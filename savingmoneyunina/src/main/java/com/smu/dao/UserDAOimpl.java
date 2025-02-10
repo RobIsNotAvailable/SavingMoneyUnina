@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.smu.model.Family;
@@ -52,14 +53,40 @@ public class UserDAOimpl implements UserDAO
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() 
+    {
+        conn = DbConnection.getConnection();
+        String sql = "SELECT * FROM \"user\"";
+        List<User> users = new ArrayList<>();
         
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
 
-        return null;
+            while(rs.next())
+            {
+                String name = rs.getString("username");
+                String password = rs.getString("password");
+                User user = new User(name, password);
+                users.add(user);
+            }
+
+            ps.close();
+            conn.close();
+            rs.close();
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 
     @Override
-    public Boolean checkValidUser(String username, String password) {
+    public Boolean checkValidUser(String username, String password) 
+    {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'checkValidUser'");
     }

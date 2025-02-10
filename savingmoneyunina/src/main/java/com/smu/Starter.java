@@ -8,9 +8,9 @@ public class Starter
 {
     public static void main( String[] args )
     {
-        UserDAO userDAO = new UserDAOimpl();
-        User u = userDAO.get("alice");
-
-        System.out.println(u.getUsername()+ " " + u.getPassword());
+        UserDAO dao= new UserDAOimpl();
+        
+        for(User u: dao.getAll())
+            System.out.println(u.getUsername()+ " " + u.getPassword());
     }
 }
