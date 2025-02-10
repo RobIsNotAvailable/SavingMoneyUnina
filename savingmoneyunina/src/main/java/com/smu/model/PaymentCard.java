@@ -2,6 +2,9 @@ package com.smu.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.smu.dao.PaymentCardDAO;
 
 public class PaymentCard 
 {
@@ -51,5 +54,15 @@ public class PaymentCard
     public BigDecimal getBalance()
     {
         return balance;
+    }
+
+    public List<Transaction> getTransactions()
+    {
+        return PaymentCardDAO.getTransactions(this);
+    }
+
+    public String toString()
+    {
+        return "Card number: " + cardNumber + " Cvv: " + cvv + " Pin: " + pin + " Expiration Date " + expirationDate.toString() + " Owner: " + owner.getUsername() + " Balance: " + balance;
     }
 }

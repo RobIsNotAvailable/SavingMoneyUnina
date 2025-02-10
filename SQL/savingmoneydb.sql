@@ -44,7 +44,7 @@ CREATE TABLE payment_card
         cvv VARCHAR(4) NOT NULL, 
         pin VARCHAR(6) NOT NULL, 
         expiration_date DATE NOT NULL,
-        amount NUMERIC NOT NULL,
+        balance NUMERIC NOT NULL,
         owner_username VARCHAR NOT NULL,
 
         CONSTRAINT fk_username FOREIGN KEY (owner_username) REFERENCES "user"(username) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -77,6 +77,8 @@ CREATE TABLE monthly_balances
         date DATE NOT NULL,
         card_number VARCHAR NOT NULL,
         
+        PRIMARY KEY (date, card_number),
+        
         CONSTRAINT fk_cardNumber FOREIGN KEY (card_number) REFERENCES payment_card(card_number) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
@@ -85,9 +87,11 @@ CREATE TABLE category
         id SERIAL PRIMARY KEY,
         name VARCHAR(30) NOT NULL,
         description VARCHAR(250) NOT NULL,
-        owner_username VARCHAR NOT NULL,
+        creator_username VARCHAR NOT NULL,
 
-        CONSTRAINT fk_username FOREIGN KEY (owner_username) REFERENCES "user"(username) ON DELETE CASCADE ON UPDATE CASCADE,
+        UNIQUE (name, creator_username),
+
+        CONSTRAINT fk_username FOREIGN KEY (creator_username) REFERENCES "user"(username) ON DELETE CASCADE ON UPDATE CASCADE,
 
         CONSTRAINT valid_name CHECK
         (
@@ -248,7 +252,7 @@ INSERT INTO "user" (username, password, family_id)
     ('boby', 'Password456', 2),
     ('charlie', 'Password789', 3);
 
-INSERT INTO payment_card (card_number, cvv, pin, expiration_date, amount, owner_username)
+INSERT INTO payment_card (card_number, cvv, pin, expiration_date, balance, owner_username)
     VALUES
     ('1234567812345678', '123', '1234', '2029-12-01', 5000, 'alice'),
     ('8765432187654321', '456', '5678', '2029-06-01', 3000, 'boby'),
@@ -268,7 +272,7 @@ INSERT INTO transaction (amount, description, date, direction, card_number)
     (400, 'Dinner', '2025-02-08', 'expense', '1234567812345678'),
     (150, 'I got scammed', '2025-01-01', 'expense', '1234567812345678');
 
-INSERT INTO category (name, description, owner_username)
+INSERT INTO category (name, description, creator_username)
     VALUES
     ('Food', 'Food and grocery expenses', 'alice'),
     ('Entertainment', 'Movies, music, and games', 'boby'),

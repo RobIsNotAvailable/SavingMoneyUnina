@@ -81,5 +81,10 @@ public class Transaction
         }
         return false;
     }
+
+    public String toString() 
+    {
+        return "Transaction: " + amount + " " + direction + " " + description + " " + date + " Card: " + card.getCardNumber();
+    }
 }
 

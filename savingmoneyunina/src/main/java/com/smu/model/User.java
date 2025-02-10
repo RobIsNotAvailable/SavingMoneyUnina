@@ -1,7 +1,8 @@
 package com.smu.model;
 
-// import java.util.List;
-// import java.util.ArrayList;
+import java.util.List;
+
+import com.smu.dao.UserDAO;
 
 public class User 
 {
@@ -24,23 +25,23 @@ public class User
         return password;
     }
 
-    // public List<PaymentCard> getCards()
-    // {
-    //     return dao cards;
-    // }
+    public List<PaymentCard> getCards()
+    {
+        return UserDAO.getCards(this);
+    }
 
-    // public List<Category> getCategories()
-    // {
-    //     return dao categories;
-    // }
+    public List<Category> getCategories()
+    {
+        return UserDAO.getCategories(this);
+    }
 
-    // public Category getOtherCategory()
-    // {
-    //     return dao otherCategory;
-    // }
+    public Family getFamily()
+    {
+        return UserDAO.getFamily(this);
+    }
 
-    // public Family getFamily()
-    // {
-    //     return dao.getfamily(this);
-    // }
+    public Boolean verify()
+    {
+        return UserDAO.verify(this);
+    }
 }

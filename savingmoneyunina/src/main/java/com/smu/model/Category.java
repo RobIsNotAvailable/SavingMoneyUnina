@@ -11,13 +11,20 @@ public class Category
     private List<Transaction> categorizedTransactions;
     private List<String> keywords;
 
-    public Category(String name, String description, User creator, List<Transaction> categorizedTransactions, List<String> keywords)
+    public Category(String name, String description, User creator)
     {
         this.name = name;
         this.description = description;
         this.creator = creator;
-        this.categorizedTransactions = new ArrayList<Transaction>(categorizedTransactions);
-        this.keywords = new ArrayList<String>(keywords);
+        this.categorizedTransactions = new ArrayList<Transaction>();
+        this.keywords = new ArrayList<String>();
+    }
+
+    public Category(String name, String description, User creator, List<Transaction> categorizedTransactions, List<String> keywords)
+    {
+        this(name, description, creator);
+        this.categorizedTransactions = categorizedTransactions;
+        this.keywords = keywords;
     }
 
     public String getName()
@@ -45,8 +52,28 @@ public class Category
         return keywords;
     }
 
+    public void setTransactions(List<Transaction> categorizedTransactions)
+    {
+        this.categorizedTransactions = categorizedTransactions;
+    }
+
+    public void setKeywords(List<String> keywords)
+    {
+        this.keywords = keywords;
+    }
+
     public void addTransaction(Transaction transaction)
     {
         categorizedTransactions.add(0, transaction);
+    }
+
+    public String toString()
+    {
+        String output = new String("Category: " + name + "\nDescription: " + description + "\nCreator: " + creator.getUsername() + "\nTransactions:");
+        for (Transaction transaction : categorizedTransactions)
+        {
+            output += "\n" + transaction.toString();
+        } 
+        return output;
     }
 }

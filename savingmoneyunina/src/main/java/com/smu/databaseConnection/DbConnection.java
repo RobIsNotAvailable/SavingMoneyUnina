@@ -10,8 +10,6 @@ public class DbConnection
     private static String username = "postgres";	
     private static String password = "8caratteri";
 
-    private DbConnection(){}
-
     public static Connection getConnection()
     {
         try 

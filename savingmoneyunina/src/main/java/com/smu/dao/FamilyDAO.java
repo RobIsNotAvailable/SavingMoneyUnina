@@ -12,26 +12,22 @@ import com.smu.model.Family;
 import com.smu.model.User;
 
 
-public class FamilyDAO implements DAO<Family, String>
+public class FamilyDAO
 {
-    Connection conn = null;
+    static Connection conn = DbConnection.getConnection();
 
-    @Override
-	public Family get(String usernameMember) 
+	public static Family get(String memberUsername) 
     {
-        conn = DbConnection.getConnection();
-        List <User> members = new ArrayList<>();
         Family family = null;
-
-        //WHERE \"user\".username = ?" questo deve diventare dove id famiglai è lo stersso dello user passato in input
-        //oppure separa le stringhe e recupera gli utenti dopo
-		String sql = "SELECT * FROM family JOIN \"user\" ON family.id = \"user\".family_id WHERE \"user\".username = ?";
+        List<User> members = new ArrayList<>();
+        
+		String sql = "SELECT * FROM family JOIN \"user\" ON family.id = \"user\".family_id WHERE id = (SELECT family_id FROM \"user\" WHERE username = ? )";
 		
         try 
         {
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, usernameMember);
-            ResultSet rs=ps.executeQuery();
+            ps.setString(1, memberUsername);
+            ResultSet rs = ps.executeQuery();
 
             if (rs.next()) 
             {
@@ -56,13 +52,4 @@ public class FamilyDAO implements DAO<Family, String>
         
         return family;
 	}
-
-	@Override
-	public List<Family> getAll() 
-    {
-		// Implementation here
-		return new ArrayList<>();
-	}
-
-
 }

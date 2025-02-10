@@ -7,111 +7,117 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.smu.model.Family;
-import com.smu.model.User;
-import com.smu.model.PaymentCard;
 import com.smu.databaseConnection.DbConnection;
+import com.smu.model.User;
 import com.smu.model.Category;
+import com.smu.model.Family;
+import com.smu.model.PaymentCard;
 
-public class UserDAO implements DAO<User, String>
+public class UserDAO
 {
-    Connection conn = null;
-
-    @Override
-    public User get(String username) 
+    static Connection conn = DbConnection.getConnection();
+    
+    public static User get(String username)
     {
-        conn = DbConnection.getConnection();
 
-        String sql = "SELECT * FROM \"user\" WHERE username = ?";
-
+		String sql = "SELECT * FROM \"user\" WHERE username = ?";
+		
         try 
         {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
-            ResultSet rs=ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
 
-            if(rs.next())
+            if (rs.next()) 
             {
-                String name = rs.getString("username");
                 String password = rs.getString("password");
 
-                User user = new User(name, password);
-
-                ps.close();
-                conn.close();
-                rs.close();
-
-                return user;
+                return new User(username, password);
             }
+
         } 
         catch (SQLException e) 
         {
             e.printStackTrace();
+
         }
         
         return null;
     }
 
-    @Override
-    public List<User> getAll() 
+    public static List<PaymentCard> getCards(User user)
     {
-        conn = DbConnection.getConnection();
-        String sql = "SELECT * FROM \"user\"";
-        List<User> users = new ArrayList<>();
-        
-        try 
+        List<PaymentCard> cards = new ArrayList<>();
+
+        String sql = "SELECT card_number FROM payment_card WHERE owner_username = ?";
+
+        try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next())
+            while (rs.next())
             {
-                String name = rs.getString("username");
-                String password = rs.getString("password");
-                User user = new User(name, password);
-                users.add(user);
+                cards.add(PaymentCardDAO.get(rs.getString("card_number")));
             }
-
-            ps.close();
-            conn.close();
-            rs.close();
-        } 
-        catch (SQLException e) 
+        }
+        catch (SQLException e)
         {
             e.printStackTrace();
         }
 
-        return users;
+        return cards;
     }
-
     
-    public Boolean checkValidUser(String username, String password) 
+    public static List<Category> getCategories(User user)
     {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'checkValidUser'");
+        List<Category> categories = new ArrayList<>();
+
+        String sql = "SELECT * FROM category WHERE creator_username = ?";
+
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                categories.add(CategoryDAO.get(rs.getString("name"), user.getUsername()));
+            }
+            
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return categories;
     }
 
-    
-    public List<PaymentCard> getCards(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCards'");
+    public static Family getFamily(User user)
+    {
+        return FamilyDAO.get(user.getUsername());
     }
 
-    
-    public List<Category> getCategories(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCategories'");
-    }
+    public static Boolean verify(User user)
+    {
+        String sql = "SELECT * FROM \"user\" WHERE username = ? AND password = ?";
 
-    
-    public Category getOtherCategory(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOtherCategory'");
-    }
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ResultSet rs = ps.executeQuery();
 
-    
-    public Family getFamily(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFamily'");
+            return rs.next();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

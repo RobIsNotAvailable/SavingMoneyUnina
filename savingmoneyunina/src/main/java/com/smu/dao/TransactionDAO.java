@@ -1,0 +1,55 @@
+package com.smu.dao;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+
+import java.util.ArrayList;
+
+import com.smu.databaseConnection.DbConnection;
+import com.smu.model.PaymentCard;
+import com.smu.model.Transaction;
+
+public class TransactionDAO 
+{
+    static Connection conn = DbConnection.getConnection();
+
+    public static List<Transaction> getByCard(PaymentCard card)
+    {
+        String cardNumber = card.getCardNumber();
+        String sql = "SELECT * FROM transaction WHERE card_number = ?";
+
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, cardNumber);
+            ResultSet rs = ps.executeQuery();
+
+            List<Transaction> transactions = new ArrayList<Transaction>();
+
+            while (rs.next())
+            {
+                BigDecimal amount = rs.getBigDecimal("amount");
+                String description = rs.getString("description");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                Transaction.Direction direction = Transaction.Direction.valueOf(rs.getString("direction"));
+
+                transactions.add(new Transaction(amount, description, date, direction, card));
+            }
+
+            return transactions;
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+
+        }
+
+        return null;
+    }
+    
+}
