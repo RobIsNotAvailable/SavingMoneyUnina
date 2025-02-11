@@ -1,6 +1,9 @@
 package com.smu.model;
 
 import java.util.List;
+
+import com.smu.dao.CategoryDAO;
+
 import java.util.ArrayList;
 
 public class Category 
@@ -67,14 +70,32 @@ public class Category
         this.keywords = keywords;
     }
 
-
-
 /*****************************************************METHODS******************************************** */
     public void addTransaction(Transaction transaction)
     {
         categorizedTransactions.add(0, transaction);
     }
 
+    public Boolean insertIfMatches(Transaction transaction)
+    {
+        for (String keyword : getKeywords())
+        {
+            if (description.toLowerCase().contains(keyword.toLowerCase()))
+            {
+                insertTransaction(transaction);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public void insertTransaction(Transaction transaction)
+    {
+        categorizedTransactions.add(transaction);
+        CategoryDAO.insertTransaction(transaction, this);
+    }
 /*****************************************************DEBUG******************************************** */
    public String toString()
     {

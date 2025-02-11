@@ -120,4 +120,22 @@ public class CategoryDAO
 
         return null;
     }
+
+    public static void insertTransaction(Transaction transaction, Category category)
+    {
+        String sql = "INSERT INTO transaction_category (transaction_id, category_id) VALUES(?,(Select id FROM category WHERE name = ? AND creator_username = ?))";
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setLong(1, transaction.getId());
+            ps.setString(2, category.getName());
+            ps.setString(3, category.getCreator().getUsername());
+
+            ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

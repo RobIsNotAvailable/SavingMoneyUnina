@@ -15,7 +15,7 @@ public class PaymentCard
     private User owner;
     private BigDecimal balance;
 
-
+    
     public PaymentCard(String cardNumber, String cvv, String pin, LocalDate expirationDate, User owner, BigDecimal balance)
     {
         this.cardNumber = cardNumber;
@@ -25,7 +25,9 @@ public class PaymentCard
         this.owner = owner;
         this.balance = balance;
     }
-
+    
+    /***************************************************************GETTERS**************************************************************** */
+    
     public String getCardNumber()
     {
         return cardNumber;
@@ -61,6 +63,20 @@ public class PaymentCard
         return PaymentCardDAO.getTransactions(this);
     }
 
+
+    /***************************************************************METHODS**************************************************************** */
+    public void executeTransaction(Transaction transaction)
+    {
+        if (transaction.getDirection() == Transaction.Direction.income) 
+            balance = balance.add(transaction.getAmount());
+        else    
+            balance = balance.subtract(transaction.getAmount());
+
+        PaymentCardDAO.update(this);    
+        PaymentCardDAO.insertTransaction(transaction);
+        transaction.sortInCategories();
+    }
+    /***************************************************************DEBUG**************************************************************** */
     public String toString()
     {
         return "Card number: " + cardNumber + " Cvv: " + cvv + " Pin: " + pin + " Expiration Date " + expirationDate.toString() + " Owner: " + owner.getUsername() + " Balance: " + balance;

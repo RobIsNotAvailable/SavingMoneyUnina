@@ -53,7 +53,7 @@ public class TransactionDAO
 
     public static Boolean insert(Transaction transaction)
     {
-        String sql = "INSERT INTO transaction (amount, description, date, direction, card_number) VALUES (?,?,?,?::direction,?) ";
+        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number) VALUES (?,?,?,?,?::direction,?) ";
 
         try
         {
@@ -74,5 +74,26 @@ public class TransactionDAO
         }
         return true;
     }
-    
+   
+    public static Long generateId()
+    {
+        String sql = "SELECT MAX(id) FROM transaction";
+
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                return rs.getLong(1) + 1;
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return 0L;
+    }
 }

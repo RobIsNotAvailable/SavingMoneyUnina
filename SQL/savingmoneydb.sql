@@ -58,7 +58,7 @@ CREATE TABLE payment_card
 
 CREATE TABLE transaction
     (
-        id SERIAL PRIMARY KEY,
+        id NUMERIC PRIMARY KEY,
         amount NUMERIC NOT NULL,
         description VARCHAR(250) NOT NULL,
         date DATE NOT NULL,
@@ -165,7 +165,8 @@ CREATE OR REPLACE FUNCTION get_latest_balance(input_card_number VARCHAR, input_d
     $$ LANGUAGE plpgsql;
 
 /********************************************** TRIGGER FUNCTIONS ************************************************/
-CREATE OR REPLACE FUNCTION update_report()
+
+CREATE OR REPLACE FUNCTION update_monthly_balances()
 	RETURNS TRIGGER AS $$
 	DECLARE  
 	    exist BOOLEAN;
@@ -192,12 +193,13 @@ CREATE OR REPLACE FUNCTION update_report()
 	    RETURN NEW;
 	END;
 	$$ LANGUAGE plpgsql;
+
 /********************************************** TRIGGERS ************************************************/
-CREATE TRIGGER trigger_update_report
+
+CREATE TRIGGER trigger_update_monthly_balances
 BEFORE INSERT ON transaction
 FOR EACH ROW
-EXECUTE FUNCTION update_report();
-
+EXECUTE FUNCTION update_monthly_balances();
 
 /***************************************************** DAO FUNCTIONS *************************************************************/
 
@@ -275,13 +277,13 @@ INSERT INTO monthly_balances
     (3000,3000, '2024-02-01', '8765432187654321'),
     (1000,1000, '2024-02-01', '1122334455667788');
 
-INSERT INTO transaction (amount, description, date, direction, card_number)
+INSERT INTO transaction (id, amount, description, date, direction, card_number)
     VALUES
-    (400, 'Dinner', '2025-02-08', 'expense', '1234567812345678'),
-    (200, 'Grocery Shopping', '2025-02-08', 'expense', '1234567812345678'),
-    (500, 'Salary Payment', '2025-02-05', 'income', '1234567812345678'),
-    (700, 'won a scratch ticket', '2025-02-03', 'income', '1234567812345678'),
-    (400, 'Dinner', '2025-02-08', 'expense', '1234567812345678');
+    (1, 400, 'Dinner', '2025-02-08', 'expense', '1234567812345678'),
+    (2, 200, 'Grocery Shopping', '2025-02-08', 'expense', '1234567812345678'),
+    (3, 500, 'Salary Payment', '2025-02-05', 'income', '1234567812345678'),
+    (4, 700, 'won a scratch ticket', '2025-02-03', 'income', '1234567812345678'),
+    (5, 400, 'Dinner', '2025-02-08', 'expense', '1234567812345678');
 
 INSERT INTO category (name, description, creator_username)
     VALUES
@@ -294,4 +296,6 @@ INSERT INTO keyword (keyword, category_id)
     ('groceries', 1),
     ('movies', 2),
     ('electricity', 3);
+
+
 

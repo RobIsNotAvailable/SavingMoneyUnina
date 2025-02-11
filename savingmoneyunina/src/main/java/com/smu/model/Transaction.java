@@ -2,6 +2,9 @@ package com.smu.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
+
+import com.smu.dao.TransactionDAO;
 
 public class Transaction 
 {
@@ -11,6 +14,7 @@ public class Transaction
         income, expense;
     }
 
+    private Long id;
     private BigDecimal amount;
     private String description;
     private LocalDate date;
@@ -24,6 +28,21 @@ public class Transaction
         this.date = date;
         this.direction = direction;
         this.card = card;
+        this.id = TransactionDAO.generateId();
+    }
+
+    //constructor for the DAO 
+    public Transaction(BigDecimal amount, String description, LocalDate date, Direction direction, PaymentCard card, Long id) 
+    {
+        this(amount, description, date, direction, card);
+        this.id = id;
+    }
+
+    /************************************************GETTERS****************************************************** */
+
+    public Long getId() 
+    {
+        return id;
     }
 
     public BigDecimal getAmount() 
@@ -56,35 +75,29 @@ public class Transaction
         return card.getOwner();
     }
 
-    // public void sortInCategories() 
-    // {
-    //     Boolean matched = false;
-    //     for (Category category : getUser().getCategories()) 
-    //     {
-    //         matched |= insertIfMatches(category);
-    //     }
-    //     if (!matched)
-    //     {
-    //         getUser().getCategoryOtherOfUser().addTransaction(this);
-    //     }
-    // }
-
-    public Boolean insertIfMatches(Category category)
+/************************************************METHODS****************************************************** */
+    public void sortInCategories() 
     {
-        for (String keyword : category.getKeywords())
+        Boolean matched = false;
+        
+        for (Category category : getUserCategories()) 
         {
-            if (description.toLowerCase().contains(keyword.toLowerCase()))
-            {
-                category.addTransaction(this);
-                return true;
-            }
+            matched |= category.insertIfMatches(this);
         }
-        return false;
+        if (!matched)
+        {
+            //getUserOtherCategory().addTransaction(this);
+        }
+    }
+
+    public List<Category> getUserCategories()
+    {
+        return getUser().getCategories();
     }
 
     public String toString() 
     {
-        return "Transaction: " + amount + " " + direction + " " + description + " " + date + " Card: " + card.getCardNumber();
+        return "Transaction("+id+"): " + amount + " " + direction + " " + description + " " + date + " Card: " + card.getCardNumber();
     }
 }
 

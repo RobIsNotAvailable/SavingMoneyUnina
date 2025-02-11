@@ -50,4 +50,26 @@ public class PaymentCardDAO
     {
         return TransactionDAO.getByCard(card);
     }
+
+    public static void insertTransaction(Transaction transaction)
+    {
+        TransactionDAO.insert(transaction);
+    }
+
+    public static void update(PaymentCard card)
+    {
+        String sql = "UPDATE payment_card SET balance = ? WHERE card_number = ?";
+
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setBigDecimal(1, card.getBalance());
+            ps.setString(2, card.getCardNumber());
+            ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

@@ -25,10 +25,7 @@ public class Starter
 
     public static void test()
     {
-        PaymentCard card = PaymentCardDAO.get("1234567812345678");
-
-        Report r = ReportDAO.get(card, LocalDate.parse("2025-02-01"));
-        System.out.println(r.toString());
+        
     }
 
     public static void menu()
