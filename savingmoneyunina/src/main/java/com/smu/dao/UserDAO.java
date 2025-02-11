@@ -96,6 +96,11 @@ public class UserDAO
         return categories;
     }
 
+    public static Category getCategory(User user, String name)
+    {
+        return CategoryDAO.get(name, user.getUsername());
+    }
+    
     public static Family getFamily(User user)
     {
         return FamilyDAO.get(user.getUsername());

@@ -59,7 +59,7 @@ public class CategoryDAO
 
     public static List<Transaction> getTransactions(Category category)
     {
-        String sql = "SELECT * FROM transaction WHERE id IN (SELECT transaction_id FROM transaction_category WHERE category_id = (SELECT id FROM category WHERE name = ? AND creator_username = ?))";
+        String sql = "SELECT * FROM transaction WHERE id IN (SELECT transaction_id FROM transaction_category WHERE category_id = (SELECT id FROM category WHERE name = ? AND creator_username = ?)) ORDER BY date DESC";
 
         try
         {

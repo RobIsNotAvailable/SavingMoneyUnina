@@ -35,6 +35,11 @@ public class User
         return UserDAO.getCategories(this);
     }
 
+    public Category getCategory(String name)
+    {
+        return UserDAO.getCategory(this, name);
+    }
+    
     public Family getFamily()
     {
         return UserDAO.getFamily(this);
@@ -43,5 +48,10 @@ public class User
     public Boolean verify()
     {
         return UserDAO.verify(this);
+    }
+
+    public String toString()
+    {
+        return "Username: " + username + "\nPassword: " + password;
     }
 }

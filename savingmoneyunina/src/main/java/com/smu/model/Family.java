@@ -2,8 +2,6 @@ package com.smu.model;
 
 import java.util.List;
 
-import com.smu.dao.FamilyDAO;
-
 import java.util.ArrayList;
 
 public class Family
@@ -16,13 +14,6 @@ public class Family
     {
         this.name = name;
         this.members = new ArrayList<User>(members);
-    }
-
-    public Family(User user)
-    {
-        Family familyLoader = FamilyDAO.get(user.getUsername());
-        this.name = familyLoader.getName();
-        this.members = familyLoader.getMembers();
     }
 
 /*************************************GETTER******************************************* */ 

@@ -1,10 +1,9 @@
 package com.smu.model;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.smu.dao.CategoryDAO;
-
-import java.util.ArrayList;
 
 public class Category 
 {
@@ -71,11 +70,6 @@ public class Category
     }
 
 /*****************************************************METHODS******************************************** */
-    public void addTransaction(Transaction transaction)
-    {
-        categorizedTransactions.add(0, transaction);
-    }
-
     public Boolean insertIfMatches(Transaction transaction)
     {
         for (String keyword : getKeywords())

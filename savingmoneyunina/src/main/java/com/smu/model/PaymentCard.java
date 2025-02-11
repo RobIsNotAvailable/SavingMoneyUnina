@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.smu.dao.PaymentCardDAO;
+import com.smu.model.Transaction.Direction;
 
 public class PaymentCard 
 {
@@ -63,6 +64,35 @@ public class PaymentCard
         return PaymentCardDAO.getTransactions(this);
     }
 
+    public List<Transaction> getTransactions(Transaction.Direction direction)
+    {
+        return PaymentCardDAO.getTransactions(this, direction);
+    }
+
+    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate)
+    {
+        return PaymentCardDAO.getTransactions(this, beginDate, endDate);
+    }
+
+    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate , Transaction.Direction direction)
+    {
+        return PaymentCardDAO.getTransactions(this, beginDate, endDate, direction);
+    }
+    
+    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate, Category category)
+    {
+        return PaymentCardDAO.getTransactions(this, beginDate, endDate, category);
+    }
+
+    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate, Category category, Direction direction)
+    {
+        return PaymentCardDAO.getTransactions(this, beginDate, endDate, category, direction);
+    }
+
+    public Report getReport(LocalDate date)
+    {
+        return PaymentCardDAO.getReport(this, date);
+    }
 
     /***************************************************************METHODS**************************************************************** */
     public void executeTransaction(Transaction transaction)
@@ -73,12 +103,13 @@ public class PaymentCard
             balance = balance.subtract(transaction.getAmount());
 
         PaymentCardDAO.update(this);    
-        PaymentCardDAO.insertTransaction(transaction);
+        transaction.insert();
         transaction.sortInCategories();
     }
     /***************************************************************DEBUG**************************************************************** */
     public String toString()
     {
-        return "Card number: " + cardNumber + " Cvv: " + cvv + " Pin: " + pin + " Expiration Date " + expirationDate.toString() + " Owner: " + owner.getUsername() + " Balance: " + balance;
+        return "Card number: " + cardNumber + " Cvv: " + cvv + " Pin: " + pin + " Expiration Date " + expirationDate.toString() + " Balance: " + balance;
     }
+
 }

@@ -76,6 +76,12 @@ public class Transaction
     }
 
 /************************************************METHODS****************************************************** */
+
+    public void insert()
+    {
+        TransactionDAO.insert(this);
+    }
+
     public void sortInCategories() 
     {
         Boolean matched = false;
@@ -86,7 +92,7 @@ public class Transaction
         }
         if (!matched)
         {
-            //getUserOtherCategory().addTransaction(this);
+            getUserOtherCategory().insertTransaction(this);
         }
     }
 
@@ -95,9 +101,14 @@ public class Transaction
         return getUser().getCategories();
     }
 
+    public Category getUserOtherCategory()
+    {
+        return getUser().getCategory("Other");
+    }
+
     public String toString() 
     {
-        return "Transaction("+id+"): " + amount + " " + direction + " " + description + " " + date + " Card: " + card.getCardNumber();
+        return "Transaction("+ id +"): " + amount + " " + direction + " " + description + " " + date + " Card: " + card.getCardNumber();
     }
 }
 

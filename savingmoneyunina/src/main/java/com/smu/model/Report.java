@@ -16,6 +16,7 @@ public class Report
 
     public Report(PaymentCard card, LocalDate date)
     {
+        
         this.card = card;
         this.date = date.withDayOfMonth(1);
     }
