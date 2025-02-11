@@ -27,6 +27,9 @@ public class Category
         this.keywords = keywords;
     }
 
+
+/*****************************************************GETTERS******************************************** */
+
     public String getName()
     {
         return name;
@@ -52,6 +55,8 @@ public class Category
         return keywords;
     }
 
+/*****************************************************SETTERS******************************************** */
+
     public void setTransactions(List<Transaction> categorizedTransactions)
     {
         this.categorizedTransactions = categorizedTransactions;
@@ -62,12 +67,16 @@ public class Category
         this.keywords = keywords;
     }
 
+
+
+/*****************************************************METHODS******************************************** */
     public void addTransaction(Transaction transaction)
     {
         categorizedTransactions.add(0, transaction);
     }
 
-    public String toString()
+/*****************************************************DEBUG******************************************** */
+   public String toString()
     {
         String output = new String("Category: " + name + "\nDescription: " + description + "\nCreator: " + creator.getUsername() + "\nTransactions:");
         for (Transaction transaction : categorizedTransactions)

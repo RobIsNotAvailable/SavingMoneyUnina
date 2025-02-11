@@ -11,6 +11,7 @@ public class Family
     private String name;
     private List<User> members;
 
+/*************************************CONSTRUCTORS******************************************* */ 
     public Family(String name, List<User> members)
     {
         this.name = name;
@@ -24,6 +25,8 @@ public class Family
         this.members = familyLoader.getMembers();
     }
 
+/*************************************GETTER******************************************* */ 
+
     public String getName()
     {
         return name;
@@ -34,7 +37,7 @@ public class Family
         return members;
     }
 
-    @Override
+/*************************************DEBUG******************************************* */ 
     public String toString()
     {
         String string = "Family name: " + name + " | Members:";	

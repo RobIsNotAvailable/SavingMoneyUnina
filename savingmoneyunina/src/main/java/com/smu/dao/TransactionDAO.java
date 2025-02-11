@@ -46,10 +46,33 @@ public class TransactionDAO
         catch (SQLException e)
         {
             e.printStackTrace();
-
         }
 
         return null;
+    }
+
+    public static Boolean insert(Transaction transaction)
+    {
+        String sql = "INSERT INTO transaction (amount, description, date, direction, card_number) VALUES (?,?,?,?::direction,?) ";
+
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setBigDecimal(1, transaction.getAmount());
+            ps.setString(2, transaction.getDescription());
+            ps.setDate(3, java.sql.Date.valueOf(transaction.getDate()));
+            ps.setString(4, transaction.getDirection().toString());
+            ps.setString(5, transaction.getCard().getCardNumber());
+
+            ps.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
 }

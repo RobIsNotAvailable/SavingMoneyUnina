@@ -5,13 +5,8 @@ import java.time.LocalDate;
 
 public class Report 
 {
-    private BigDecimal maxExpense;
-    private BigDecimal minExpense;
-    private BigDecimal avgExpense;
-
-    private BigDecimal maxIncome;
-    private BigDecimal minIncome;
-    private BigDecimal avgIncome;
+    IncomeDetails incomeDetails;
+    ExpenseDetails expenseDetails;
 
     private BigDecimal initialBalance;
     private BigDecimal finalBalance;
@@ -19,48 +14,22 @@ public class Report
     private PaymentCard card;
     private LocalDate date;
 
-    public Report(BigDecimal maxExpense, BigDecimal minExpense, BigDecimal avgExpense, BigDecimal maxIncome, BigDecimal minIncome, BigDecimal avgIncome, BigDecimal initialBalance, BigDecimal finalBalance, int numberOfExpenses, int numberOfIncomes, PaymentCard card, LocalDate date)
+    public Report(PaymentCard card, LocalDate date)
     {
-        this.maxExpense = maxExpense;
-        this.minExpense = minExpense;
-        this.avgExpense = avgExpense;
-        this.maxIncome = maxIncome;
-        this.minIncome = minIncome;
-        this.avgIncome = avgIncome;
-        this.initialBalance = initialBalance;
-        this.finalBalance = finalBalance;
         this.card = card;
         this.date = date.withDayOfMonth(1);
     }
 
-    public BigDecimal getMaxExpense()
+    //constructor for the DAO
+    public Report(IncomeDetails incomeDetails, ExpenseDetails expenseDetails, BigDecimal initialBalance, BigDecimal finalBalance, PaymentCard card, LocalDate date)
     {
-        return maxExpense;
-    }
+        this(card, date);
 
-    public BigDecimal getMinExpense()
-    {
-        return minExpense;
-    }
+        this.expenseDetails = expenseDetails;
+        this.incomeDetails = incomeDetails;
 
-    public BigDecimal getAvgExpense()
-    {
-        return avgExpense;
-    }
-
-    public BigDecimal getMaxIncome()
-    {
-        return maxIncome;
-    }
-
-    public BigDecimal getMinIncome()
-    {
-        return minIncome;
-    }
-
-    public BigDecimal getAvgIncome()
-    {
-        return avgIncome;
+        this.initialBalance = initialBalance;
+        this.finalBalance = finalBalance;
     }
 
     public BigDecimal getInitialBalance()
@@ -81,5 +50,16 @@ public class Report
     public LocalDate getDate()
     {
         return date;
+    }
+
+/***************************************************DEBUG******************************************************* */
+    public String toString()
+    {
+        return "Initial balance: " + initialBalance + "\n" +
+                "Final balance: " + finalBalance + "\n\n" +
+                "Income details: " + incomeDetails + "\n\n" +
+                "Expense details: " + expenseDetails + "\n\n" +
+                "Card: " + card + "\n" +
+                "Date: " + date;
     }
 }

@@ -41,7 +41,6 @@ public class PaymentCardDAO
         catch (SQLException e)
         {
             e.printStackTrace();
-
         }
 
         return null;

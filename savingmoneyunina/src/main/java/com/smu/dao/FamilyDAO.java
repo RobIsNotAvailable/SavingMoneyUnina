@@ -47,7 +47,6 @@ public class FamilyDAO
         catch (SQLException e) 
         {
             e.printStackTrace();
-
         }
         
         return family;

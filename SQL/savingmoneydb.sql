@@ -229,7 +229,18 @@ CREATE OR REPLACE FUNCTION get_monthly_income_details(input_number VARCHAR, inpu
 
 CREATE OR REPLACE FUNCTION get_monthly_balances(input_number VARCHAR, input_date DATE)
     RETURNS TABLE(starting_balance NUMERIC, ending_balance NUMERIC) AS $$
+	DECLARE 
+		exist BOOLEAN;
+		balance NUMERIC;
     BEGIN
+        exist := report_exists(input_number, input_date);
+	
+	    IF NOT exist THEN
+	        balance := get_latest_balance(input_number, input_date);
+	        INSERT INTO monthly_balances 
+	        VALUES (balance, balance, DATE_TRUNC('month', input_date), input_number);
+	    END IF;
+
         RETURN QUERY
             SELECT m.starting_balance, m.ending_balance 
             FROM monthly_balances AS m
@@ -266,11 +277,11 @@ INSERT INTO monthly_balances
 
 INSERT INTO transaction (amount, description, date, direction, card_number)
     VALUES
+    (400, 'Dinner', '2025-02-08', 'expense', '1234567812345678'),
     (200, 'Grocery Shopping', '2025-02-08', 'expense', '1234567812345678'),
     (500, 'Salary Payment', '2025-02-05', 'income', '1234567812345678'),
     (700, 'won a scratch ticket', '2025-02-03', 'income', '1234567812345678'),
-    (400, 'Dinner', '2025-02-08', 'expense', '1234567812345678'),
-    (150, 'I got scammed', '2025-01-01', 'expense', '1234567812345678');
+    (400, 'Dinner', '2025-02-08', 'expense', '1234567812345678');
 
 INSERT INTO category (name, description, creator_username)
     VALUES
