@@ -23,14 +23,14 @@ public class TransactionDAO
     {
         String cardNumber = card.getCardNumber();
         String sql = "SELECT * FROM transaction WHERE card_number = ? ORDER BY date DESC";
-
+        List<Transaction> transactions = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, cardNumber);
             ResultSet rs = ps.executeQuery();
 
-            List<Transaction> transactions = new ArrayList<Transaction>();
+            
 
             while (rs.next())
             {
@@ -43,14 +43,13 @@ public class TransactionDAO
                 transactions.add(new Transaction(amount, description, date, direction, card, id));
             }
 
-            return transactions;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
 
-        return null;
+        return transactions;
     }
 
     public static List<Transaction> getFiltered(PaymentCard card, Transaction.Direction direction)
@@ -58,7 +57,7 @@ public class TransactionDAO
         String cardNumber = card.getCardNumber();
         String sql = "SELECT * FROM transaction WHERE card_number = ? AND direction = ?::direction ORDER BY date DESC";
 
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -89,7 +88,7 @@ public class TransactionDAO
         String cardNumber = card.getCardNumber();
         String sql = "SELECT * FROM transaction WHERE card_number = ? AND date >= ? AND date <= ? ORDER BY date DESC";
 
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -122,7 +121,7 @@ public class TransactionDAO
         String cardNumber = card.getCardNumber();
         String sql = "SELECT * FROM transaction WHERE card_number = ? AND date >= ? AND date <= ? AND direction = ?::direction ORDER BY date DESC";
 
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -159,7 +158,7 @@ public class TransactionDAO
         """;
                 
 
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -198,7 +197,7 @@ public class TransactionDAO
         AND direction = ?::direction ORDER BY date DESC
         """;
 
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);

@@ -61,14 +61,14 @@ public class CategoryDAO
     {
         String sql = "SELECT * FROM transaction WHERE id IN (SELECT transaction_id FROM transaction_category WHERE category_id = (SELECT id FROM category WHERE name = ? AND creator_username = ?)) ORDER BY date DESC";
 
+        List<Transaction> transactions = new ArrayList<>();
+
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, category.getName());
             ps.setString(2, category.getCreator().getUsername());
             ResultSet rs = ps.executeQuery();
-
-            List<Transaction> transactions = new ArrayList<Transaction>();
 
             while (rs.next())
             {
@@ -82,20 +82,20 @@ public class CategoryDAO
                 transactions.add(transaction);
             }
 
-            return transactions;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
 
-        return null;
+        return transactions;
     }
 
     public static List<String> getKeywords(Category category)
     {
         String sql = "SELECT * FROM keyword WHERE category_id = (SELECT id FROM category WHERE name = ? AND creator_username = ?)";
 
+        List<String> keywords = new ArrayList<>();
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -103,22 +103,19 @@ public class CategoryDAO
             ps.setString(2, category.getCreator().getUsername());
             ResultSet rs = ps.executeQuery();
 
-            List<String> keywords = new ArrayList<String>();
-
             while (rs.next())
             {
                 String keyword = rs.getString("keyword");
                 keywords.add(keyword);
             }
 
-            return keywords;
         }
         catch (SQLException e)
         {
             e.printStackTrace();
         }
 
-        return null;
+        return keywords;
     }
 
     public static void insertTransaction(Transaction transaction, Category category)
