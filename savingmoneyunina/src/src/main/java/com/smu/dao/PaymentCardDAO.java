@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.smu.databaseConnection.DbConnection;
-import com.smu.model.Category;
 import com.smu.model.PaymentCard;
 import com.smu.model.Report;
 import com.smu.model.Transaction;
@@ -48,39 +47,14 @@ public class PaymentCardDAO
         return null;
     }
 
-    public static List<Transaction> getTransactions(PaymentCard card)
-    {
-        return TransactionDAO.getByCard(card);
-    }
-
-    public static List<Transaction> getTransactions(PaymentCard card, Transaction.Direction direction)
-    {
-        return TransactionDAO.getFiltered(card, direction);
-    }
-    
-    public static List<Transaction> getTransactions(PaymentCard card, LocalDate beginDate, LocalDate endDate)
-    {
-        return TransactionDAO.getFiltered(card, beginDate, endDate);
-    }
-
-    public static List<Transaction> getTransactions(PaymentCard card, LocalDate beginDate, LocalDate endDate, Transaction.Direction direction)
-    {
-        return TransactionDAO.getFiltered(card, beginDate, endDate, direction);
-    }
-
-    public static List<Transaction> getTransactions(PaymentCard card, LocalDate beginDate, LocalDate endDate, Category category)
-    {
-        return TransactionDAO.getFiltered(card, beginDate, endDate, category);
-    }
-
-    public static List<Transaction> getTransactions(PaymentCard card, LocalDate beginDate, LocalDate endDate, Category category, Transaction.Direction direction)
-    {
-        return TransactionDAO.getFiltered(card, beginDate, endDate, category, direction);
-    }
-
     public static Report getReport(PaymentCard card, LocalDate date)
     {
         return ReportDAO.get(card, date);
+    }
+
+    public static List <Transaction> getTransactions(PaymentCard card)
+    {
+        return TransactionDAO.getByCard(card);
     }
 
     public static void update(PaymentCard card)

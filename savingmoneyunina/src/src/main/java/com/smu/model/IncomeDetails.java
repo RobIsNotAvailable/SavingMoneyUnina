@@ -1,6 +1,7 @@
 package com.smu.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class IncomeDetails
 {
@@ -14,7 +15,7 @@ public class IncomeDetails
         { 
             this.maxIncome = maxIncome;
             this.minIncome = minIncome;
-            this.avgIncome = avgIncome.setScale(2);
+            this.avgIncome = avgIncome.setScale(2, RoundingMode.HALF_UP);
         }
     }
 

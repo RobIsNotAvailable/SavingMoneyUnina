@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.smu.dao.CategoryDAO;
 import com.smu.dao.PaymentCardDAO;
 import com.smu.model.Category;
 import com.smu.model.Family;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
+import com.smu.model.TransactionFilter;
 import com.smu.model.User;
 
 public class Starter 
@@ -21,6 +23,7 @@ public class Starter
     
     public static void main( String[] args)
     {
+        System.out.println("Welcome to Saving Money Unina! soon available for you!");
         test();
     }
 
@@ -46,6 +49,60 @@ public class Starter
 
         System.out.println("STAMPA AFTER TRANSACTION");
         System.out.println(card.getReport(LocalDate.now()));
+    }
+
+    private static void transactionsPrinter(User u) 
+    {
+        PaymentCard card = PaymentCardDAO.get("1234567812345678");
+        
+        LocalDate initialDate = null;
+        LocalDate finalDate = null;
+        Transaction.Direction direction = null;
+        Category category = null;
+
+        int choice = 0;
+
+        System.out.println("would you like to insert a initialDate?\n\n 1) Yes\t\t2) No");
+        choice = Integer.parseInt(System.console().readLine());
+        if (choice == 1)
+        {
+            System.out.println("Insert the initial date (yyyy-mm-dd):");
+            initialDate = LocalDate.parse(System.console().readLine());
+        }
+
+        System.out.println("would you like to insert a final?\n\n 1) Yes\t\t2) No");
+        choice = Integer.parseInt(System.console().readLine());
+        if (choice == 1)
+        {
+            System.out.println("Insert the initial date (yyyy-mm-dd):");
+            finalDate = LocalDate.parse(System.console().readLine());
+        }
+
+        System.out.println("would you like to insert a direction?\n\n 1) Yes\t\t2) No");
+        choice = Integer.parseInt(System.console().readLine());
+        if (choice == 1)
+        {
+            System.out.println("Insert the direction");
+            System.out.println("1) Income\t\t2) Expense");
+
+            if(System.console().readLine().equals("1"))
+                direction = Transaction.Direction.income;
+            else
+                direction = Transaction.Direction.expense;
+        }
+
+        System.out.println("would you like to insert a category?\n\n 1) Yes\t\t2) No");
+        choice = Integer.parseInt(System.console().readLine());
+        if (choice == 1)
+        {
+            System.out.println("insert a category name");
+            String categoryName = System.console().readLine();
+
+            category = CategoryDAO.get(categoryName, u.getUsername());
+        }
+
+        TransactionFilter transactionFilter = new TransactionFilter(initialDate, finalDate, direction, category);
+        card.filterTransactions(transactionFilter, card.getTransactions());
     }
 
     public static void menu()
@@ -178,104 +235,6 @@ public class Starter
 
             System.out.println(MENU_STRING);
             choice = Integer.parseInt(System.console().readLine());
-        }
-    }
-
-    private static void transactionsPrinter(User u) 
-    {
-        System.out.println("Select a card to see its transactions:");
-        PaymentCard c = null;
-        try
-        {
-            c = cardSelector(u);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            return;
-        }
-        LocalDate beginDate = null;
-        LocalDate endDate = null;
-
-        System.out.println("Filter transactions by time? \n\n 1) Select a time frame\t\t2) No");
-        int choice = Integer.parseInt(System.console().readLine());
-        if (choice == 1)
-        {
-            System.out.println("Enter two dates for the time frame (yyyy-mm-dd):");
-            beginDate = LocalDate.parse(System.console().readLine());
-            endDate = LocalDate.parse(System.console().readLine());
-        }
-        else if (choice == 2)
-        {
-            beginDate = LocalDate.of(2000,1, 1);
-            endDate = LocalDate.now();
-        }
-
-        System.out.println("Filter transactions by category? \n\n 1) Select a category\t2) No");
-        choice = Integer.parseInt(System.console().readLine());
-        Category category = null;
-        if (choice == 1)
-        {
-            try
-            {
-                category = categorySelector(u);
-            }
-            catch (Exception e)
-            {
-                System.out.println(e.getMessage());
-                return;
-            }
-        }
-
-        System.out.println("Show expenses, incomes or both? \n\n 1) Expenses\t\t2) Incomes\t\t3) Both");
-        choice = Integer.parseInt(System.console().readLine());
-        if (category == null)
-        {
-            if (choice == 1)
-            {
-                for (Transaction t : c.getTransactions(beginDate, endDate, Transaction.Direction.expense))
-                {
-                    System.out.println(t);
-                }
-            }
-            else if (choice == 2)
-            {
-                for (Transaction t : c.getTransactions(beginDate, endDate, Transaction.Direction.income))
-                {
-                    System.out.println(t);
-                }
-            }
-            else
-            {
-                for (Transaction t : c.getTransactions(beginDate, endDate))
-                {
-                    System.out.println(t);
-                }
-            }
-        }
-        else
-        {
-            if (choice == 1)
-            {
-                for (Transaction t : c.getTransactions(beginDate, endDate, category, Transaction.Direction.expense))
-                {
-                    System.out.println(t);
-                }
-            }
-            else if (choice == 2)
-            {
-                for (Transaction t : c.getTransactions(beginDate, endDate, category, Transaction.Direction.income))
-                {
-                    System.out.println(t);
-                }
-            }
-            else
-            {
-                for (Transaction t : c.getTransactions(beginDate, endDate, category))
-                {
-                    System.out.println(t);
-                }
-            }
         }
     }
 

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.smu.dao.PaymentCardDAO;
-import com.smu.model.Transaction.Direction;
+
 
 public class PaymentCard 
 {
@@ -16,7 +16,6 @@ public class PaymentCard
     private User owner;
     private BigDecimal balance;
 
-    
     public PaymentCard(String cardNumber, String cvv, String pin, LocalDate expirationDate, User owner, BigDecimal balance)
     {
         this.cardNumber = cardNumber;
@@ -59,39 +58,19 @@ public class PaymentCard
         return balance;
     }
 
+    public Report getReport(LocalDate date)
+    {
+        return PaymentCardDAO.getReport(this, date);
+    }
+
     public List<Transaction> getTransactions()
     {
         return PaymentCardDAO.getTransactions(this);
     }
-
-    public List<Transaction> getTransactions(Transaction.Direction direction)
-    {
-        return PaymentCardDAO.getTransactions(this, direction);
-    }
-
-    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate)
-    {
-        return PaymentCardDAO.getTransactions(this, beginDate, endDate);
-    }
-
-    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate , Transaction.Direction direction)
-    {
-        return PaymentCardDAO.getTransactions(this, beginDate, endDate, direction);
-    }
     
-    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate, Category category)
+    public List<Transaction> filterTransactions(TransactionFilter transactionFilter, List<Transaction> transactions)
     {
-        return PaymentCardDAO.getTransactions(this, beginDate, endDate, category);
-    }
-
-    public List<Transaction> getTransactions(LocalDate beginDate, LocalDate endDate, Category category, Direction direction)
-    {
-        return PaymentCardDAO.getTransactions(this, beginDate, endDate, category, direction);
-    }
-
-    public Report getReport(LocalDate date)
-    {
-        return PaymentCardDAO.getReport(this, date);
+        return transactionFilter.filter(transactions);
     }
 
     /***************************************************************METHODS**************************************************************** */
@@ -106,6 +85,7 @@ public class PaymentCard
         transaction.insert();
         transaction.sortInCategories();
     }
+ 
     /***************************************************************DEBUG**************************************************************** */
     public String toString()
     {

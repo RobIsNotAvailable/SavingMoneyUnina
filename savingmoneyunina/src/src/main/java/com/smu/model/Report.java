@@ -20,7 +20,7 @@ public class Report
         this.card = card;
         this.date = date.withDayOfMonth(1);
     }
-
+    
     //constructor for the DAO
     public Report(IncomeDetails incomeDetails, ExpenseDetails expenseDetails, BigDecimal initialBalance, BigDecimal finalBalance, PaymentCard card, LocalDate date)
     {
@@ -53,6 +53,8 @@ public class Report
         return date;
     }
 
+    //getters for the income/expense details
+    
 /***************************************************DEBUG******************************************************* */
     public String toString()
     {

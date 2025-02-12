@@ -21,7 +21,7 @@ public class CategoryDAO
     //methods should never return null, but an empty list
     static Connection conn = DbConnection.getConnection();
 
-    public static Category get(String name, String creator_username)
+    public static Category get(String name, String creatorUsername)
     {
         String sql = "SELECT * FROM category WHERE name = ? AND creator_username = ?";
 
@@ -29,13 +29,13 @@ public class CategoryDAO
         {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, name);
-            ps.setString(2, creator_username);
+            ps.setString(2, creatorUsername);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next())
             {
                 String description = rs.getString("description");
-                User creator = UserDAO.get(creator_username);
+                User creator = UserDAO.get(creatorUsername);
                 
                 Category category = new Category(name, description, creator);
 

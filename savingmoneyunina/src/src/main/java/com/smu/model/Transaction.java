@@ -75,6 +75,10 @@ public class Transaction
         return card.getOwner();
     }
 
+    public List <Category> getCategories() 
+    {
+        return TransactionDAO.getCategories(this);
+    }
 /************************************************METHODS****************************************************** */
 
     public void insert()

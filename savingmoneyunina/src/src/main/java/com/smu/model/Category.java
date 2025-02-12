@@ -84,13 +84,13 @@ public class Category
         return false;
     }
 
-
     public void insertTransaction(Transaction transaction)
     {
         categorizedTransactions.add(transaction);
         CategoryDAO.insertTransaction(transaction, this);
     }
-/*****************************************************DEBUG******************************************** */
+
+    /*****************************************************DEBUG******************************************** */
    public String toString()
     {
         String output = new String("Category: " + name + "\nDescription: " + description + "\nCreator: " + creator.getUsername() + "\nTransactions:");

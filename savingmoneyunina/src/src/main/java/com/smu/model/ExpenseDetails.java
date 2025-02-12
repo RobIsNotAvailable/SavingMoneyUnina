@@ -1,6 +1,7 @@
 package com.smu.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class ExpenseDetails 
 {
@@ -14,7 +15,7 @@ public class ExpenseDetails
         {
             this.maxExpense = maxExpense;
             this.minExpense = minExpense;
-            this.avgExpense = avgExpense.setScale(2);
+            this.avgExpense = avgExpense.setScale(2,RoundingMode.HALF_UP);
         }
     }
 
