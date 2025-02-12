@@ -129,20 +129,22 @@ CREATE TABLE transaction_category
 
 /**********************************************FUNZIONI AUSILIARIE************************************************/
 
-CREATE OR REPLACE FUNCTION report_exists(input_card_number VARCHAR, report_date DATE)
+CREATE OR REPLACE FUNCTION balance_saved(input_card_number VARCHAR, report_date DATE)
 	RETURNS BOOLEAN AS $$
 	DECLARE  
-	    report_found BOOLEAN;
+	    report_found NUMERIC;
 	BEGIN 
-	    SELECT EXISTS (
-	        SELECT 1
-	        FROM transaction AS t
-	        WHERE 
-	            t.card_number = input_card_number AND
-	            DATE_TRUNC('month', t.date) = DATE_TRUNC('month', report_date)
-	    ) INTO report_found;
-	
-	    RETURN report_found;
+	    SELECT COUNT(*) INTO report_found
+        FROM monthly_balances AS m
+        WHERE
+            m.card_number = input_card_number AND
+            date = DATE_TRUNC('month', report_date);
+
+        IF report_found = 0 THEN
+            RETURN FALSE;
+        ELSE
+            RETURN TRUE;
+        END IF;
 	END;
 	$$ LANGUAGE plpgsql;
 	
@@ -172,7 +174,7 @@ CREATE OR REPLACE FUNCTION update_monthly_balances()
 	    exist BOOLEAN;
 	    balance NUMERIC;
 	BEGIN 
-	    exist := report_exists(NEW.card_number, NEW.date);
+	    exist := balance_saved(NEW.card_number, NEW.date);
 	
 	    IF NOT exist THEN
 	        balance := get_latest_balance(NEW.card_number, NEW.date);
@@ -235,7 +237,7 @@ CREATE OR REPLACE FUNCTION get_monthly_balances(input_number VARCHAR, input_date
 		exist BOOLEAN;
 		balance NUMERIC;
     BEGIN
-        exist := report_exists(input_number, input_date);
+        exist := balance_saved(input_number, input_date);
 	
 	    IF NOT exist THEN
 	        balance := get_latest_balance(input_number, input_date);
@@ -282,8 +284,53 @@ INSERT INTO monthly_balances
     (3000, 3000, '2024-02-01', '3498734875349033'),
     (3000, 3000, '2024-02-01', '3498734875349456');
 
+INSERT INTO category (name, description, creator_username)
+    VALUES
+    ('Food', 'Food and grocery expenses', 'alice'),
+    ('Income', 'Salary, freelance, and other earnings', 'alice'),
+    ('Other', '', 'alice'),
+    
+    ('Entertainment', 'Movies, music, and games', 'boby'),
+    ('Utilities', 'Bills and subscriptions', 'charlie'),
+    ('Transport', 'Expenses related to transportation', 'frankie'),
+    ('Shopping', 'Retail and online purchases', 'boby'),
+    ('Housing', 'Rent and home-related expenses', 'charlie'),
+
+    
+    ('Other', '', 'boby'),
+    ('Other', '', 'charlie'),
+    ('Other', '', 'frankie');
+    
+INSERT INTO keyword (keyword, category_id)
+    VALUES
+    ('groceries', 1),      -- for Food (creator: alice)
+    ('food', 1),
+    ('supermarket', 1),
+    ('restaurant', 1),
+    ('diner', 1),
+    ('coffee', 1),
+    ('snacks', 1),
+    
+    ('movies', 2),         -- for Entertainment (creator: boby)
+    ('concert', 2),
+    ('electricity', 3),    -- for Utilities (creator: charlie)
+    
+    ('taxi', 4),           -- for Transport (creator: frankie)
+    ('bus', 4),
+    
+    ('salary', 5),         -- for Income (creator: alice)
+    ('freelance', 5),
+    ('bonus', 5),
+    ('dividends', 5),
+    
+    ('electronics', 6),    -- for Shopping (creator: boby)
+    ('gift', 6),
+    ('book', 6),
+    
+    ('rent', 7);           -- for Housing (creator: charlie)
+
 INSERT INTO transaction (id, amount, description, date, direction, card_number)
-VALUES
+    VALUES
   -- Cycle 1
   (1, 50, 'Groceries purchase at local store', '2024-12-01', 'expense', '1234567812345678'),
   (2, 15, 'Watched a movie at the cinema', '2024-12-02', 'expense', '8765432187654321'),
@@ -356,47 +403,8 @@ VALUES
   (49, 260, 'Dividends paid quarterly', '2025-01-21', 'income', '1234567812345678'),
   (50, 45, 'Miscellaneous expense for office supplies', '2025-01-22', 'expense', '3498734875349033');
 
-
-INSERT INTO category (name, description, creator_username)
-    VALUES
-    ('Food', 'Food and grocery expenses', 'alice'),
-    ('Entertainment', 'Movies, music, and games', 'boby'),
-    ('Utilities', 'Bills and subscriptions', 'charlie'),
-    ('Transport', 'Expenses related to transportation', 'frankie'),
-    ('Income', 'Salary, freelance, and other earnings', 'alice'),
-    ('Shopping', 'Retail and online purchases', 'boby'),
-    ('Housing', 'Rent and home-related expenses', 'charlie'),
-
-    ('Other', '', 'alice'),
-    ('Other', '', 'boby'),
-    ('Other', '', 'charlie'),
-    ('Other', '', 'frankie');
-    
-
-INSERT INTO keyword (keyword, category_id)
-VALUES
-    ('groceries', 1),      -- for Food (creator: alice)
-    ('movies', 2),         -- for Entertainment (creator: boby)
-    ('concert', 2),
-    ('electricity', 3),    -- for Utilities (creator: charlie)
-    
-    ('taxi', 4),           -- for Transport (creator: frankie)
-    ('bus', 4),
-    
-    ('salary', 5),         -- for Income (creator: alice)
-    ('freelance', 5),
-    ('bonus', 5),
-    ('dividends', 5),
-    
-    ('electronics', 6),    -- for Shopping (creator: boby)
-    ('gift', 6),
-    ('book', 6),
-    
-    ('rent', 7);           -- for Housing (creator: charlie)
-
-
 INSERT INTO transaction_category (transaction_id, category_id)
-VALUES
+    VALUES
   (1, 1),    -- Transaction 1: alice – Food (contains "groceries")
   (2, 2),    -- Transaction 2: boby – Entertainment (contains "movies")
   (3, 3),    -- Transaction 3: charlie – Utilities (contains "electricity")

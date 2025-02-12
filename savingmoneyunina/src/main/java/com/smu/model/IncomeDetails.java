@@ -4,15 +4,18 @@ import java.math.BigDecimal;
 
 public class IncomeDetails
 {
-    private BigDecimal maxIncome;
-    private BigDecimal minIncome;
-    private BigDecimal avgIncome;   
+    private BigDecimal maxIncome = BigDecimal.ZERO;
+    private BigDecimal minIncome = BigDecimal.ZERO;
+    private BigDecimal avgIncome = BigDecimal.ZERO;   
     
     public IncomeDetails(BigDecimal maxIncome, BigDecimal minIncome, BigDecimal avgIncome)
     {
-        this.maxIncome = maxIncome;
-        this.minIncome = minIncome;
-        this.avgIncome = avgIncome;
+        if(maxIncome != null)
+        { 
+            this.maxIncome = maxIncome;
+            this.minIncome = minIncome;
+            this.avgIncome = avgIncome.setScale(2);
+        }
     }
 
     public BigDecimal getMaxIncome()

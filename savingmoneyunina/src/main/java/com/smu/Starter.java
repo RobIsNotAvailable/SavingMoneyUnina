@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.smu.dao.PaymentCardDAO;
+import com.smu.dao.UserDAO;
 import com.smu.model.Category;
 import com.smu.model.Family;
 import com.smu.model.PaymentCard;
@@ -13,16 +15,38 @@ import com.smu.model.User;
 
 public class Starter 
 {
-    //try inserting a transaction
+    //control insert if matches
+    //insert transaction should be functioning 
+
     public static final String MENU_STRING = "1) Family Details\t2) Cards \t\t3) Transactions \n\n4) Categories\t\t5) Reports\t\t6) Exit";
+    
     public static void main( String[] args)
     {
-        menu();
+        test();
     }
 
     public static void test()
     {
-        
+        PaymentCard card = PaymentCardDAO.get("1234567812345678");
+
+        System.out.println("Insert the amount:");
+        double amount = Double.parseDouble(System.console().readLine());
+
+        System.out.println("Insert the description:");
+        String description = System.console().readLine();
+
+        System.out.println("Select the direction: \n1) Income\t\t 2) Expense");
+        int direction = Integer.parseInt(System.console().readLine());
+        Transaction.Direction dir = (direction == 1) ? Transaction.Direction.income : Transaction.Direction.expense;
+
+        System.out.println("STAMPA BEFORE TRANSACTION");
+        System.out.println(card.getReport(LocalDate.now()));
+
+        Transaction t = new Transaction(BigDecimal.valueOf(amount), description, LocalDate.now(), dir, card);
+        card.executeTransaction(t);
+
+        System.out.println("STAMPA AFTER TRANSACTION");
+        System.out.println(card.getReport(LocalDate.now()));
     }
 
     public static void menu()

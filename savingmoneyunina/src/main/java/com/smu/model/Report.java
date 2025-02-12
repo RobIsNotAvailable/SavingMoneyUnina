@@ -59,8 +59,6 @@ public class Report
         return "Initial balance: " + initialBalance + "\n" +
                 "Final balance: " + finalBalance + "\n\n" +
                 "Income details: " + incomeDetails + "\n\n" +
-                "Expense details: " + expenseDetails + "\n\n" +
-                "Card: " + card + "\n" +
-                "Date: " + date;
+                "Expense details: " + expenseDetails + "\n\n" ;
     }
 }

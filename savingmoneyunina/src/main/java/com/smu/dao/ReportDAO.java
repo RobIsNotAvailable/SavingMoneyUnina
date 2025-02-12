@@ -22,6 +22,7 @@ public class ReportDAO
         BigDecimal startingBalance = null;
         BigDecimal endingBalance = null;	
         String sql = "select * from get_monthly_balances(?,?)";
+        date=date.withDayOfMonth(1);
 
         try 
         {

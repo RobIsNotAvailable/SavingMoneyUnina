@@ -38,8 +38,9 @@ public class TransactionDAO
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("date").toLocalDate();
                 Transaction.Direction direction = Transaction.Direction.valueOf(rs.getString("direction"));
+                Long id = rs.getLong("id");
 
-                transactions.add(new Transaction(amount, description, date, direction, card));
+                transactions.add(new Transaction(amount, description, date, direction, card, id));
             }
 
             return transactions;
@@ -229,7 +230,7 @@ public class TransactionDAO
 
     public static Boolean insert(Transaction transaction)
     {
-        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number) VALUES (?, ?, ?, ?, ?, ?::direction, ?) ";
+        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number) VALUES (?, ?, ?, ?, ?::direction, ?) ";
 
         try
         {
@@ -241,8 +242,7 @@ public class TransactionDAO
             ps.setDate(4, java.sql.Date.valueOf(transaction.getDate()));
             ps.setString(5, transaction.getDirection().toString());
             ps.setString(6, transaction.getCard().getCardNumber());
-            ps.setLong(7, TransactionDAO.generateId());
-
+            
             ps.executeUpdate();
         }
         catch (SQLException e)

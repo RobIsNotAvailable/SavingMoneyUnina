@@ -74,7 +74,7 @@ public class Category
     {
         for (String keyword : getKeywords())
         {
-            if (description.toLowerCase().contains(keyword.toLowerCase()))
+            if (transaction.getDescription().toLowerCase().contains(keyword.toLowerCase()))//not using transaction??????
             {
                 insertTransaction(transaction);
                 return true;
