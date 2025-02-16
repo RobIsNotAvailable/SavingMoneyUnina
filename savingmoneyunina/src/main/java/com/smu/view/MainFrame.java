@@ -10,18 +10,18 @@ public class MainFrame extends JFrame
 {
     public MainFrame()
     {
-        this.setTitle("SavingMoneyUnina");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        this.setSize(1440,810);
+        setTitle("SavingMoneyUnina");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        setSize(1440,810);
         ImageIcon logo = new ImageIcon(MainFrame.class.getResource("/logo.png"));
-        this.setIconImage(logo.getImage());
-        this.getContentPane().setBackground(new java.awt.Color(35, 35, 35));
+        setIconImage(logo.getImage());
+        getContentPane().setBackground(UiUtil.BACKGROUND_GRAY);
 
         Rectangle screen = getScreenSize();
-        int x = ((int) screen.getMaxX() - this.getWidth()) / 2;
-        int y = ((int) screen.getMaxY() - this.getHeight()) / 2;
-        this.setLocation(x, y);
-        this.setVisible(true);
+        int x = ((int) screen.getMaxX() - getWidth()) / 2;
+        int y = ((int) screen.getMaxY() - getHeight()) / 2;
+        setLocation(x, y);
+        setVisible(true);
     }
 
     private Rectangle getScreenSize()

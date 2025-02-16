@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 
 public class UiUtil 
 {
+    public static final Color BACKGROUND_GRAY = new Color(35, 35, 35);
+
     public static final Color DARK_CAPPUCCINO = new Color(150,130,115);
 
     public static final Color CAPPUCCINO = new Color(200,165,140);
