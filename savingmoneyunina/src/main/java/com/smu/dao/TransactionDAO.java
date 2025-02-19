@@ -39,8 +39,9 @@ public class TransactionDAO
                 LocalDate date = rs.getDate("date").toLocalDate();
                 Transaction.Direction direction = Transaction.Direction.valueOf(rs.getString("direction"));
                 Long id = rs.getLong("id");
+                String counterPart = rs.getString("counter_part");
 
-                transactions.add(new Transaction(amount, description, date, direction, card, id));
+                transactions.add(new Transaction(amount, description, date, direction, card, id, counterPart));
             }
 
         }

@@ -43,7 +43,8 @@ public class LoginController
                 view.showSuccessMessage("Login successful");
                 main.loadScreens(user);
                 main.showScreen("Home");
-            } else 
+            } 
+            else 
             {
                 view.showErrorMessage("Invalid credentials");
             }

@@ -25,20 +25,17 @@ public class MainController
 
         mainPanel.setOpaque(false);
 
-        LoginPanel loginPanel = new LoginPanel();
+        // LoginPanel loginPanel = new LoginPanel();
 
-        new LoginController(this, loginPanel);
+        // new LoginController(this, loginPanel);
 
-        mainPanel.add(loginPanel, "Login"); 
+        // mainPanel.add(loginPanel, "Login"); 
 
         // USE TO DIRECTLY ACCESS HOME 
-        //{
-            // new HomePanel(new User("alice", "Password123")); 
-        //}
-
+        HomePanel hp = new HomePanel(new User("alice", "Password123")); 
+        mainPanel.add(hp, "Home");
         mainFrame.add(mainPanel);
     }
-
 
     public void showScreen(String screenName) 
     {

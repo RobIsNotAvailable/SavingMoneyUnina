@@ -8,14 +8,16 @@ public class ExpenseDetails
     private BigDecimal maxExpense = BigDecimal.ZERO;
     private BigDecimal minExpense = BigDecimal.ZERO;
     private BigDecimal avgExpense = BigDecimal.ZERO;
+    private BigDecimal totalExpense = BigDecimal.ZERO;
 
-    public ExpenseDetails(BigDecimal maxExpense, BigDecimal minExpense, BigDecimal avgExpense)
+    public ExpenseDetails(BigDecimal maxExpense, BigDecimal minExpense, BigDecimal avgExpense, BigDecimal totalExpense)
     {
         if(maxExpense != null)
         {
             this.maxExpense = maxExpense;
             this.minExpense = minExpense;
             this.avgExpense = avgExpense.setScale(2,RoundingMode.HALF_UP);
+            this.totalExpense = totalExpense;
         }
     }
 
@@ -33,7 +35,12 @@ public class ExpenseDetails
     {
         return avgExpense;
     }
-/***************************************************DEBUG************************************************** */
+
+    public BigDecimal getTotalExpense()
+    {
+        return totalExpense;
+    }
+    /***************************************************DEBUG************************************************** */
     public String toString()
     {
         return "Max expense: " + maxExpense + "\n" +

@@ -17,7 +17,7 @@ public class ExpenseDetailsDAO
 
     public static ExpenseDetails get(PaymentCard card, LocalDate date)
     {
-        String sql = "select max_expense, min_expense, avg_expense from get_monthly_expense_details(?,?)";
+        String sql = "select max_expense, min_expense, avg_expense, total_expense from get_monthly_expense_details(?,?)";
 
         try
         {
@@ -32,8 +32,10 @@ public class ExpenseDetailsDAO
                 BigDecimal maxExpense = rs.getBigDecimal("max_expense");
                 BigDecimal minExpense = rs.getBigDecimal("min_expense");
                 BigDecimal avgExpense = rs.getBigDecimal("avg_expense");
+                BigDecimal totalExpense = rs.getBigDecimal("total_expense");
 
-                return new ExpenseDetails(maxExpense, minExpense, avgExpense);
+
+                return new ExpenseDetails(maxExpense, minExpense, avgExpense, totalExpense);
             }
         }
         catch(SQLException e)

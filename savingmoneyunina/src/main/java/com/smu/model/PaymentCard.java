@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.smu.dao.IncomeDetailsDAO;
 import com.smu.dao.PaymentCardDAO;
 
 
@@ -61,6 +62,16 @@ public class PaymentCard
     public Report getReport(LocalDate date)
     {
         return PaymentCardDAO.getReport(this, date);
+    }
+
+    public BigDecimal getTotalMonthlyIncome(LocalDate date)
+    {
+        return PaymentCardDAO.getTotalMonthlyIncome(this, date);
+    }
+
+    public BigDecimal getTotalMonthlyExpense(LocalDate date)
+    {
+        return PaymentCardDAO.getTotalMonthlyExpense(this, date);
     }
 
     public List<Transaction> getTransactions()

@@ -64,6 +64,7 @@ CREATE TABLE transaction
         date DATE NOT NULL,
         direction direction NOT NULL,
         card_number VARCHAR NOT NULL,
+        counter_part VARCHAR NOT NULL,
 
         CONSTRAINT fk_cardNumber FOREIGN KEY (card_number) REFERENCES payment_card(card_number) ON DELETE CASCADE ON UPDATE CASCADE,
 
@@ -206,10 +207,10 @@ EXECUTE FUNCTION update_monthly_balances();
 /***************************************************** DAO FUNCTIONS *************************************************************/
 
 CREATE OR REPLACE FUNCTION get_monthly_expense_details(input_number VARCHAR, input_date DATE)
-    RETURNS TABLE(max_expense NUMERIC, min_expense NUMERIC, avg_expense NUMERIC) AS $$
+    RETURNS TABLE(max_expense NUMERIC, min_expense NUMERIC, avg_expense NUMERIC, total_expense NUMERIC) AS $$
     BEGIN
         RETURN QUERY
-            SELECT MAX(amount), MIN(amount), AVG(amount)
+            SELECT MAX(amount), MIN(amount), AVG(amount), SUM(amount)
             FROM transaction AS t
             WHERE 
                 t.card_number = input_number AND
@@ -219,10 +220,10 @@ CREATE OR REPLACE FUNCTION get_monthly_expense_details(input_number VARCHAR, inp
     $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_monthly_income_details(input_number VARCHAR, input_date DATE)
-    RETURNS TABLE(max_income NUMERIC, min_income NUMERIC, avg_income NUMERIC) AS $$
+    RETURNS TABLE(max_income NUMERIC, min_income NUMERIC, avg_income NUMERIC, total_income NUMERIC) AS $$
     BEGIN
         RETURN QUERY
-            SELECT MAX(amount), MIN(amount), AVG(amount)
+            SELECT MAX(amount), MIN(amount), AVG(amount), SUM(amount)
             FROM transaction AS t
             WHERE 
                 t.card_number = input_number AND
@@ -329,79 +330,79 @@ INSERT INTO keyword (keyword, category_id)
     
     ('rent', 7);           -- for Housing (creator: charlie)
 
-INSERT INTO transaction (id, amount, description, date, direction, card_number)
+INSERT INTO transaction (id, amount, description, date, direction, card_number,counter_part)
     VALUES
-  -- Cycle 1
-  (1, 50, 'Groceries purchase at local store', '2024-12-01', 'expense', '1234567812345678'),
-  (2, 15, 'Watched a movie at the cinema', '2024-12-02', 'expense', '8765432187654321'),
-  (3, 80, 'Electricity bill payment', '2024-12-03', 'expense', '1122334455667788'),
-  (4, 25, 'Taxi ride from airport', '2024-12-04', 'expense', '3498734875349456'),
-  
-  -- Cycle 2
-  (5, 2000, 'Salary received from employer', '2024-12-05', 'income', '3498734875349033'),
-  (6, 100, 'Purchased new electronics online', '2024-12-06', 'expense', '8765432187654321'),
-  (7, 600, 'Monthly rent payment', '2024-12-07', 'expense', '1122334455667788'),
-  (8, 10, 'Bus fare for commute', '2024-12-08', 'expense', '3498734875349456'),
-  
-  -- Cycle 3
-  (9, 60, 'Weekly groceries shopping', '2024-12-09', 'expense', '1234567812345678'),
-  (10, 50, 'Concert tickets for live show', '2024-12-10', 'expense', '8765432187654321'),
-  (11, 85, 'Paid electricity charges', '2024-12-11', 'expense', '1122334455667788'),
-  (12, 30, 'Taxi charge from downtown', '2024-12-12', 'expense', '3498734875349456'),
-  
-  -- Cycle 4
-  (13, 500, 'Freelance project payment', '2024-12-13', 'income', '3498734875349033'),
-  (14, 40, 'Bought a gift for a friend', '2024-12-14', 'expense', '8765432187654321'),
-  (15, 620, 'Rent for apartment', '2024-12-15', 'expense', '1122334455667788'),
-  (16, 12, 'Bus ticket for work', '2024-12-16', 'expense', '3498734875349456'),
-  
-  -- Cycle 5
-  (17, 40, 'Coffee and snacks', '2024-12-17', 'expense', '1234567812345678'),
-  (18, 20, 'Dinner at a local restaurant', '2024-12-18', 'expense', '8765432187654321'),
-  (19, 30, 'Dinner at a local diner', '2024-12-19', 'expense', '1122334455667788'),
-  (20, 20, 'Snacks on the go', '2024-12-20', 'expense', '3498734875349456'),
-  
-  -- Cycle 6
-  (21, 55, 'Bought groceries for the week', '2024-12-21', 'expense', '3498734875349033'),
-  (22, 18, 'Evening movies with friends', '2024-12-22', 'expense', '8765432187654321'),
-  (23, 90, 'Electricity expense for the month', '2024-12-23', 'expense', '1122334455667788'),
-  (24, 28, 'Taxi service for event', '2024-12-24', 'expense', '3498734875349456'),
-  
-  -- Cycle 7
-  (25, 300, 'Year-end bonus credited', '2024-12-25', 'income', '1234567812345678'),
-  (26, 25, 'Bought a new book online', '2024-12-26', 'expense', '8765432187654321'),
-  (27, 630, 'Rent due for the office', '2024-12-27', 'expense', '1122334455667788'),
-  (28, 11, 'Bus ride during rush hour', '2024-12-28', 'expense', '3498734875349456'),
-  
-  -- Cycle 8
-  (29, 45, 'Groceries from the market', '2025-01-01', 'expense', '1234567812345678'),
-  (30, 55, 'Attended a concert event', '2025-01-02', 'expense', '8765432187654321'),
-  (31, 95, 'Electricity bill for February', '2025-01-03', 'expense', '1122334455667788'),
-  (32, 27, 'Quick taxi ride to station', '2025-01-04', 'expense', '3498734875349456'),
-  
-  -- Cycle 9
-  (33, 250, 'Dividends from investments', '2025-01-05', 'income', '3498734875349033'),
-  (34, 35, 'Gift purchase for birthday', '2025-01-06', 'expense', '8765432187654321'),
-  (35, 640, 'Monthly rent installment', '2025-01-07', 'expense', '1122334455667788'),
-  (36, 13, 'Bus trip for city tour', '2025-01-08', 'expense', '3498734875349456'),
-  
-  -- Cycle 10
-  (37, 35, 'Random shopping expense', '2025-01-09', 'expense', '1234567812345678'),
-  (38, 22, 'Casual outing expense', '2025-01-10', 'expense', '8765432187654321'),
-  (39, 35, 'Miscellaneous utility expense', '2025-01-11', 'expense', '1122334455667788'),
-  (40, 18, 'Unplanned expense', '2025-01-12', 'expense', '3498734875349456'),
-  
-  -- Extra 10 for alice
-  (41, 65, 'Groceries for family dinner', '2025-01-13', 'expense', '1234567812345678'),
-  (42, 2100, 'Salary deposit', '2025-01-14', 'income', '3498734875349033'),
-  (43, 70, 'Fresh groceries purchase', '2025-01-15', 'expense', '1234567812345678'),
-  (44, 550, 'Freelance income from design work', '2025-01-16', 'income', '3498734875349033'),
-  (45, 30, 'Uncategorized expense at restaurant', '2025-01-17', 'expense', '1234567812345678'),
-  (46, 50, 'Groceries from organic store', '2025-01-18', 'expense', '3498734875349033'),
-  (47, 320, 'Bonus received after performance review', '2025-01-19', 'income', '1234567812345678'),
-  (48, 60, 'Groceries at supermarket', '2025-01-20', 'expense', '3498734875349033'),
-  (49, 260, 'Dividends paid quarterly', '2025-01-21', 'income', '1234567812345678'),
-  (50, 45, 'Miscellaneous expense for office supplies', '2025-01-22', 'expense', '3498734875349033');
+    -- Cycle 1
+    (1, 50, 'Groceries purchase', '2024-12-01', 'expense', '1234567812345678','local store'),
+    (2, 15, 'Watched a movie', '2024-12-02', 'expense', '8765432187654321','cinema'),
+    (3, 80, 'Electricity bill payment', '2024-12-03', 'expense', '1122334455667788','enel'),
+    (4, 25, 'Taxi ride from airport', '2024-12-04', 'expense', '3498734875349456','taxi'),
+
+    -- Cycle 2
+    (5, 2000, 'Salary received from employer', '2024-12-05', 'income', '3498734875349033','job'),
+    (6, 100, 'Purchased new electronics online', '2024-12-06', 'expense', '8765432187654321','amazon'),
+    (7, 600, 'Monthly rent payment', '2024-12-07', 'expense', '1122334455667788','landlord'),
+    (8, 10, 'Bus fare for commute', '2024-12-08', 'expense', '3498734875349456','anm'),
+
+    -- Cycle 3
+    (9, 60, 'Weekly groceries shopping', '2024-12-09', 'expense', '1234567812345678','local store'),
+    (10, 50, 'Concert tickets for live show', '2024-12-10', 'expense', '8765432187654321','ticket one'),
+    (11, 85, 'Paid electricity charges', '2024-12-11', 'expense', '1122334455667788','enel'),
+    (12, 30, 'Taxi charge from downtown', '2024-12-12', 'expense', '3498734875349456','taxi'),
+
+    -- Cycle 4
+    (13, 500, 'Freelance project payment', '2024-12-13', 'income', '3498734875349033','manager'),
+    (14, 40, 'Bought a gift for a friend', '2024-12-14', 'expense', '8765432187654321','amazon'),
+    (15, 620, 'Rent for apartment', '2024-12-15', 'expense', '1122334455667788','landlord'),
+    (16, 12, 'Bus ticket for work', '2024-12-16', 'expense', '3498734875349456','bus'),
+
+    -- Cycle 5
+    (17, 40, 'Coffee and snacks', '2024-12-17', 'expense', '1234567812345678', 'bar'),
+    (18, 20, 'Dinner at a local restaurant', '2024-12-18', 'expense', '8765432187654321','pizzeria da michele'),
+    (19, 30, 'Dinner at a local diner', '2024-12-19', 'expense', '1122334455667788','local diner'),
+    (20, 20, 'Snacks on the go', '2024-12-20', 'expense', '3498734875349456','vending machine'),
+
+    -- Cycle 6
+    (21, 55, 'Bought groceries for the week', '2024-12-21', 'expense', '3498734875349033', 'Supermarket'),
+    (22, 18, 'Evening movies with friends', '2024-12-22', 'expense', '8765432187654321', 'Cinema'),
+    (23, 90, 'Electricity expense for the month', '2024-12-23', 'expense', '1122334455667788', 'Utility Provider'),
+    (24, 28, 'Taxi service for event', '2024-12-24', 'expense', '3498734875349456', 'Taxi Company'),
+
+    -- Cycle 7
+    (25, 300, 'Year-end bonus credited', '2024-12-25', 'income', '1234567812345678', 'Employer'),
+    (26, 25, 'Bought a new book online', '2024-12-26', 'expense', '8765432187654321', 'Online Bookstore'),
+    (27, 630, 'Rent due for the office', '2024-12-27', 'expense', '1122334455667788', 'Landlord'),
+    (28, 11, 'Bus ride during rush hour', '2024-12-28', 'expense', '3498734875349456', 'Public Transport'),
+
+    -- Cycle 8
+    (29, 45, 'Groceries from the market', '2025-01-01', 'expense', '1234567812345678', 'Local Market'),
+    (30, 55, 'Attended a concert event', '2025-01-02', 'expense', '8765432187654321', 'Concert Venue'),
+    (31, 95, 'Electricity bill for February', '2025-01-03', 'expense', '1122334455667788', 'Utility Provider'),
+    (32, 27, 'Quick taxi ride to station', '2025-01-04', 'expense', '3498734875349456', 'Taxi Service'),
+
+    -- Cycle 9
+    (33, 250, 'Dividends from investments', '2025-01-05', 'income', '3498734875349033', 'Investment Firm'),
+    (34, 35, 'Gift purchase for birthday', '2025-01-06', 'expense', '8765432187654321', 'Gift Shop'),
+    (35, 640, 'Monthly rent installment', '2025-01-07', 'expense', '1122334455667788', 'Landlord'),
+    (36, 13, 'Bus trip for city tour', '2025-01-08', 'expense', '3498734875349456', 'Tour Bus Service'),
+
+    -- Cycle 10
+    (37, 35, 'Random shopping expense', '2025-01-09', 'expense', '1234567812345678', 'Retail Store'),
+    (38, 22, 'Casual outing expense', '2025-01-10', 'expense', '8765432187654321', 'Cafe'),
+    (39, 35, 'Miscellaneous utility expense', '2025-01-11', 'expense', '1122334455667788', 'Service Provider'),
+    (40, 18, 'Unplanned expense', '2025-01-12', 'expense', '3498734875349456', 'General Vendor'),
+
+    -- Extra 10 for Alice
+    (41, 65, 'Groceries for family dinner', '2025-01-13', 'expense', '1234567812345678', 'Supermarket'),
+    (42, 2100, 'Salary deposit', '2025-01-14', 'income', '3498734875349033', 'Employer'),
+    (43, 70, 'Fresh groceries purchase', '2025-01-15', 'expense', '1234567812345678', 'Grocery Store'),
+    (44, 550, 'Freelance income from design work', '2025-01-16', 'income', '3498734875349033', 'Client'),
+    (45, 30, 'Uncategorized expense at restaurant', '2025-01-17', 'expense', '1234567812345678', 'Restaurant'),
+    (46, 50, 'Groceries from organic store', '2025-01-18', 'expense', '3498734875349033', 'Organic Store'),
+    (47, 320, 'Bonus received after performance review', '2025-01-19', 'income', '1234567812345678', 'Employer'),
+    (48, 60, 'Groceries at supermarket', '2025-01-20', 'expense', '3498734875349033', 'Supermarket'),
+    (49, 260, 'Dividends paid quarterly', '2025-01-21', 'income', '1234567812345678', 'Investment Firm'),
+    (50, 45, 'Miscellaneous expense for office supplies', '2025-01-22', 'expense', '3498734875349033', 'Office Supplies Store');
 
 INSERT INTO transaction_category (transaction_id, category_id)
     VALUES

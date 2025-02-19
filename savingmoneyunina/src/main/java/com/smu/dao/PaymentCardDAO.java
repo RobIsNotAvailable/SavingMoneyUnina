@@ -73,4 +73,14 @@ public class PaymentCardDAO
             e.printStackTrace();
         }
     }
-}
+
+    public static BigDecimal getTotalMonthlyIncome(PaymentCard card, LocalDate date)
+    {
+        return IncomeDetailsDAO.get(card, date).getTotalIncome();
+    }
+
+    public static BigDecimal getTotalMonthlyExpense(PaymentCard card, LocalDate date)
+    {
+        return ExpenseDetailsDAO.get(card, date).getTotalExpense();
+    }
+}   

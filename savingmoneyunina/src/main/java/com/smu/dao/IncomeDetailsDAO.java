@@ -17,7 +17,7 @@ public class IncomeDetailsDAO
 
     public static IncomeDetails get(PaymentCard card, LocalDate date)
     {
-        String sql = "select max_income, min_income, avg_income from get_monthly_income_details(?,?)";
+        String sql = "select max_income, min_income, avg_income, total_income from get_monthly_income_details(?,?)";
 
         try
         {
@@ -32,8 +32,9 @@ public class IncomeDetailsDAO
                 BigDecimal maxIncome = rs.getBigDecimal("max_income");
                 BigDecimal minIncome = rs.getBigDecimal("min_income");
                 BigDecimal avgIncome = rs.getBigDecimal("avg_income");
+                BigDecimal totalIncome = rs.getBigDecimal("total_income");
 
-                return new IncomeDetails(maxIncome, minIncome, avgIncome);
+                return new IncomeDetails(maxIncome, minIncome, avgIncome, totalIncome);
             }
         }
         catch(SQLException e)

@@ -8,14 +8,16 @@ public class IncomeDetails
     private BigDecimal maxIncome = BigDecimal.ZERO;
     private BigDecimal minIncome = BigDecimal.ZERO;
     private BigDecimal avgIncome = BigDecimal.ZERO;   
+    private BigDecimal totalIncome = BigDecimal.ZERO;
     
-    public IncomeDetails(BigDecimal maxIncome, BigDecimal minIncome, BigDecimal avgIncome)
+    public IncomeDetails(BigDecimal maxIncome, BigDecimal minIncome, BigDecimal avgIncome, BigDecimal totalIncome)
     {
         if(maxIncome != null)
-        { 
+        {
             this.maxIncome = maxIncome;
             this.minIncome = minIncome;
             this.avgIncome = avgIncome.setScale(2, RoundingMode.HALF_UP);
+            this.totalIncome = totalIncome;
         }
     }
 
@@ -34,6 +36,10 @@ public class IncomeDetails
         return avgIncome;
     }
 
+    public BigDecimal getTotalIncome()
+    {
+        return totalIncome;
+    }
 /***************************************************DEBUG************************************************** */
     public String toString()
     {
