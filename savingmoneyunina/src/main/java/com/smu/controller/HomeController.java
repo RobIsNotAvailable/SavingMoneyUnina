@@ -66,9 +66,10 @@ public class HomeController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            //show card screen
+            System.out.println("BUTTON PRESSED ");
         }
     }
+
     public void updateButton()
     {
         String cardType = getCorrespondingCard();
@@ -86,11 +87,14 @@ public class HomeController
 
     private String getCorrespondingCard() 
     {
-        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1"))
+        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1234"))
             return "postepay";
 
-        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("2"))
+        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("5678"))
             return "hype";
+
+        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1111"))
+            return "americanEspresso";
 
         return "default";
     }

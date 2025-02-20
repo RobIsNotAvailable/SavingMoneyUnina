@@ -108,7 +108,7 @@ public class UiUtil
         }
     }
 
-    public static JButton createStyledButton(String text)
+    public static JButton createStyledButton(String text)//not used
     {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 14));
@@ -125,8 +125,16 @@ public class UiUtil
     public static JLabel createStyledLabel(String text)
     {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
+    
         label.setForeground(Color.WHITE);
-        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setFont(new Font("Arial", Font.BOLD, 20)); // Set desired font size
+
+        // Create a fixed-sized panel to contain the label
+        JPanel wrapper = new JPanel();
+        wrapper.setPreferredSize(new Dimension(200, 50)); // Set fixed size
+        wrapper.setMaximumSize(new Dimension(200, 50));
+        wrapper.setOpaque(false);
+        wrapper.add(label);
 
         return label;
     }

@@ -3,7 +3,6 @@ package com.smu.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.math.BigDecimal;
 
 import javax.swing.JButton;
@@ -30,6 +29,59 @@ public class HomePanel extends JPanel
     private JLabel incomeLabel = UiUtil.createStyledLabel("");
     private JLabel expensesLabel = UiUtil.createStyledLabel("");
     private JLabel balanceLabel = UiUtil.createStyledLabel("");
+    
+
+    public HomePanel()
+    {
+        cardButton = new JButton();
+
+        cardButton.setContentAreaFilled(false); 
+        cardButton.setBorderPainted(false);     
+        cardButton.setOpaque(false);
+        cardButton.setFocusPainted(false);           
+
+        cardButton.setPreferredSize(new Dimension(449, 280));//374, 233
+        
+        this.setOpaque(false);
+        this.setLayout(new BorderLayout());
+
+        navbar = new Navbar();
+        this.add(navbar, BorderLayout.NORTH);
+
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setOpaque(false);
+        centerPanel.add(new BlankPanel(new Dimension(1,150)),BorderLayout.NORTH);
+
+        JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
+        financePanel.setOpaque(false);
+
+        financePanel.add(new BlankPanel(new Dimension(1,50)),BorderLayout.NORTH);
+        financePanel.add(incomeLabel);
+        financePanel.add(expensesLabel);
+        financePanel.add(balanceLabel);
+
+        JPanel cardPanel = new JPanel(new BorderLayout());
+        cardPanel.setOpaque(false);
+        cardPanel.add(cardButton, BorderLayout.CENTER);
+        cardPanel.add(financePanel, BorderLayout.SOUTH);
+
+        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, -50));
+        buttonRow.setOpaque(false);
+
+        leftTriangleButton = new TriangleButton(TriangleButton.Direction.LEFT);
+        rightTriangleButton = new TriangleButton(TriangleButton.Direction.RIGHT);
+
+        leftTriangleButton.setPreferredSize(new Dimension(80, 80));
+        rightTriangleButton.setPreferredSize(new Dimension(80, 80));
+
+        buttonRow.add(leftTriangleButton);
+        buttonRow.add(cardPanel);
+        buttonRow.add(rightTriangleButton);
+
+        centerPanel.add(buttonRow, BorderLayout.CENTER);
+
+        this.add(centerPanel, BorderLayout.CENTER);
+    }
 
     public Navbar getNavbar()
     {
@@ -91,75 +143,14 @@ public class HomePanel extends JPanel
         return balanceLabel;
     }
 
-    public HomePanel()
-    {
-
-        cardButton = UiUtil.createStyledButton(null);
-
-        this.setOpaque(false);
-        this.setLayout(new BorderLayout());
-
-        navbar = new Navbar();
-        this.add(navbar, BorderLayout.NORTH);
-
-        // Wrapper panel for spacing and buttons
-        JPanel buttonContainer = new JPanel(new BorderLayout());
-        buttonContainer.setOpaque(false);
-
-        // Panel for buttons and finance labels
-        JPanel buttonWrapper = new JPanel(new BorderLayout());
-        buttonWrapper.setOpaque(false);
-
-        // Add spacing between navbar and card
-        buttonWrapper.add(new BlankPanel(new Dimension(1, 100)), BorderLayout.NORTH);
-        leftTriangleButton = new TriangleButton(TriangleButton.Direction.LEFT);
-        rightTriangleButton = new TriangleButton(TriangleButton.Direction.RIGHT);
-
-        leftTriangleButton.setPreferredSize(new Dimension(80, 80));
-        rightTriangleButton.setPreferredSize(new Dimension(80, 80));
-
-        cardButton.setPreferredSize(new Dimension(400, 200));
-        cardButton.setFont(new Font("Arial", Font.BOLD, 14));
-
-        JPanel cardPanel = new JPanel(new BorderLayout());
-        cardPanel.setOpaque(false);
-        cardPanel.add(cardButton, BorderLayout.CENTER);
-
-        // Finance panel with proper spacing and alignment
-        JPanel financeWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        financeWrapper.setOpaque(false);
-
-        JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
-        financePanel.setOpaque(false);
-
-        financePanel.add(incomeLabel);
-        financePanel.add(expensesLabel);
-        financePanel.add(balanceLabel);
-
-        // Add spacing between the card and finance labels
-        financeWrapper.add(new BlankPanel(new Dimension(1, 30)));
-        financeWrapper.add(financePanel);
-
-        cardPanel.add(financeWrapper, BorderLayout.SOUTH);
-
-        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, -30));
-        buttonRow.setOpaque(false);
-        buttonRow.add(leftTriangleButton);
-        buttonRow.add(cardPanel);
-        buttonRow.add(rightTriangleButton);
-
-        buttonWrapper.add(buttonRow, BorderLayout.CENTER);
-        buttonContainer.add(buttonWrapper, BorderLayout.CENTER);
-
-        this.add(buttonContainer, BorderLayout.CENTER);
-    }
-
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
-        incomeLabel.setText("Income: " + income + "€");
-        expensesLabel.setText("Expense: " + expense + "€");
-        balanceLabel.setText("Balance: " + balance + "€");
+        String green = String.format("rgb(%d, %d, %d)", UiUtil.SUCCESS_GREEN.getRed(), UiUtil.SUCCESS_GREEN.getGreen(), UiUtil.SUCCESS_GREEN.getBlue());
+        String red = String.format("rgb(%d, %d, %d)", UiUtil.ERROR_RED.getRed(), UiUtil.ERROR_RED.getGreen(), UiUtil.ERROR_RED.getBlue());
+        
+        incomeLabel.setText("<html><font color='white'>Income: </font><font color='" + green + "'>" + income + "€</font></html>");
+        expensesLabel.setText("<html><font color='white'>Expense: </font><font color='" + red + "'>" + expense + "€</font></html>");
+        balanceLabel.setText("<html><font color='white'>Balance: </font><font color='" + green + "'>" + balance + "€</font></html>");
     }
-
-
 }
+
