@@ -29,8 +29,10 @@ public class MainController
 
 
         /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
-        HomePanel homePanel = new HomePanel();
-        new HomeController(this, homePanel, new User("alice", "Password123"));
+        User user = new User("alice", "Password123");
+       
+        HomePanel homePanel = new HomePanel(user.getCards());
+        new HomeController(this, homePanel, user);
         new NavbarController(this, homePanel.getNavbar());
         mainPanel.add(homePanel, "Home");
         /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
@@ -52,7 +54,7 @@ public class MainController
     public void loadScreens(User user)
     {
         // add further panels here
-        HomePanel homePanel = new HomePanel();
+        HomePanel homePanel = new HomePanel(user.getCards());
         new HomeController(this, homePanel, user);
         new NavbarController(this, homePanel.getNavbar());
         mainPanel.add(homePanel, "Home");

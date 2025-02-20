@@ -21,13 +21,15 @@ public class HomeController
 
     private MainController main;
     private HomePanel view;
+    private User user;
 
     public HomeController(MainController main, HomePanel view, User user) 
     {
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
         this.main = main;
         this.view = view;
-        
+        this.user = user; 
+
         UiUtil.addListener(view.getRightTriangleButton(), new CardChangerListener(view.getRightTriangleButton()));
         UiUtil.addListener(view.getLeftTriangleButton(), new CardChangerListener(view.getLeftTriangleButton()));
         UiUtil.addListener(view.getCardButton(), new CardListener());
@@ -58,6 +60,7 @@ public class HomeController
 
             updateButton();
             updateDetails();
+            updateTable();
         }
     }
 
@@ -97,6 +100,11 @@ public class HomeController
             return "americanEspresso";
 
         return "default";
+    }
+
+    private void updateTable()
+    {
+        view.createTable(user.getCards().get(cardIndex).getTransactions());
     }
 
 }
