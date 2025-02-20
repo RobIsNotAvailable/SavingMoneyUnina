@@ -5,10 +5,12 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import com.smu.controller.HomeController;
 import com.smu.controller.LoginController;
+import com.smu.controller.NavbarController;
 import com.smu.model.User;
-import com.smu.view.LoginPanel;
 import com.smu.view.HomePanel;
+import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
 
 public class MainController 
@@ -25,15 +27,20 @@ public class MainController
 
         mainPanel.setOpaque(false);
 
-        // LoginPanel loginPanel = new LoginPanel();
 
-        // new LoginController(this, loginPanel);
+        /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
+        HomePanel homePanel = new HomePanel();
+        new HomeController(this, homePanel, new User("alice", "Password123"));
+        new NavbarController(this, homePanel.getNavbar());
+        mainPanel.add(homePanel, "Home");
+        /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
 
-        // mainPanel.add(loginPanel, "Login"); 
+        LoginPanel loginPanel = new LoginPanel();
 
-        // USE TO DIRECTLY ACCESS HOME 
-        HomePanel hp = new HomePanel(new User("alice", "Password123")); 
-        mainPanel.add(hp, "Home");
+        new LoginController(this, loginPanel);
+
+        mainPanel.add(loginPanel, "Login"); 
+        
         mainFrame.add(mainPanel);
     }
 
@@ -45,7 +52,9 @@ public class MainController
     public void loadScreens(User user)
     {
         // add further panels here
-        HomePanel homePanel = new HomePanel(user);
+        HomePanel homePanel = new HomePanel();
+        new HomeController(this, homePanel, user);
+        new NavbarController(this, homePanel.getNavbar());
         mainPanel.add(homePanel, "Home");
     }
 

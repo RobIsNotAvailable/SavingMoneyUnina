@@ -11,7 +11,7 @@ public class Transaction
 
     public enum Direction 
     {
-        income, expense;
+        INCOME, EXPENSE;
     }
 
     private Long id;

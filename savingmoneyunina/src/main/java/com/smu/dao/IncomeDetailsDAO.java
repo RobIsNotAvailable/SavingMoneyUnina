@@ -33,7 +33,7 @@ public class IncomeDetailsDAO
                 BigDecimal minIncome = rs.getBigDecimal("min_income");
                 BigDecimal avgIncome = rs.getBigDecimal("avg_income");
                 BigDecimal totalIncome = rs.getBigDecimal("total_income");
-
+                
                 return new IncomeDetails(maxIncome, minIncome, avgIncome, totalIncome);
             }
         }

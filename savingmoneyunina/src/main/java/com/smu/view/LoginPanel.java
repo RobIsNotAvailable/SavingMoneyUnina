@@ -8,7 +8,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -18,7 +17,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import com.smu.view.UiUtil.BlankPanel;
+import com.smu.view.UiUtil.*;
 
 public class LoginPanel extends JPanel
 {
@@ -38,7 +37,7 @@ public class LoginPanel extends JPanel
     
         JPanel logoPanel = new JPanel();
         logoPanel.setOpaque(false);
-        UiUtil.LogoLabel logo = new UiUtil.LogoLabel(0.7);
+        LogoLabel logo = new LogoLabel(0.7);
         logoPanel.add(logo);
         
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -155,6 +154,11 @@ public class LoginPanel extends JPanel
         }
     }
 
+    public JButton getLoginButton()
+    {
+        return loginButton;
+    }
+
     public String getUsername() 
     {
         return usernameField.getText();
@@ -182,8 +186,4 @@ public class LoginPanel extends JPanel
         messageLabel.setText(" ");
     }
 
-    public void addLoginListener(ActionListener listener) 
-    {
-        loginButton.addActionListener(listener);
-    }
 }

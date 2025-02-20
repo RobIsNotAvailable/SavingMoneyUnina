@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import com.smu.MainController;
 import com.smu.model.User;
 import com.smu.view.LoginPanel;
+import com.smu.view.UiUtil;
 
 
 public class LoginController 
@@ -15,11 +16,11 @@ public class LoginController
 
     public LoginController(MainController main, LoginPanel view) 
     {
-        // Loads the DB connection and relative objects, making login button more responsive on the first attempt
+        // Loads the DB connection and relative objects, making login button respond instantly on the first attempt
         new User(null, null).verify();
         this.main = main;
         this.view = view;
-        this.view.addLoginListener(new LoginListener());
+        UiUtil.addListener(view.getLoginButton(), new LoginListener());
     }
 
     private class LoginListener implements ActionListener 
@@ -43,6 +44,7 @@ public class LoginController
                 view.showSuccessMessage("Login successful");
                 main.loadScreens(user);
                 main.showScreen("Home");
+                view.clearMessage();
             } 
             else 
             {

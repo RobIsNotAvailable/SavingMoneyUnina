@@ -1,9 +1,11 @@
 package com.smu.view;
 
-import javax.swing.*;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 
 public class MainFrame extends JFrame 

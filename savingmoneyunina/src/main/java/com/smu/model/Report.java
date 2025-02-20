@@ -53,7 +53,6 @@ public class Report
         return date;
     }
 
-    //getters for the income/expense details
     
 /***************************************************DEBUG******************************************************* */
     public String toString()

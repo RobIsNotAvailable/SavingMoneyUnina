@@ -6,17 +6,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 import com.smu.MainController;
 import com.smu.model.PaymentCard;
 import com.smu.model.User;
 import com.smu.view.HomePanel;
-import com.smu.view.RightTriangleButton;
+import com.smu.view.UiUtil;
+import com.smu.view.UiUtil.*;
 
 public class HomeController 
 {
-    private ArrayList <PaymentCard> PaymentCardList;
+    private ArrayList<PaymentCard> PaymentCardList;
     private int cardIndex = 0;
 
     private MainController main;
@@ -27,39 +27,53 @@ public class HomeController
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
         this.main = main;
         this.view = view;
-    
-        this.view.addListener(view.rightTriangleButton, new ChangeCardListener(view.rightTriangleButton));
+        
+        UiUtil.addListener(view.getRightTriangleButton(), new CardChangerListener(view.getRightTriangleButton()));
+        UiUtil.addListener(view.getLeftTriangleButton(), new CardChangerListener(view.getLeftTriangleButton()));
+        UiUtil.addListener(view.getCardButton(), new CardListener());
+
+        updateButton();
+        updateDetails();
     }
 
-    private class ChangeCardListener implements ActionListener 
+    private class CardChangerListener implements ActionListener 
     {
-        JButton button;
+        TriangleButton.Direction direction;
 
-        ChangeCardListener(JButton button)
+        CardChangerListener(TriangleButton button)
         {
-            this.button = button;
+            this.direction = button.getDirection();
         }
 
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            if(button instanceof RightTriangleButton)
+            int length = PaymentCardList.size();
+            if(direction == TriangleButton.Direction.RIGHT)
                 cardIndex++;
             else    
                 cardIndex--;
 
-            cardIndex %= PaymentCardList.size(); 
+            cardIndex = (cardIndex + length) % length; 
 
             updateButton();
             updateDetails();
         }
     }
 
+    private class CardListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            //show card screen
+        }
+    }
     public void updateButton()
     {
         String cardType = getCorrespondingCard();
-        ImageIcon cardImage = new ImageIcon(HomeController.class.getResource("/"+cardType));
-        view.centerButton.setIcon(cardImage);
+        ImageIcon cardImage = new ImageIcon(HomeController.class.getResource("/" + cardType + ".png"));
+        view.getCardButton().setIcon(cardImage);
     }
 
     public void updateDetails()
@@ -73,12 +87,12 @@ public class HomeController
     private String getCorrespondingCard() 
     {
         if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1"))
-            return "postepay.png";
+            return "postepay";
 
         if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("2"))
-            return "hype.png";
+            return "hype";
 
-        return "default.png";
+        return "default";
     }
 
 }

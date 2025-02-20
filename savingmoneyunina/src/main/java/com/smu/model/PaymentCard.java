@@ -3,8 +3,6 @@ package com.smu.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
-import com.smu.dao.IncomeDetailsDAO;
 import com.smu.dao.PaymentCardDAO;
 
 
@@ -87,7 +85,7 @@ public class PaymentCard
     /***************************************************************METHODS**************************************************************** */
     public void executeTransaction(Transaction transaction)
     {
-        if (transaction.getDirection() == Transaction.Direction.income) 
+        if (transaction.getDirection() == Transaction.Direction.INCOME) 
             balance = balance.add(transaction.getAmount());
         else    
             balance = balance.subtract(transaction.getAmount());
