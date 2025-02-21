@@ -6,9 +6,13 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -24,15 +28,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class HomePanel extends JPanel
 {
     private Navbar navbar;
-    private JButton cardButton;
-    private JButton homeButton;
-    private JButton familyButton;
-    private JButton transactionButton;
-    private JButton newTransactionButton;
-    private JButton reporButton;
 
+    private JButton cardButton;
     private TriangleButton leftTriangleButton;
     private TriangleButton rightTriangleButton;
+
+    private JFrame cardDetailsFrame;
 
     private JLabel incomeLabel = UiUtil.createStyledLabel("");
     private JLabel expensesLabel = UiUtil.createStyledLabel("");
@@ -49,7 +50,7 @@ public class HomePanel extends JPanel
         cardButton.setOpaque(false);
         cardButton.setFocusPainted(false);           
 
-        cardButton.setPreferredSize(new Dimension(449, 280));//374, 233
+        cardButton.setPreferredSize(new Dimension(450, 280));
         cardButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         this.setOpaque(false);
@@ -105,31 +106,6 @@ public class HomePanel extends JPanel
         return cardButton;
     }
 
-    public JButton getHomeButton()
-    {
-        return homeButton;
-    }
-
-    public JButton getFamilyButton()
-    {
-        return familyButton;
-    }
-
-    public JButton getTransactionButton()
-    {
-        return transactionButton;
-    }
-
-    public JButton getNewTransactionButton()
-    {
-        return newTransactionButton;
-    }
-
-    public JButton getReporButton()
-    {
-        return reporButton;
-    }
-
     public TriangleButton getLeftTriangleButton()
     {
         return leftTriangleButton;
@@ -165,6 +141,50 @@ public class HomePanel extends JPanel
         balanceLabel.setText("<html><font color='white'>Balance: </font><font color='" + incomeColor + "'>" + balance + "€</font></html>");
     }
 
+    public void displayCardDetails(String cardNumber, String pin, String expirationDate, String cvv)
+    {
+        if (cardDetailsFrame != null && cardDetailsFrame.isDisplayable()) 
+            cardDetailsFrame.dispose();
+
+        cardDetailsFrame = new JFrame();
+        cardDetailsFrame.setTitle("Card Details");
+        cardDetailsFrame.setIconImage(new ImageIcon(HomePanel.class.getResource("/logo.png")).getImage());
+        cardDetailsFrame.getContentPane().setBackground(UiUtil.BACKGROUND_GRAY);
+
+
+        cardDetailsFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        JPanel detailsPanel = new JPanel();
+        detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
+        detailsPanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
+        detailsPanel.setOpaque(false);
+                    
+        JPanel coloredLine = new JPanel();
+        coloredLine.setBackground(UiUtil.CAPPUCCINO);
+        coloredLine.setPreferredSize(new Dimension(30, 5));
+
+        JLabel titleLabel = UiUtil.createStyledLabel("Card Details");
+        JLabel numberLabel = UiUtil.createStyledLabel("Number: " + cardNumber); 
+        JLabel pinLabel = UiUtil.createStyledLabel("Pin: " + pin); 
+        JLabel expiryLabel = UiUtil.createStyledLabel("Valid thru: " + expirationDate); 
+        JLabel cvvLabel = UiUtil.createStyledLabel("CVV: " + cvv);
+
+        detailsPanel.add(titleLabel);
+        detailsPanel.add(new BlankPanel(new Dimension(30, 10)));
+        detailsPanel.add(coloredLine);
+        detailsPanel.add(new BlankPanel(new Dimension(30, 10)));
+        detailsPanel.add(numberLabel);
+        detailsPanel.add(pinLabel);
+        detailsPanel.add(cvvLabel);
+        detailsPanel.add(expiryLabel);
+
+        cardDetailsFrame.getContentPane().add(detailsPanel, BorderLayout.CENTER);
+        cardDetailsFrame.pack();
+        cardDetailsFrame.setLocationRelativeTo(null); 
+        cardDetailsFrame.setVisible(true);
+        cardDetailsFrame.setResizable(false);
+    }
+
     public void createTable(List<Transaction> transactionList)  
     {  
         if (transactions != null)    
@@ -175,7 +195,7 @@ public class HomePanel extends JPanel
         for (int i = 0; i < transactionList.size(); i++)  
         {  
             Transaction transaction = transactionList.get(i);  
-            data[i][0] = transaction.getDate();  
+            data[i][0] = transaction.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             data[i][1] = transaction.getDescription();  
 
             Color color = (transaction.getDirection() == Transaction.Direction.INCOME) ? UiUtil.CAPPUCCINO : Color.WHITE;  

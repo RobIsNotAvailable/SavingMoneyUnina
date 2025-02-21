@@ -33,7 +33,7 @@ public class MainController
         
         HomePanel homePanel = new HomePanel(user.getCards());
         
-        new HomeController(this, homePanel, user);
+        new HomeController(homePanel, user);
         new NavbarController(this, homePanel.getNavbar());
         
         mainPanel.add(homePanel, "Home");
@@ -58,7 +58,7 @@ public class MainController
     {
         // add further panels here
         HomePanel homePanel = new HomePanel(user.getCards());
-        new HomeController(this, homePanel, user);
+        new HomeController(homePanel, user);
         new NavbarController(this, homePanel.getNavbar());
         mainPanel.add(homePanel, "Home");
     }

@@ -1,24 +1,16 @@
 package com.smu.controller;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-import com.smu.MainController;
 import com.smu.model.PaymentCard;
 import com.smu.model.User;
 import com.smu.view.HomePanel;
-import com.smu.view.MainFrame;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.*;
 
@@ -27,14 +19,12 @@ public class HomeController
     private ArrayList<PaymentCard> PaymentCardList;
     public static int cardIndex = 0;
 
-    private MainController main;
     private HomePanel view;
     private User user;
 
-    public HomeController(MainController main, HomePanel view, User user) 
+    public HomeController(HomePanel view, User user) 
     {
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
-        this.main = main;
         this.view = view;
         this.user = user; 
 
@@ -74,50 +64,18 @@ public class HomeController
 
     private class CardListener implements ActionListener
     {
-        private MainFrame frame;
-
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if (frame != null && frame.isDisplayable()) 
-                frame.dispose();
-
-            frame = new MainFrame();
-            frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-            
-            
-            PaymentCard card = user.getCards().get(cardIndex); 
-
-            JPanel detailsPanel = new JPanel();
-            detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
-            detailsPanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
-            detailsPanel.setOpaque(false);
-
-            JLabel titLabel = UiUtil.createStyledLabel("Card Details"); 
-            JLabel numberLabel = UiUtil.createStyledLabel("Number: " + card.getCardNumber()); 
-            JLabel pinLabel = UiUtil.createStyledLabel("Pin: " + card.getPin()); 
-            JLabel expiryLabel = UiUtil.createStyledLabel("Expiration Date: " + card.getExpirationDate().toString()); 
-            JLabel cvvLabel = UiUtil.createStyledLabel("CVV: " + card.getCvv());
-
-            detailsPanel.add(titLabel);
-            detailsPanel.add(numberLabel);
-            detailsPanel.add(pinLabel);
-            detailsPanel.add(cvvLabel);
-            detailsPanel.add(expiryLabel);
-
-            frame.getContentPane().add(detailsPanel, BorderLayout.CENTER);
-            
-            // Pack and show the frame
-            frame.pack();
-            frame.setLocationRelativeTo(null); // centers the frame
-            frame.setVisible(true);
+            PaymentCard card = PaymentCardList.get(cardIndex);
+            view.displayCardDetails(card.getCardNumber(), card.getPin(), card.getExpirationDate().format(DateTimeFormatter.ofPattern("MM/yy")), card.getCvv());
         }
     }
 
     public void updateButton()
     {
         String cardType = getCorrespondingCard();
-        ImageIcon cardImage = new ImageIcon(HomeController.class.getResource("/" + cardType + ".png"));
+        ImageIcon cardImage = new ImageIcon(new ImageIcon(HomeController.class.getResource("/" + cardType + ".png")).getImage().getScaledInstance(450, 280, java.awt.Image.SCALE_SMOOTH));
         view.getCardButton().setIcon(cardImage);
     }
 
@@ -132,15 +90,15 @@ public class HomeController
     private String getCorrespondingCard() 
     {
         if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1234"))
-            return "postepay";
+            return "pastapay";
 
         if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("5678"))
-            return "hype";
+            return "viza";
 
         if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1111"))
-            return "americanEspresso";
+            return "americanespresso";
 
-        return "default";
+        return "smucard";
     }
 
     private void updateTable()
