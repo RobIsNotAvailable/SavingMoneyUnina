@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
@@ -18,12 +19,14 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.JTableHeader;
 
 
@@ -257,7 +260,19 @@ public class UiUtil
             header.setBackground(UiUtil.DARK_CAPPUCCINO);
             header.setPreferredSize(new Dimension(10, 10)); 
             header.setEnabled(false);
+            header.setBorder(BorderFactory.createLineBorder(UiUtil.DARK_CAPPUCCINO)); 
             
+            header.setUI(new BasicTableHeaderUI() //custom header to remove separation between columns in the header
+            {
+                @Override
+                public void paint(Graphics g, JComponent c) {
+                    
+                    Graphics2D g2d = (Graphics2D) g;
+                    g2d.setColor(UiUtil.DARK_CAPPUCCINO);
+                    g2d.fillRect(0, 0, c.getWidth(), c.getHeight());
+                }
+            });
+
             setTableHeader(header);
         }
     }
@@ -281,7 +296,7 @@ public class UiUtil
                 @Override
                 protected void configureScrollBarColors() 
                 {
-                    this.thumbColor = UiUtil.DARK_CAPPUCCINO;
+                    this.thumbColor = UiUtil.CAPPUCCINO;
                     this.trackColor = new Color(0,0,0,0);
                 }
 
@@ -302,9 +317,19 @@ public class UiUtil
                     btn.setVisible(false);
                     return btn;
                 }
+
+                @Override //changin shape of the scroll wheel
+                protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) 
+                {
+                    Graphics2D g2d = (Graphics2D) g.create();
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2d.setColor(thumbColor);
+                    g2d.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
+                    g2d.dispose();
+                }
             });
 
-            getVerticalScrollBar().setPreferredSize(new Dimension(10, 0)); 
+            getVerticalScrollBar().setPreferredSize(new Dimension(5, 0)); 
         }
     } 
 }
