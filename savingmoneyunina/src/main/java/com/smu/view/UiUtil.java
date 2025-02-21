@@ -2,6 +2,8 @@ package com.smu.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -12,18 +14,24 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
+
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicScrollBarUI;
+import javax.swing.table.JTableHeader;
 
 
 public class UiUtil
 {
     public static final Color BACKGROUND_GRAY = new Color(35, 35, 35);
 
-    public static final Color DARK_CAPPUCCINO = new Color(150,130,115);
+    public static final Color DARK_CAPPUCCINO = new Color(107, 88, 75);
 
     public static final Color CAPPUCCINO = new Color(200,165,140);
 
@@ -60,10 +68,11 @@ public class UiUtil
         public Navbar()
         {
             wrapperPanel = new JPanel(new BorderLayout());
-            wrapperPanel.setOpaque(false);
+
+            setBackground(DARK_CAPPUCCINO);
 
             setLayout(new GridLayout(1, 0, 20, 0));
-            setOpaque(false);
+            setOpaque(true);
 
             homeButton = createStyledButton("Home");
             familyButton = createStyledButton("New Transaction");
@@ -108,17 +117,22 @@ public class UiUtil
         }
     }
 
-    public static JButton createStyledButton(String text)//not used
+    public static JButton createStyledButton(String text)
     {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setBackground(new Color(0, 0, 0, 127));
+        button.setBackground(new Color(0, 0, 0, 0)); 
         button.setForeground(Color.WHITE);
+        
+        button.setContentAreaFilled(false); 
         button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setFocusable(false);
+        button.setFocusPainted(false); 
+        button.setFocusable(false); 
         button.setMargin(new Insets(10, 15, 15, 15));
+        button.setRolloverEnabled(false);
 
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
         return button;
     }
 
@@ -189,7 +203,7 @@ public class UiUtil
 
             triangle = new Polygon(xPoints, yPoints, 3);
 
-            g2d.setColor(Color.WHITE);
+            g2d.setColor(UiUtil.CAPPUCCINO);
             g2d.fill(triangle);
         }
 
@@ -224,4 +238,73 @@ public class UiUtil
         }
     }
 
+    public static class TransparentTable extends JTable
+    {
+        public TransparentTable(Object[][] data, String[] ColumnNames)
+        {
+            super(data, ColumnNames);
+
+            setFillsViewportHeight(true);  
+            setOpaque(false);  
+            setBackground(new Color(0, 0, 0, 0));  
+            setForeground(Color.WHITE);  
+            setFont(getFont().deriveFont(20f));  
+            setRowHeight(30);  
+            setShowGrid(false);  
+            setEnabled(false);
+
+            JTableHeader header = getTableHeader();
+            header.setBackground(UiUtil.DARK_CAPPUCCINO);
+            header.setPreferredSize(new Dimension(10, 10)); 
+            header.setEnabled(false);
+            
+            setTableHeader(header);
+        }
+    }
+
+    public static class TransparentScrollPanel extends JScrollPane 
+    {
+        public TransparentScrollPanel(Component component, int width, int height) 
+        {
+            super(component);  
+
+            setPreferredSize(new Dimension(width, height));  
+            setOpaque(false);  
+            getViewport().setOpaque(false);  
+            setBorder(BorderFactory.createEmptyBorder());  
+
+            getVerticalScrollBar().setOpaque(false);
+            getHorizontalScrollBar().setOpaque(false);
+    
+            getVerticalScrollBar().setUI(new BasicScrollBarUI() 
+            {
+                @Override
+                protected void configureScrollBarColors() 
+                {
+                    this.thumbColor = UiUtil.DARK_CAPPUCCINO;
+                    this.trackColor = new Color(0,0,0,0);
+                }
+
+                @Override
+                protected JButton createDecreaseButton(int orientation) 
+                {
+                    JButton btn = new JButton();
+                    btn.setPreferredSize(new Dimension(0, 0));
+                    btn.setVisible(false);
+                    return btn;
+                }
+
+                @Override
+                protected JButton createIncreaseButton(int orientation) 
+                {
+                    JButton btn = new JButton();
+                    btn.setPreferredSize(new Dimension(0, 0));
+                    btn.setVisible(false);
+                    return btn;
+                }
+            });
+
+            getVerticalScrollBar().setPreferredSize(new Dimension(10, 0)); 
+        }
+    } 
 }

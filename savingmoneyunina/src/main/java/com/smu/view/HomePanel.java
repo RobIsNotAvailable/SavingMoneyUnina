@@ -2,25 +2,27 @@ package com.smu.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.math.BigDecimal;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.smu.controller.HomeController;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 import com.smu.view.UiUtil.*;
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class HomePanel extends JPanel
 {
-    public static int cardIndex = 0;
-
     private Navbar navbar;
     private JButton cardButton;
     private JButton homeButton;
@@ -48,6 +50,7 @@ public class HomePanel extends JPanel
         cardButton.setFocusPainted(false);           
 
         cardButton.setPreferredSize(new Dimension(449, 280));//374, 233
+        cardButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
@@ -89,7 +92,7 @@ public class HomePanel extends JPanel
 
         this.add(centerPanel, BorderLayout.CENTER);
 
-        createTable(cards.get(cardIndex).getTransactions());
+        createTable(cards.get(HomeController.cardIndex).getTransactions());
     }
 
     public Navbar getNavbar()
@@ -154,75 +157,59 @@ public class HomePanel extends JPanel
 
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
-        String green = String.format("rgb(%d, %d, %d)", UiUtil.SUCCESS_GREEN.getRed(), UiUtil.SUCCESS_GREEN.getGreen(), UiUtil.SUCCESS_GREEN.getBlue());
-        String red = String.format("rgb(%d, %d, %d)", UiUtil.ERROR_RED.getRed(), UiUtil.ERROR_RED.getGreen(), UiUtil.ERROR_RED.getBlue());
+        String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
+        String expenseColor = "rgb(255,255, 255)";
         
-        incomeLabel.setText("<html><font color='white'>Income: </font><font color='" + green + "'>" + income + "€</font></html>");
-        expensesLabel.setText("<html><font color='white'>Expense: </font><font color='" + red + "'>" + expense + "€</font></html>");
-        balanceLabel.setText("<html><font color='white'>Balance: </font><font color='" + green + "'>" + balance + "€</font></html>");
+        incomeLabel.setText("<html><font color='white'>Income: </font><font color='" + incomeColor + "'>" + income + "€</font></html>");
+        expensesLabel.setText("<html><font color='white'>Expense: </font><font color='" + expenseColor + "'>" + expense + "€</font></html>");
+        balanceLabel.setText("<html><font color='white'>Balance: </font><font color='" + incomeColor + "'>" + balance + "€</font></html>");
     }
 
     public void createTable(List<Transaction> transactionList)  
     {  
-        Object[][] data = new Object[(transactionList != null) ? 5 : 0][3];  
-
-        if (transactionList != null)  
-        {  
-            for (int i = 0; i < 5; i++)  
-            {  
-                Transaction transaction = transactionList.get(i);  
-                data[i][0] = transaction.getDate();  
-                data[i][1] = transaction.getDescription();  
-
-                Color color = (transaction.getDirection() == Transaction.Direction.INCOME) ? UiUtil.SUCCESS_GREEN : UiUtil.ERROR_RED;  
-                String hexColor = String.format("#%06X", (0xFFFFFF & color.getRGB()));  
-                data[i][2] = "<html><font color='" + hexColor + "'>" + transaction.getAmount() + "€</font></html>";  
-            }  
-        }  
-
         if (transactions != null)    
-            this.remove(transactions.getParent());  
+            this.remove(transactions.getParent().getParent().getParent());
 
-        transactions = new JTable(data, new String[] {"", "", ""})  
+        Object[][] data = new Object[(transactionList != null) ? transactionList.size() : 0][3];  
+
+        for (int i = 0; i < transactionList.size(); i++)  
         {  
-            @Override  
-            public Class<?> getColumnClass(int column)  
-            {  
-                return String.class;  
-            }  
-        };  
+            Transaction transaction = transactionList.get(i);  
+            data[i][0] = transaction.getDate();  
+            data[i][1] = transaction.getDescription();  
+
+            Color color = (transaction.getDirection() == Transaction.Direction.INCOME) ? UiUtil.CAPPUCCINO : Color.WHITE;  
+            
+            String hexColor = String.format("#%06X", (0xFFFFFF & color.getRGB()));  
+            String sign = (transaction.getDirection() == Transaction.Direction.INCOME) ? "+ " : "- ";
+            data[i][2] = String.format("<html><font color='%s'>%s%.2f€   </font></html>", hexColor, sign, transaction.getAmount());  
+        }  
+        
+        transactions = new TransparentTable(data, new String[] {"", "", ""});
 
         int columnWidth = 180; 
-        transactions.getColumnModel().getColumn(0).setPreferredWidth(columnWidth); // Adjust width as needed 
-        transactions.getColumnModel().getColumn(0).setMinWidth(columnWidth);       
-        transactions.getColumnModel().getColumn(0).setMaxWidth(columnWidth);  
+        transactions.getColumnModel().getColumn(0).setMinWidth(columnWidth);
+        transactions.getColumnModel().getColumn(0).setMaxWidth(columnWidth);
 
+        transactions.getColumnModel().getColumn(2).setMinWidth(columnWidth);
+        transactions.getColumnModel().getColumn(2).setMaxWidth(columnWidth);
 
-        transactions.setPreferredScrollableViewportSize(new Dimension(700, 70));  
-        transactions.setFillsViewportHeight(true);  
-        transactions.setOpaque(false);  
-        transactions.setBackground(new Color(0, 0, 0, 0));  
-        transactions.setForeground(Color.WHITE);  
-        transactions.setFont(transactions.getFont().deriveFont(16f));  
-        transactions.setRowHeight(30);  
-        transactions.setShowGrid(false); 
-
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();  
-        centerRenderer.setHorizontalAlignment(JLabel.LEFT);  
-        for (int i = 0; i < transactions.getColumnCount(); i++)  
-        {  
-            transactions.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);  
-        }  
-
+        DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
+        rightAlignRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+        transactions.getColumnModel().getColumn(2).setCellRenderer(rightAlignRenderer);
 
         JPanel tablePanel = new JPanel(new BorderLayout());  
-        tablePanel.setOpaque(false);  
-        tablePanel.add(transactions, BorderLayout.CENTER);  
-        tablePanel.add(new BlankPanel(new Dimension(1, 100)), BorderLayout.SOUTH);  
-        tablePanel.add(new BlankPanel(new Dimension(400, 1)), BorderLayout.WEST);  
+        
+        tablePanel.setPreferredSize(new Dimension(400, 300));  
+        tablePanel.setOpaque(false); 
+
+        tablePanel.add(new TransparentScrollPanel(transactions,400,200), BorderLayout.CENTER);
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 200)); 
+        
+        tablePanel.add(new BlankPanel(new Dimension(1, 50)), BorderLayout.SOUTH);  
+        tablePanel.add(new BlankPanel(new Dimension(200, 1)), BorderLayout.WEST);
 
         this.add(tablePanel, BorderLayout.SOUTH);  
-    }  
+    }
 }
 

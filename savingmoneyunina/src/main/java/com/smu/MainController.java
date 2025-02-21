@@ -27,14 +27,17 @@ public class MainController
 
         mainPanel.setOpaque(false);
 
-
         /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
+        
         User user = new User("alice", "Password123");
-       
+        
         HomePanel homePanel = new HomePanel(user.getCards());
+        
         new HomeController(this, homePanel, user);
         new NavbarController(this, homePanel.getNavbar());
+        
         mainPanel.add(homePanel, "Home");
+        
         /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
 
         LoginPanel loginPanel = new LoginPanel();
