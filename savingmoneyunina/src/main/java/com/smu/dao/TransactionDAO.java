@@ -34,7 +34,6 @@ public class TransactionDAO
                 BigDecimal amount = rs.getBigDecimal("amount");
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("date").toLocalDate();
-                // Changed here: convert the direction string to uppercase before valueOf.
                 Transaction.Direction direction = Transaction.Direction.valueOf(rs.getString("direction").toUpperCase());
                 Long id = rs.getLong("id");
                 String counterPart = rs.getString("counter_part");

@@ -17,7 +17,17 @@ public class NavbarController
     {
         this.main = main;
 
+        UiUtil.addListener(view.getHomeButton(), new HomeListener());
         UiUtil.addListener(view.getLogoutButton(), new LogoutListener());
+    }
+
+    private class HomeListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            main.showScreen("Home");
+        }
     }
 
     private class LogoutListener implements ActionListener

@@ -93,11 +93,6 @@ public class Category
     /*****************************************************DEBUG******************************************** */
    public String toString()
     {
-        String output = new String("Category: " + name + "\nDescription: " + description + "\nCreator: " + creator.getUsername() + "\nTransactions:");
-        for (Transaction transaction : categorizedTransactions)
-        {
-            output += "\n" + transaction.toString();
-        } 
-        return output;
+        return name;
     }
 }

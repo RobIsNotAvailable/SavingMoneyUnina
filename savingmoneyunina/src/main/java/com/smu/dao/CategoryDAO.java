@@ -75,7 +75,7 @@ public class CategoryDAO
                 BigDecimal amount = rs.getBigDecimal("amount");
                 String description = rs.getString("description");
                 LocalDate date = rs.getDate("date").toLocalDate();
-                Direction direction = Direction.valueOf(rs.getString("direction"));
+                Direction direction = Direction.valueOf(rs.getString("direction").toUpperCase());
                 PaymentCard card = PaymentCardDAO.get(rs.getString("card_number"));
                 String counterPart = rs.getString("counter_part");
 

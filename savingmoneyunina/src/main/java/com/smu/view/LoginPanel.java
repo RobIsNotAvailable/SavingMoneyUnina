@@ -98,8 +98,9 @@ public class LoginPanel extends JPanel
         loginLabel.setForeground(Color.WHITE);
         panel.add(loginLabel, gbc);
         gbc.gridy++;
-        usernameField = new JTextField(30);
+        usernameField = new JTextField(24);
         usernameField.setPreferredSize(new Dimension(200, 30));
+        usernameField.setFont(new Font("Arial", Font.PLAIN, 18));
         gbc.insets = new Insets(2, 2, 30, 2);
         panel.add(usernameField, gbc);
         gbc.gridy++;
@@ -113,8 +114,9 @@ public class LoginPanel extends JPanel
         loginLabel.setForeground(Color.WHITE);
         panel.add(loginLabel, gbc);
         gbc.gridy++;
-        passwordField = new JPasswordField(30);
+        passwordField = new JPasswordField(24);
         passwordField.setPreferredSize(new Dimension(200, 30));
+        passwordField.setFont(new Font("Arial", Font.PLAIN, 18));
         gbc.insets = new Insets(2, 2, 30, 2);
         panel.add(passwordField, gbc);
         gbc.gridy++;
@@ -131,11 +133,11 @@ public class LoginPanel extends JPanel
 
     private void addLoginButton(JPanel panel) 
     {
-        loginButton = new JButton("Login");
+        loginButton = UiUtil.createStyledButton("Login");
         loginButton.setPreferredSize(new Dimension(200, 40));
         loginButton.setBackground(UiUtil.DARK_CAPPUCCINO);
-        loginButton.setForeground(Color.WHITE);
         loginButton.setFont(new Font("Arial", Font.BOLD, 20));
+        loginButton.setContentAreaFilled(true);
         gbc.weighty = 1;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;

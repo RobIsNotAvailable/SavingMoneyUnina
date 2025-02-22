@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.smu.model.PaymentCard;
+import com.smu.model.TransactionFilter;
 import com.smu.model.User;
 import com.smu.view.HomePanel;
 import com.smu.view.UiUtil;
@@ -20,13 +21,11 @@ public class HomeController
     public static int cardIndex = 0;
 
     private HomePanel view;
-    private User user;
 
     public HomeController(HomePanel view, User user) 
     {
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
         this.view = view;
-        this.user = user; 
 
         UiUtil.addListener(view.getRightTriangleButton(), new CardChangerListener(view.getRightTriangleButton()));
         UiUtil.addListener(view.getLeftTriangleButton(), new CardChangerListener(view.getLeftTriangleButton()));
@@ -34,6 +33,7 @@ public class HomeController
 
         updateButton();
         updateDetails();
+        updateTable();
     }
 
     private class CardChangerListener implements ActionListener 
@@ -103,6 +103,8 @@ public class HomeController
 
     private void updateTable()
     {
-        view.createTable(user.getCards().get(cardIndex).getTransactions());
+        //TransactionFilter filter = new TransactionFilter(view.getFilterInitialDate(), view.getFilterFinalDate(), view.getFilterDirection(), view.getFilterCategory());
+        //view.showTransactions(filter.filter(PaymentCardList.get(cardIndex).getTransactions()));
+        view.showTransactions(PaymentCardList.get(cardIndex).getTransactions());
     }
 }
