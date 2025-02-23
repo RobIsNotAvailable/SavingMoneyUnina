@@ -272,6 +272,10 @@ public class UiUtil
 
             setTableHeader(header);
         }
+
+        public void setData(Object[][] data, String[] columnNames) {
+            setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        }
     }
 
     public static class TransparentScrollPanel extends JScrollPane

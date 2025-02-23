@@ -4,8 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Insets;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
@@ -13,19 +14,19 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.smu.model.Category;
 import com.smu.model.Transaction;
-import com.smu.model.Transaction.Direction;
 import com.smu.view.UiUtil.*;
 import java.util.List;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.text.MaskFormatter;
 
 public class HomePanel extends JPanel
 {
@@ -41,9 +42,9 @@ public class HomePanel extends JPanel
     private JLabel expensesLabel = UiUtil.createStyledLabel("");
     private JLabel balanceLabel = UiUtil.createStyledLabel("");
     
-    private JTextField filterInitialDate;
-    private JTextField filterFinalDate;
-    private JComboBox<Direction> filterDirection;
+    private JFormattedTextField filterInitialDate;
+    private JFormattedTextField filterFinalDate;
+    private JComboBox<String> filterDirection;
     private JComboBox<Category> filterCategory;
     private JButton filterButton;
     private JLabel filterErrorLabel;
@@ -53,7 +54,8 @@ public class HomePanel extends JPanel
     public HomePanel()
     {
         cardButton = UiUtil.createStyledButton("");
-        cardButton.setPreferredSize(new Dimension(450, 280));
+        cardButton.setMargin(new Insets(30, 0, -20, 0));
+        cardButton.setPreferredSize(new Dimension(450, 330));
         
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
@@ -94,63 +96,101 @@ public class HomePanel extends JPanel
         centerPanel.add(buttonRow, BorderLayout.CENTER);
 
         this.add(centerPanel, BorderLayout.CENTER);
+
+        addTablePanel();
     }
 
-    public Navbar getNavbar()
+    public Navbar getNavbar() { return navbar; }
+
+    public JButton getCardButton() { return cardButton; }
+
+    public TriangleButton getLeftTriangleButton() { return leftTriangleButton; }
+
+    public TriangleButton getRightTriangleButton() { return rightTriangleButton; }
+
+    public JLabel getIncomeLabel() { return incomeLabel; }
+
+    public JLabel getExpensesLabel() { return expensesLabel; }
+
+    public JLabel getBalanceLabel() { return balanceLabel; }
+
+    public JFormattedTextField getFilterInitialDate() { return filterInitialDate; }
+
+    public JFormattedTextField getFilterFinalDate() { return filterFinalDate; }
+
+    public JComboBox<String> getFilterDirection() { return filterDirection; }
+
+    public JComboBox<Category> getFilterCategory() { return filterCategory; }
+
+    public JButton getFilterButton() { return filterButton; }
+
+    private void addTablePanel()
     {
-        return navbar;
-    }
+        transactions = new TransparentTable(new Object[0][4], new String[] {"", "", "", ""});
 
-    public JButton getCardButton()
-    {
-        return cardButton;
-    }
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        
+        tablePanel.setPreferredSize(new Dimension(400, 300));
+        tablePanel.setOpaque(false);
 
-    public TriangleButton getLeftTriangleButton()
-    {
-        return leftTriangleButton;
-    }
+        tablePanel.add(new TransparentScrollPanel(transactions,400,200), BorderLayout.CENTER);
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 200));
+        
+        tablePanel.add(new BlankPanel(new Dimension(1, 50)), BorderLayout.SOUTH);
+        tablePanel.add(new BlankPanel(new Dimension(200, 1)), BorderLayout.WEST);
 
-    public TriangleButton getRightTriangleButton()
-    {
-        return rightTriangleButton;
-    }
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        filterPanel.setOpaque(false);
 
-    public JLabel getIncomeLabel()
-    {
-        return incomeLabel;
-    }
+        try
+        {
+            MaskFormatter formatter = new MaskFormatter("##/##/####");
+            formatter.setPlaceholderCharacter('-');
+            filterInitialDate = new JFormattedTextField(formatter);
+            filterFinalDate = new JFormattedTextField(formatter);
 
-    public JLabel getExpensesLabel()
-    {
-        return expensesLabel;
-    }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-    public JLabel getBalanceLabel()
-    {
-        return balanceLabel;
-    }
+        filterPanel.add(new BlankPanel(new Dimension(185, 1)));
 
-    public LocalDate getFilterInitialDate()
-    {
-        return LocalDate.parse(filterInitialDate.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    }
+        filterInitialDate.setFont(new Font("Arial", Font.PLAIN, 19));
+        filterInitialDate.setColumns(6);
+        filterPanel.add(new JLabel("From:"));
+        filterPanel.add(filterInitialDate);
 
-    public LocalDate getFilterFinalDate()
-    {
-        return LocalDate.parse(filterFinalDate.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    }
+        filterFinalDate.setFont(new Font("Arial", Font.PLAIN, 19));
+        filterFinalDate.setColumns(6);
+        filterPanel.add(new JLabel("To:"));
+        filterPanel.add(filterFinalDate);
 
-    public Direction getFilterDirection()
-    {
-        return (Direction) filterDirection.getSelectedItem();
-    }
+        filterPanel.add(new BlankPanel(new Dimension(40, 1)));
 
-    public Category getFilterCategory()
-    {
-        return (Category) filterCategory.getSelectedItem();
-    }
+        filterDirection = new JComboBox<>();
+        filterPanel.add(filterDirection);
 
+        filterCategory = new JComboBox<>();
+        filterPanel.add(filterCategory);
+
+        filterPanel.add(new BlankPanel(new Dimension(35, 1)));
+
+        filterButton = UiUtil.createStyledButton("Filter");
+        filterButton.setContentAreaFilled(true);
+        filterButton.setBackground(UiUtil.DARK_CAPPUCCINO);
+        filterButton.setMargin(new Insets(3, 35, 3, 35));
+        filterPanel.add(filterButton);
+
+        filterErrorLabel = UiUtil.createStyledLabel("placeholder error text");
+        filterPanel.add(filterErrorLabel);
+
+        tablePanel.add(filterPanel, BorderLayout.NORTH);
+
+        this.add(tablePanel, BorderLayout.SOUTH);
+    }
+    
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
         String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
@@ -206,9 +246,6 @@ public class HomePanel extends JPanel
 
     public void showTransactions(List<Transaction> transactionList)
     {
-        if (transactions != null)
-            this.remove(transactions.getParent().getParent().getParent());
-
         Object[][] data = new Object[(transactionList != null) ? transactionList.size() : 0][4];
 
         for (int i = 0; i < transactionList.size(); i++)
@@ -233,7 +270,7 @@ public class HomePanel extends JPanel
             data[i][3] = String.format("<html><font color='%s'>%s%.2f €    </font></html>", hexColor, sign, transaction.getAmount());
         }
         
-        transactions = new TransparentTable(data, new String[] {"", "", "", ""});
+        transactions.setModel(new javax.swing.table.DefaultTableModel(data, new String[] {"", "", "", ""}));
 
         int columnWidth = 180;
         transactions.getColumnModel().getColumn(0).setMinWidth(columnWidth);
@@ -248,18 +285,5 @@ public class HomePanel extends JPanel
         DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
         rightAlignRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         transactions.getColumnModel().getColumn(3).setCellRenderer(rightAlignRenderer);
-
-        JPanel tablePanel = new JPanel(new BorderLayout());
-        
-        tablePanel.setPreferredSize(new Dimension(400, 300));
-        tablePanel.setOpaque(false);
-
-        tablePanel.add(new TransparentScrollPanel(transactions,400,200), BorderLayout.CENTER);
-        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 200));
-        
-        tablePanel.add(new BlankPanel(new Dimension(1, 50)), BorderLayout.SOUTH);
-        tablePanel.add(new BlankPanel(new Dimension(200, 1)), BorderLayout.WEST);
-
-        this.add(tablePanel, BorderLayout.SOUTH);
     }
 }

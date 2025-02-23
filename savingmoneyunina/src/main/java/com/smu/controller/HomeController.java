@@ -7,9 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 
 import com.smu.model.PaymentCard;
-import com.smu.model.TransactionFilter;
+import com.smu.model.Category;
 import com.smu.model.User;
 import com.smu.view.HomePanel;
 import com.smu.view.UiUtil;
@@ -30,10 +31,12 @@ public class HomeController
         UiUtil.addListener(view.getRightTriangleButton(), new CardChangerListener(view.getRightTriangleButton()));
         UiUtil.addListener(view.getLeftTriangleButton(), new CardChangerListener(view.getLeftTriangleButton()));
         UiUtil.addListener(view.getCardButton(), new CardListener());
+        UiUtil.addListener(view.getFilterButton(), new FilterListener());
 
         updateButton();
         updateDetails();
         updateTable();
+        setFilterBoxes(user);
     }
 
     private class CardChangerListener implements ActionListener 
@@ -72,6 +75,15 @@ public class HomeController
         }
     }
 
+    private class FilterListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            System.out.println(view.getFilterInitialDate().getText());
+        }
+    }
+
     public void updateButton()
     {
         String cardType = getCorrespondingCard();
@@ -106,5 +118,22 @@ public class HomeController
         //TransactionFilter filter = new TransactionFilter(view.getFilterInitialDate(), view.getFilterFinalDate(), view.getFilterDirection(), view.getFilterCategory());
         //view.showTransactions(filter.filter(PaymentCardList.get(cardIndex).getTransactions()));
         view.showTransactions(PaymentCardList.get(cardIndex).getTransactions());
+    }
+
+    private void setFilterBoxes(User user)
+    {
+        JComboBox<Category> categories = view.getFilterCategory();
+
+        categories.addItem(new Category("All categories", null, null));
+
+        for (Category c : user.getCategories())
+        {
+            categories.addItem(c);
+        }
+
+        JComboBox<String> directions = view.getFilterDirection();
+        directions.addItem("All directions");
+        directions.addItem("Income");
+        directions.addItem("Expense");
     }
 }

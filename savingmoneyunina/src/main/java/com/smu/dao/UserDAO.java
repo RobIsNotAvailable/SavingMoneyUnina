@@ -74,7 +74,7 @@ public class UserDAO
     {
         List<Category> categories = new ArrayList<>();
 
-        String sql = "SELECT * FROM category WHERE creator_username = ? AND name <> 'Other'";
+        String sql = "SELECT * FROM category WHERE creator_username = ?"; // AND name <> 'Other'
 
         try
         {
