@@ -123,7 +123,7 @@ public class UiUtil
     public static JButton createStyledButton(String text)
     {
         JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setFont(new Font("Arial", Font.BOLD, 18));
         button.setForeground(Color.WHITE);
 
         button.setContentAreaFilled(false);

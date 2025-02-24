@@ -33,6 +33,7 @@ public class HomeController
         UiUtil.addListener(view.getLeftTriangleButton(), new CardChangerListener(view.getLeftTriangleButton()));
         UiUtil.addListener(view.getCardButton(), new CardListener());
         UiUtil.addListener(view.getFilterButton(), new FilterListener());
+        UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());
 
         updateButton();
         updateDetails();
@@ -85,6 +86,20 @@ public class HomeController
         }
     }
 
+    private class ClearFilterListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            view.clearErrorMessage();
+            
+            view.getFilterInitialDate().setValue(null);
+            view.getFilterFinalDate().setValue(null);
+            view.getFilterDirection().setSelectedIndex(0);
+            view.getFilterCategory().setSelectedIndex(0);
+        }
+    }
+
     public void updateButton()
     {
         String cardType = getCorrespondingCard();
@@ -116,11 +131,11 @@ public class HomeController
 
     private void updateTable()
     {
+        view.clearErrorMessage();
         try 
         {
             TransactionFilter filter = new TransactionFilter(view.getInitialDateValue(), view.getFinalDateValue(), view.getFilterDirectionValue(), view.getFilterCategoryValue());
             view.showTransactions(filter.filter(PaymentCardList.get(cardIndex).getTransactions()));
-            System.out.println("filter is: " + view.getInitialDateValue() + " " + view.getFinalDateValue() + " " + view.getFilterDirectionValue() + " " + view.getFilterCategoryValue());
         }
         catch (Exception e) 
         {

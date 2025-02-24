@@ -36,9 +36,8 @@ public class TransactionDAO
                 LocalDate date = rs.getDate("date").toLocalDate();
                 Transaction.Direction direction = Transaction.Direction.valueOf(rs.getString("direction"));
                 Long id = rs.getLong("id");
-                String counterPart = rs.getString("counter_part");
 
-                transactions.add(new Transaction(amount, description, date, direction, card, id, counterPart));
+                transactions.add(new Transaction(amount, description, date, direction, card, id));
             }
 
         }
@@ -52,7 +51,7 @@ public class TransactionDAO
 
     public static List<Category> getCategories(Transaction transaction)
     {
-        String sql = "SELECT name,creator_username FROM category WHERE id IN (SELECT category_id FROM transaction_category WHERE transaction_id = ?)";
+        String sql = "SELECT name, creator_username FROM category WHERE id IN (SELECT category_id FROM transaction_category WHERE transaction_id = ?)";
 
         List<Category> categories = new ArrayList<>();
         try
@@ -79,7 +78,7 @@ public class TransactionDAO
 
     public static Boolean insert(Transaction transaction)
     {
-        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number, counter_part) VALUES (?, ?, ?, ?, ?::direction, ?, ?) ";
+        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number) VALUES (?, ?, ?, ?, ?::direction, ?) ";
 
         try
         {
@@ -91,7 +90,6 @@ public class TransactionDAO
             ps.setDate(4, java.sql.Date.valueOf(transaction.getDate()));
             ps.setString(5, transaction.getDirection().toString());
             ps.setString(6, transaction.getCard().getCardNumber());
-            ps.setString(7, transaction.getCounterPart());
 
             ps.executeUpdate();
         }

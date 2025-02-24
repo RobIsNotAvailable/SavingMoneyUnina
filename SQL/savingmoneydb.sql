@@ -64,7 +64,6 @@ CREATE TABLE transaction
         date DATE NOT NULL,
         direction direction NOT NULL,
         card_number VARCHAR NOT NULL,
-        counter_part VARCHAR NOT NULL,
 
         CONSTRAINT fk_cardNumber FOREIGN KEY (card_number) REFERENCES payment_card(card_number) ON DELETE CASCADE ON UPDATE CASCADE,
 
@@ -287,12 +286,18 @@ INSERT INTO monthly_balances
 INSERT INTO category (name, creator_username)
     VALUES
     ('Food', 'alice'),
+    ('Paycheck', 'alice'),
+    ('Health', 'alice'),
+    ('Travel', 'alice'),
+    ('Electronics', 'alice'),
+    
     ('Entertainment', 'boby'),
-    ('Utilities', 'charlie'),
-    ('Transport', 'frankie'),
-    ('Income', 'alice'),
     ('Shopping', 'boby'),
+
+    ('Utilities', 'charlie'),
     ('Housing', 'charlie'),
+
+    ('Transport', 'frankie'),
 
     ('Other', 'alice'),
     ('Other', 'boby'),
@@ -309,7 +314,7 @@ INSERT INTO keyword (keyword, category_id)
     ('coffee', 1),
     ('snacks', 1),
 
-    ('salary', 2),        -- for Income (creator: alice)
+    ('salary', 2),        -- for Paycheck (creator: alice)
     ('freelance', 2),
     ('bonus', 2),
 
@@ -355,91 +360,8 @@ INSERT INTO keyword (keyword, category_id)
     ('furniture', 9),
     ('appliances', 9),
 
-    -- Cycle 9
-    (33, 250, 'Dividends from investments in groceries stock market', '2025-01-05', 'income', '3498734875349033', 'Investment Firm'),
-    (34, 35, 'Gift purchase for birthday', '2025-01-06', 'expense', '8765432187654321', 'Gift Shop'),
-    (35, 640, 'Monthly rent installment', '2025-01-07', 'expense', '1122334455667788', 'Landlord'),
-    (36, 13, 'Bus trip for city tour', '2025-01-08', 'expense', '3498734875349456', 'Tour Bus Service'),
-
-    -- Cycle 10
-    (37, 35, 'Random shopping expense', '2025-01-09', 'expense', '1234567812345678', 'Retail Store'),
-    (38, 22, 'Casual outing expense', '2025-01-10', 'expense', '8765432187654321', 'Cafe'),
-    (39, 35, 'Miscellaneous utility expense', '2025-01-11', 'expense', '1122334455667788', 'Service Provider'),
-    (40, 18, 'Unplanned expense', '2025-01-12', 'expense', '3498734875349456', 'General Vendor'),
-
-    -- Extra 10 for Alice
-    (41, 65, 'Groceries for family dinner', '2025-01-13', 'expense', '1234567812345678', 'Supermarket'),
-    (42, 2100, 'Salary deposit', '2025-01-14', 'income', '3498734875349033', 'Employer'),
-    (43, 70, 'Fresh groceries purchase', '2025-01-15', 'expense', '1234567812345678', 'Grocery Store'),
-    (44, 550, 'Freelance income from design work', '2025-01-16', 'income', '3498734875349033', 'Client'),
-    (45, 30, 'Uncategorized expense at restaurant', '2025-01-17', 'expense', '1234567812345678', 'Restaurant'),
-    (46, 50, 'Groceries from organic store', '2025-01-18', 'expense', '3498734875349033', 'Organic Store'),
-    (47, 320, 'Bonus received after performance review', '2025-01-19', 'income', '1234567812345678', 'Employer'),
-    (48, 60, 'Groceries at supermarket', '2025-01-20', 'expense', '3498734875349033', 'Supermarket'),
-    (49, 260, 'Dividends paid quarterly', '2025-01-21', 'income', '1234567812345678', 'Investment Firm'),
-    (50, 45, 'Miscellaneous expense for office supplies', '2025-01-22', 'expense', '3498734875349033', 'Office Supplies Store');
-
-INSERT INTO transaction_category (transaction_id, category_id)
-    VALUES
-  (1, 1),    -- Transaction 1: alice – Food (contains "groceries")
-  (2, 2),    -- Transaction 2: boby – Entertainment (contains "movies")
-  (3, 3),    -- Transaction 3: charlie – Utilities (contains "electricity")
-  (4, 4),    -- Transaction 4: frankie – Transport (contains "taxi")
-  
-  (5, 5),    -- Transaction 5: alice – Income (contains "salary")
-  (6, 6),    -- Transaction 6: boby – Shopping (contains "electronics")
-  (7, 7),    -- Transaction 7: charlie – Housing (contains "rent")
-  (8, 4),    -- Transaction 8: frankie – Transport (contains "bus")
-  
-  (9, 1),    -- Transaction 9: alice – Food (contains "groceries")
-  (10, 2),   -- Transaction 10: boby – Entertainment (contains "concert")
-  (11, 3),   -- Transaction 11: charlie – Utilities (contains "electricity")
-  (12, 4),   -- Transaction 12: frankie – Transport (contains "taxi")
-  
-  (13, 5),   -- Transaction 13: alice – Income (contains "freelance")
-  (14, 6),   -- Transaction 14: boby – Shopping (contains "gift")
-  (15, 7),   -- Transaction 15: charlie – Housing (contains "rent")
-  (16, 4),   -- Transaction 16: frankie – Transport (contains "bus")
-  
-  (17, 8),   -- Transaction 17: alice – non-matching → Other (ID 8)
-  (18, 9),   -- Transaction 18: boby – non-matching → Other (ID 9)
-  (19, 10),  -- Transaction 19: charlie – non-matching → Other (ID 10)
-  (20, 11),  -- Transaction 20: frankie – non-matching → Other (ID 11)
-  
-  (21, 1),   -- Transaction 21: alice – Food (contains "groceries")
-  (22, 2),   -- Transaction 22: boby – Entertainment (contains "movies")
-  (23, 3),   -- Transaction 23: charlie – Utilities (contains "electricity")
-  (24, 4),   -- Transaction 24: frankie – Transport (contains "taxi")
-  
-  (25, 5),   -- Transaction 25: alice – Income (contains "bonus")
-  (26, 6),   -- Transaction 26: boby – Shopping (contains "book")
-  (27, 7),   -- Transaction 27: charlie – Housing (contains "rent")
-  (28, 4),   -- Transaction 28: frankie – Transport (contains "bus")
-  
-  (29, 1),   -- Transaction 29: alice – Food (contains "groceries")
-  (30, 2),   -- Transaction 30: boby – Entertainment (contains "concert")
-  (31, 3),   -- Transaction 31: charlie – Utilities (contains "electricity")
-  (32, 4),   -- Transaction 32: frankie – Transport (contains "taxi")
-  
-  (33, 5),   -- Transaction 33: alice – Income (contains "dividends")
-  (33, 1),   -- Transaction 33: alice – Food (contains "groceries")
-  (34, 6),   -- Transaction 34: boby – Shopping (contains "gift")
-  (35, 7),   -- Transaction 35: charlie – Housing (contains "rent")
-  (36, 4),   -- Transaction 36: frankie – Transport (contains "bus")
-  
-  (37, 8),   -- Transaction 37: alice – non-matching → Other (ID 8)
-  (38, 9),   -- Transaction 38: boby – non-matching → Other (ID 9)
-  (39, 10),  -- Transaction 39: charlie – non-matching → Other (ID 10)
-  (40, 11),  -- Transaction 40: frankie – non-matching → Other (ID 11)
-  
-  (41, 1),   -- Transaction 41: alice – Food (contains "groceries")
-  (42, 5),   -- Transaction 42: alice – Income (contains "salary")
-  (43, 1),   -- Transaction 43: alice – Food (contains "groceries")
-  (44, 5),   -- Transaction 44: alice – Income (contains "freelance")
-  (45, 8),   -- Transaction 45: alice – non-matching → Other (ID 8)
-  (46, 1),   -- Transaction 46: alice – Food (contains "groceries")
-  (47, 5),   -- Transaction 47: alice – Income (contains "bonus")
-  (48, 1),   -- Transaction 48: alice – Food (contains "groceries")
-  (49, 5),   -- Transaction 49: alice – Income (contains "dividends")
-  (50, 8);   -- Transaction 50: alice – non-matching → Other (ID 8)
-
+    ('transport', 10),    -- for Transport (creator: frankie)
+    ('bus', 10),
+    ('train', 10),
+    ('taxi', 10),
+    ('fuel', 10);

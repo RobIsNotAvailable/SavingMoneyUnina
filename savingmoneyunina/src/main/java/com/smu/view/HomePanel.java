@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -40,15 +41,16 @@ public class HomePanel extends JPanel
 
     private JFrame cardDetailsFrame;
 
-    private JLabel incomeLabel = UiUtil.createStyledLabel("");
-    private JLabel expensesLabel = UiUtil.createStyledLabel("");
-    private JLabel balanceLabel = UiUtil.createStyledLabel("");
+    private JLabel incomeLabel = UiUtil.createStyledLabel(" ");
+    private JLabel expensesLabel = UiUtil.createStyledLabel(" ");
+    private JLabel balanceLabel = UiUtil.createStyledLabel(" ");
     
     private JFormattedTextField filterInitialDate;
     private JFormattedTextField filterFinalDate;
     private JComboBox<String> filterDirection;
     private JComboBox<Category> filterCategory;
     private JButton filterButton;
+    private JButton clearFilterButton;
     private JLabel filterErrorLabel;
 
     private JTable transactions = null;
@@ -71,6 +73,7 @@ public class HomePanel extends JPanel
 
         JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
         financePanel.setOpaque(false);
+        financePanel.setPreferredSize(new Dimension(530, 40));
 
         financePanel.add(new BlankPanel(new Dimension(1,50)),BorderLayout.NORTH);
         financePanel.add(incomeLabel);
@@ -126,6 +129,8 @@ public class HomePanel extends JPanel
 
     public JButton getFilterButton() { return filterButton; }
 
+    public JButton getClearFilterButton() { return clearFilterButton; }
+
     public LocalDate getInitialDateValue() throws Exception 
     {
         String text = filterInitialDate.getText();
@@ -133,7 +138,7 @@ public class HomePanel extends JPanel
         {
             return null;
         }
-        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
     }
 
     public LocalDate getFinalDateValue() throws Exception 
@@ -143,7 +148,7 @@ public class HomePanel extends JPanel
         {
             return null;
         }
-        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
     }
 
     public Direction getFilterDirectionValue() 
@@ -187,7 +192,7 @@ public class HomePanel extends JPanel
         tablePanel.add(new BlankPanel(new Dimension(1, 50)), BorderLayout.SOUTH);
         tablePanel.add(new BlankPanel(new Dimension(200, 1)), BorderLayout.WEST);
 
-        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 13, 10));
         filterPanel.setOpaque(false);
 
         try
@@ -205,22 +210,24 @@ public class HomePanel extends JPanel
 
         filterPanel.add(new BlankPanel(new Dimension(185, 1)));
 
-        filterInitialDate.setFont(new Font("Arial", Font.PLAIN, 19));
+        filterInitialDate.setFont(new Font("Arial", Font.PLAIN, 18));
         filterInitialDate.setColumns(8);
-        filterPanel.add(new JLabel("From:"));
+        filterPanel.add(UiUtil.createStyledLabel("From:"));
         filterPanel.add(filterInitialDate);
 
-        filterFinalDate.setFont(new Font("Arial", Font.PLAIN, 19));
+        filterFinalDate.setFont(new Font("Arial", Font.PLAIN, 18));
         filterFinalDate.setColumns(8);
-        filterPanel.add(new JLabel("To:"));
+        filterPanel.add(UiUtil.createStyledLabel("To:"));
         filterPanel.add(filterFinalDate);
 
-        filterPanel.add(new BlankPanel(new Dimension(40, 1)));
+        filterPanel.add(new BlankPanel(new Dimension(30, 1)));
 
         filterDirection = new JComboBox<>();
+        filterDirection.setFont(new Font("Arial", Font.PLAIN, 18));
         filterPanel.add(filterDirection);
 
         filterCategory = new JComboBox<>();
+        filterCategory.setFont(new Font("Arial", Font.PLAIN, 18));
         filterPanel.add(filterCategory);
 
         filterPanel.add(new BlankPanel(new Dimension(35, 1)));
@@ -231,7 +238,16 @@ public class HomePanel extends JPanel
         filterButton.setMargin(new Insets(3, 35, 3, 35));
         filterPanel.add(filterButton);
 
+        clearFilterButton = UiUtil.createStyledButton("Reset Filter");
+        clearFilterButton.setContentAreaFilled(true);
+        clearFilterButton.setBackground(UiUtil.DARK_CAPPUCCINO);
+        clearFilterButton.setMargin(new Insets(3, 35, 3, 35));
+        filterPanel.add(clearFilterButton);
+
+        filterPanel.add(new BlankPanel(new Dimension(30, 1)));
+
         filterErrorLabel = UiUtil.createStyledLabel("");
+        filterErrorLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         filterErrorLabel.setForeground(UiUtil.ERROR_RED);
         filterPanel.add(filterErrorLabel);
 
@@ -339,5 +355,10 @@ public class HomePanel extends JPanel
     public void showErrorMessage(String message)
     {
         filterErrorLabel.setText(message);
+    }
+
+    public void clearErrorMessage()
+    {
+        filterErrorLabel.setText(" ");
     }
 }

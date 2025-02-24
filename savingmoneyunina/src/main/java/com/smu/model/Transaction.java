@@ -20,9 +20,8 @@ public class Transaction
     private LocalDate date;
     private Direction direction;
     private PaymentCard card;
-    private String counterPart;
     
-    public Transaction(BigDecimal amount, String description, LocalDate date, Direction direction, PaymentCard card, String counterPart) 
+    public Transaction(BigDecimal amount, String description, LocalDate date, Direction direction, PaymentCard card) 
     {
         this.amount = amount;
         this.description = description;
@@ -30,13 +29,12 @@ public class Transaction
         this.direction = direction;
         this.card = card;
         this.id = TransactionDAO.generateId();
-        this.counterPart = counterPart;
     }
 
     //constructor for the DAO 
-    public Transaction(BigDecimal amount, String description, LocalDate date, Direction direction, PaymentCard card, Long id, String counterPart) 
+    public Transaction(BigDecimal amount, String description, LocalDate date, Direction direction, PaymentCard card, Long id) 
     {
-        this(amount, description, date, direction, card, counterPart);
+        this(amount, description, date, direction, card);
         this.id = id;
     }
 
@@ -55,8 +53,6 @@ public class Transaction
     public PaymentCard getCard() { return card; }
 
     public User getUser() { return card.getOwner(); }
-
-    public String getCounterPart() { return counterPart; }
 
     public List<Category> getCategories() { return TransactionDAO.getCategories(this); }
 /************************************************METHODS****************************************************** */

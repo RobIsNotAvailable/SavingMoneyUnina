@@ -75,9 +75,9 @@ public class CategoryDAO
                 LocalDate date = rs.getDate("date").toLocalDate();
                 Direction direction = Direction.valueOf(rs.getString("direction"));
                 PaymentCard card = PaymentCardDAO.get(rs.getString("card_number"));
-                String counterPart = rs.getString("counter_part");
+                Long id = rs.getLong("id");
 
-                Transaction transaction = new Transaction(amount, description, date, direction, card, counterPart);
+                Transaction transaction = new Transaction(amount, description, date, direction, card, id);
                 transactions.add(transaction);
             }
 

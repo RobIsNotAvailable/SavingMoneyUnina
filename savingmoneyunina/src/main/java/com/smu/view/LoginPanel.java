@@ -126,7 +126,7 @@ public class LoginPanel extends JPanel
     private void addMessageLabel(JPanel panel) 
     {
         messageLabel = new JLabel(" ");
-        messageLabel.setFont(new Font("Arial", Font.ITALIC, 14));
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         panel.add(messageLabel, gbc);
         gbc.gridy++;
     }
