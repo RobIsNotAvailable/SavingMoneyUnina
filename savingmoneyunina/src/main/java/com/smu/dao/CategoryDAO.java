@@ -18,7 +18,6 @@ import com.smu.model.User;
 
 public class CategoryDAO 
 {
-    //methods should never return null, but an empty list
     static Connection conn = DbConnection.getConnection();
 
     public static Category get(String name, String creatorUsername)
@@ -34,10 +33,9 @@ public class CategoryDAO
 
             if (rs.next())
             {
-                String description = rs.getString("description");
                 User creator = UserDAO.get(creatorUsername);
                 
-                Category category = new Category(name, description, creator);
+                Category category = new Category(name, creator);
 
                 List<Transaction> categorizedTransactions = CategoryDAO.getTransactions(category);
                 category.setTransactions(categorizedTransactions);

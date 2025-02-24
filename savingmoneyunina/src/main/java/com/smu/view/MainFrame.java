@@ -14,7 +14,7 @@ public class MainFrame extends JFrame
     {
         setTitle("SavingMoneyUnina");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        setSize(1440,810);
+        setSize(1728,972);
         ImageIcon logo = new ImageIcon(MainFrame.class.getResource("/logo.png"));
         setIconImage(logo.getImage());
         getContentPane().setBackground(UiUtil.BACKGROUND_GRAY);

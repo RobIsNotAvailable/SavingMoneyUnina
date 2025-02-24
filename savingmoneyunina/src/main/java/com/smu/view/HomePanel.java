@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
@@ -21,6 +22,7 @@ import javax.swing.JPanel;
 
 import com.smu.model.Category;
 import com.smu.model.Transaction;
+import com.smu.model.Transaction.Direction;
 import com.smu.view.UiUtil.*;
 import java.util.List;
 import javax.swing.JTable;
@@ -51,7 +53,7 @@ public class HomePanel extends JPanel
 
     private JTable transactions = null;
 
-    public HomePanel()
+    public HomePanel(Navbar navbar)
     {
         cardButton = UiUtil.createStyledButton("");
         cardButton.setMargin(new Insets(30, 0, -20, 0));
@@ -60,7 +62,7 @@ public class HomePanel extends JPanel
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
 
-        navbar = new Navbar();
+        this.navbar = navbar;
         this.add(navbar, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel(new BorderLayout());
@@ -124,6 +126,52 @@ public class HomePanel extends JPanel
 
     public JButton getFilterButton() { return filterButton; }
 
+    public LocalDate getInitialDateValue() throws Exception 
+    {
+        String text = filterInitialDate.getText();
+        if (text.equals("--/--/----")) 
+        {
+            return null;
+        }
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public LocalDate getFinalDateValue() throws Exception 
+    {
+        String text = filterFinalDate.getText();
+        if (text.equals("--/--/----")) 
+        {
+            return null;
+        }
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public Direction getFilterDirectionValue() 
+    {
+        String direction = (String) filterDirection.getSelectedItem();
+        if (direction.equals("All directions")) 
+        {
+            return null;
+        } 
+        else 
+        {
+            return Direction.valueOf(direction.toUpperCase());
+        }
+    }
+
+    public Category getFilterCategoryValue() 
+    {
+        Category category = (Category) filterCategory.getSelectedItem();
+        if (category.getName().equals("All categories")) 
+        {
+            return null;
+        } 
+        else 
+        {
+            return category;
+        }
+    }
+
     private void addTablePanel()
     {
         transactions = new TransparentTable(new Object[0][4], new String[] {"", "", "", ""});
@@ -158,12 +206,12 @@ public class HomePanel extends JPanel
         filterPanel.add(new BlankPanel(new Dimension(185, 1)));
 
         filterInitialDate.setFont(new Font("Arial", Font.PLAIN, 19));
-        filterInitialDate.setColumns(6);
+        filterInitialDate.setColumns(8);
         filterPanel.add(new JLabel("From:"));
         filterPanel.add(filterInitialDate);
 
         filterFinalDate.setFont(new Font("Arial", Font.PLAIN, 19));
-        filterFinalDate.setColumns(6);
+        filterFinalDate.setColumns(8);
         filterPanel.add(new JLabel("To:"));
         filterPanel.add(filterFinalDate);
 
@@ -183,7 +231,8 @@ public class HomePanel extends JPanel
         filterButton.setMargin(new Insets(3, 35, 3, 35));
         filterPanel.add(filterButton);
 
-        filterErrorLabel = UiUtil.createStyledLabel("placeholder error text");
+        filterErrorLabel = UiUtil.createStyledLabel("");
+        filterErrorLabel.setForeground(UiUtil.ERROR_RED);
         filterPanel.add(filterErrorLabel);
 
         tablePanel.add(filterPanel, BorderLayout.NORTH);
@@ -257,7 +306,7 @@ public class HomePanel extends JPanel
             String categories = "";
             for (Category c : transaction.getCategories())
             {
-                categories += c;
+                categories += c + " ";
             }
             
 
@@ -285,5 +334,10 @@ public class HomePanel extends JPanel
         DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
         rightAlignRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         transactions.getColumnModel().getColumn(3).setCellRenderer(rightAlignRenderer);
+    }
+
+    public void showErrorMessage(String message)
+    {
+        filterErrorLabel.setText(message);
     }
 }

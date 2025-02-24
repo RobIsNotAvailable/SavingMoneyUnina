@@ -1,10 +1,6 @@
 package com.smu;
 
 import java.awt.CardLayout;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -12,13 +8,11 @@ import javax.swing.SwingUtilities;
 import com.smu.controller.HomeController;
 import com.smu.controller.LoginController;
 import com.smu.controller.NavbarController;
-import com.smu.dao.PaymentCardDAO;
-import com.smu.model.PaymentCard;
-import com.smu.model.Transaction;
 import com.smu.model.User;
 import com.smu.view.HomePanel;
 import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
+import com.smu.view.UiUtil.Navbar;
 
 public class MainController 
 {
@@ -55,11 +49,12 @@ public class MainController
 
     public void loadScreens(User user)
     {
-        // add further panels here
-        HomePanel homePanel = new HomePanel();
+        Navbar navbar = new Navbar();
+        HomePanel homePanel = new HomePanel(navbar);
         new HomeController(homePanel, user);
-        new NavbarController(this, homePanel.getNavbar());
+        new NavbarController(this, navbar);
         mainPanel.add(homePanel, "Home");
+        // add further panels here
     }
 
     public static void main(String[] args) 
@@ -71,8 +66,8 @@ public class MainController
 
     public static void populate()//used for populating the db 
     {
-        PaymentCard card;
         /* ************************************************************ALICE FIRST CARD****************************************************************** */
+        // PaymentCard card;
         // card = PaymentCardDAO.get("1234567812345678");
 
         // card.executeTransaction(new Transaction(BigDecimal.valueOf(120), "groceries", LocalDate.parse("2024-02-05"), Transaction.Direction.EXPENSE, card, "supermarket"));

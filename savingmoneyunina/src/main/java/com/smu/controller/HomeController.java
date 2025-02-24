@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 
 import com.smu.model.PaymentCard;
+import com.smu.model.TransactionFilter;
 import com.smu.model.Category;
 import com.smu.model.User;
 import com.smu.view.HomePanel;
@@ -35,8 +36,8 @@ public class HomeController
 
         updateButton();
         updateDetails();
-        updateTable();
         setFilterBoxes(user);
+        updateTable();
     }
 
     private class CardChangerListener implements ActionListener 
@@ -80,7 +81,7 @@ public class HomeController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println(view.getFilterInitialDate().getText());
+            updateTable();
         }
     }
 
@@ -115,16 +116,24 @@ public class HomeController
 
     private void updateTable()
     {
-        //TransactionFilter filter = new TransactionFilter(view.getFilterInitialDate(), view.getFilterFinalDate(), view.getFilterDirection(), view.getFilterCategory());
-        //view.showTransactions(filter.filter(PaymentCardList.get(cardIndex).getTransactions()));
-        view.showTransactions(PaymentCardList.get(cardIndex).getTransactions());
+        try 
+        {
+            TransactionFilter filter = new TransactionFilter(view.getInitialDateValue(), view.getFinalDateValue(), view.getFilterDirectionValue(), view.getFilterCategoryValue());
+            view.showTransactions(filter.filter(PaymentCardList.get(cardIndex).getTransactions()));
+            System.out.println("filter is: " + view.getInitialDateValue() + " " + view.getFinalDateValue() + " " + view.getFilterDirectionValue() + " " + view.getFilterCategoryValue());
+        }
+        catch (Exception e) 
+        {
+            view.showErrorMessage("Date is not valid");
+        }
+
     }
 
     private void setFilterBoxes(User user)
     {
         JComboBox<Category> categories = view.getFilterCategory();
 
-        categories.addItem(new Category("All categories", null, null));
+        categories.addItem(new Category("All categories", null));
 
         for (Category c : user.getCategories())
         {

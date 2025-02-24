@@ -8,23 +8,21 @@ import com.smu.dao.CategoryDAO;
 public class Category 
 {
     private String name;
-    private String description;
     private User creator;
     private List<Transaction> categorizedTransactions;
     private List<String> keywords;
 
-    public Category(String name, String description, User creator)
+    public Category(String name, User creator)
     {
         this.name = name;
-        this.description = description;
         this.creator = creator;
         this.categorizedTransactions = new ArrayList<Transaction>();
         this.keywords = new ArrayList<String>();
     }
 
-    public Category(String name, String description, User creator, List<Transaction> categorizedTransactions, List<String> keywords)
+    public Category(String name, User creator, List<Transaction> categorizedTransactions, List<String> keywords)
     {
-        this(name, description, creator);
+        this(name, creator);
         this.categorizedTransactions = categorizedTransactions;
         this.keywords = keywords;
     }
@@ -35,11 +33,6 @@ public class Category
     public String getName()
     {
         return name;
-    }
-
-    public String getDescription()
-    {
-        return description;
     }
 
     public User getCreator()
@@ -74,7 +67,7 @@ public class Category
     {
         for (String keyword : getKeywords())
         {
-            if (transaction.getDescription().toLowerCase().contains(keyword.toLowerCase()))//not using transaction??????
+            if (transaction.getDescription().toLowerCase().contains(keyword.toLowerCase()))
             {
                 insertTransaction(transaction);
                 return true;
