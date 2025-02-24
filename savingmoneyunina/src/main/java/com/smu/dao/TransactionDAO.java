@@ -79,7 +79,7 @@ public class TransactionDAO
 
     public static Boolean insert(Transaction transaction)
     {
-        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number) VALUES (?, ?, ?, ?, ?::direction, ?) ";
+        String sql = "INSERT INTO transaction (id, amount, description, date, direction, card_number, counter_part) VALUES (?, ?, ?, ?, ?::direction, ?, ?) ";
 
         try
         {
@@ -91,7 +91,8 @@ public class TransactionDAO
             ps.setDate(4, java.sql.Date.valueOf(transaction.getDate()));
             ps.setString(5, transaction.getDirection().toString());
             ps.setString(6, transaction.getCard().getCardNumber());
-            
+            ps.setString(7, transaction.getCounterPart());
+
             ps.executeUpdate();
         }
         catch (SQLException e)

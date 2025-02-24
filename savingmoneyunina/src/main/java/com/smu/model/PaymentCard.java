@@ -27,72 +27,46 @@ public class PaymentCard
     
     /***************************************************************GETTERS**************************************************************** */
     
-    public String getCardNumber()
-    {
-        return cardNumber;
-    }
+    public String getCardNumber() { return cardNumber; }
 
-    public String getCvv()
-    {
-        return cvv;
-    }
+    public String getCvv() { return cvv; }
 
-    public String getPin()
-    {
-        return pin;
-    }
+    public String getPin() { return pin; }
 
-    public LocalDate getExpirationDate()
-    {
-        return expirationDate;
-    }
+    public LocalDate getExpirationDate() { return expirationDate; }
 
-    public User getOwner()
-    {
-        return owner;
-    }
+    public User getOwner() { return owner; }
 
-    public BigDecimal getBalance()
-    {
-        return balance;
-    }
+    public BigDecimal getBalance() { return balance; }
 
-    public Report getReport(LocalDate date)
-    {
-        return PaymentCardDAO.getReport(this, date);
-    }
+    public Report getReport(LocalDate date) { return PaymentCardDAO.getReport(this, date); }
 
-    public BigDecimal getTotalMonthlyIncome(LocalDate date)
-    {
-        return PaymentCardDAO.getTotalMonthlyIncome(this, date);
-    }
+    public BigDecimal getTotalMonthlyIncome(LocalDate date) { return PaymentCardDAO.getTotalMonthlyIncome(this, date); }
 
-    public BigDecimal getTotalMonthlyExpense(LocalDate date)
-    {
-        return PaymentCardDAO.getTotalMonthlyExpense(this, date);
-    }
+    public BigDecimal getTotalMonthlyExpense(LocalDate date) { return PaymentCardDAO.getTotalMonthlyExpense(this, date); }
 
-    public List<Transaction> getTransactions()
-    {
-        return PaymentCardDAO.getTransactions(this);
-    }
+    public List<Transaction> getTransactions() { return PaymentCardDAO.getTransactions(this); }
     
-    public List<Transaction> filterTransactions(TransactionFilter transactionFilter, List<Transaction> transactions)
-    {
-        return transactionFilter.filter(transactions);
-    }
+    public List<Transaction> filterTransactions(TransactionFilter transactionFilter, List<Transaction> transactions) { return transactionFilter.filter(transactions); }
 
     /***************************************************************METHODS**************************************************************** */
     public void executeTransaction(Transaction transaction)
     {
+        
+
         if (transaction.getDirection() == Transaction.Direction.INCOME) 
             balance = balance.add(transaction.getAmount());
         else    
+        {   
+            if (transaction.getAmount().compareTo(balance) > 0)
+                throw new IllegalArgumentException("Insufficient balance for the transaction."); 
+            
             balance = balance.subtract(transaction.getAmount());
-
-        PaymentCardDAO.update(this);    
+        }
+ 
         transaction.insert();
         transaction.sortInCategories();
+        PaymentCardDAO.update(this);   
     }
  
     /***************************************************************DEBUG**************************************************************** */

@@ -69,7 +69,7 @@ public class UserDAO
 
         return cards;
     }
-    
+        
     public static List<Category> getCategories(User user)
     {
         List<Category> categories = new ArrayList<>();

@@ -42,50 +42,23 @@ public class Transaction
 
     /************************************************GETTERS****************************************************** */
 
-    public Long getId() 
-    {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public BigDecimal getAmount() 
-    {
-        return amount;
-    }
+    public BigDecimal getAmount() { return amount; }
 
-    public String getDescription() 
-    {
-        return description;
-    }
+    public String getDescription() { return description; }
 
-    public LocalDate getDate() 
-    {
-        return date;
-    }
+    public LocalDate getDate() { return date; }
 
-    public Direction getDirection() 
-    {
-        return direction;
-    }
+    public Direction getDirection() { return direction; }
 
-    public PaymentCard getCard() 
-    {
-        return card;
-    }
+    public PaymentCard getCard() { return card; }
 
-    public User getUser() 
-    {
-        return card.getOwner();
-    }
+    public User getUser() { return card.getOwner(); }
 
-    public String getCounterPart()
-    {
-        return counterPart;
-    }
+    public String getCounterPart() { return counterPart; }
 
-    public List <Category> getCategories() 
-    {
-        return TransactionDAO.getCategories(this);
-    }
+    public List<Category> getCategories() { return TransactionDAO.getCategories(this); }
 /************************************************METHODS****************************************************** */
 
     public void insert()
