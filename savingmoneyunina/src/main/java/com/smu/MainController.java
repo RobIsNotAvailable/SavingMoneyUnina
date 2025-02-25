@@ -13,6 +13,7 @@ import com.smu.dao.PaymentCardDAO;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 import com.smu.model.User;
+import com.smu.view.CardManager;
 import com.smu.view.HomePanel;
 import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
@@ -55,9 +56,13 @@ public class MainController
     public void loadScreens(User user)
     {
         Navbar navbar = new Navbar();
-        HomePanel homePanel = new HomePanel(navbar);
-        new HomeController(homePanel, user);
         new NavbarController(this, navbar);
+
+        CardManager cardManager = new CardManager();
+
+        HomePanel homePanel = new HomePanel(navbar, cardManager);
+        new HomeController(cardManager, homePanel, user);
+
         mainPanel.add(homePanel, "Home");
         // add further panels here
     }

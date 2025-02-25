@@ -8,11 +8,10 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import com.smu.view.UiUtil;
-
 public class Navbar extends JPanel
 {
     private JPanel wrapperPanel;
+    
     private JButton homeButton;
     private JButton familyButton;
     private JButton newTransactionButton;
