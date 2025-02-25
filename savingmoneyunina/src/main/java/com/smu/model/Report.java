@@ -33,28 +33,17 @@ public class Report
         this.finalBalance = finalBalance;
     }
 
-    public BigDecimal getInitialBalance()
-    {
-        return initialBalance;
-    }
+    /************************************************GETTERS****************************************************** */
 
-    public BigDecimal getFinalBalance()
-    {
-        return finalBalance;
-    }
+    public BigDecimal getInitialBalance() { return initialBalance; }
 
-    public PaymentCard getCard()
-    {
-        return card;
-    }
+    public BigDecimal getFinalBalance() { return finalBalance; }
 
-    public LocalDate getDate()
-    {
-        return date;
-    }
+    public PaymentCard getCard() { return card; }
 
+    public LocalDate getDate() { return date; }
     
-/***************************************************DEBUG******************************************************* */
+    /***************************************************DEBUG******************************************************* */
     public String toString()
     {
         return "Initial balance: " + initialBalance + "\n" +

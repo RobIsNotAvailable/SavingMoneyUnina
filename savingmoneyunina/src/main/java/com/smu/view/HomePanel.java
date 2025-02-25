@@ -51,6 +51,7 @@ public class HomePanel extends JPanel
     private JComboBox<Category> filterCategory;
     private JButton filterButton;
     private JButton clearFilterButton;
+    private JButton allTransactionsButton;
     private JLabel filterErrorLabel;
 
     private JTable transactions = null;
@@ -69,7 +70,7 @@ public class HomePanel extends JPanel
 
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
-        centerPanel.add(new BlankPanel(new Dimension(1,65)),BorderLayout.NORTH);
+        centerPanel.add(new BlankPanel(new Dimension(1,150)),BorderLayout.NORTH);
 
         JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
         financePanel.setOpaque(false);
@@ -105,93 +106,38 @@ public class HomePanel extends JPanel
         addTablePanel();
     }
 
-    public Navbar getNavbar() { return navbar; }
-
-    public JButton getCardButton() { return cardButton; }
-
-    public TriangleButton getLeftTriangleButton() { return leftTriangleButton; }
-
-    public TriangleButton getRightTriangleButton() { return rightTriangleButton; }
-
-    public JLabel getIncomeLabel() { return incomeLabel; }
-
-    public JLabel getExpensesLabel() { return expensesLabel; }
-
-    public JLabel getBalanceLabel() { return balanceLabel; }
-
-    public JFormattedTextField getFilterInitialDate() { return filterInitialDate; }
-
-    public JFormattedTextField getFilterFinalDate() { return filterFinalDate; }
-
-    public JComboBox<String> getFilterDirection() { return filterDirection; }
-
-    public JComboBox<Category> getFilterCategory() { return filterCategory; }
-
-    public JButton getFilterButton() { return filterButton; }
-
-    public JButton getClearFilterButton() { return clearFilterButton; }
-
-    public LocalDate getInitialDateValue() throws Exception 
-    {
-        String text = filterInitialDate.getText();
-        if (text.equals("--/--/----")) 
-        {
-            return null;
-        }
-        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
-    }
-
-    public LocalDate getFinalDateValue() throws Exception 
-    {
-        String text = filterFinalDate.getText();
-        if (text.equals("--/--/----")) 
-        {
-            return null;
-        }
-        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
-    }
-
-    public Direction getFilterDirectionValue() 
-    {
-        String direction = (String) filterDirection.getSelectedItem();
-        if (direction.equals("All directions")) 
-        {
-            return null;
-        } 
-        else 
-        {
-            return Direction.valueOf(direction.toUpperCase());
-        }
-    }
-
-    public Category getFilterCategoryValue() 
-    {
-        Category category = (Category) filterCategory.getSelectedItem();
-        if (category.getName().equals("All categories")) 
-        {
-            return null;
-        } 
-        else 
-        {
-            return category;
-        }
-    }
-
     private void addTablePanel()
     {
         transactions = new TransparentTable(new Object[0][4], new String[] {"", "", "", ""});
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         
-        tablePanel.setPreferredSize(new Dimension(400, 300));
+        tablePanel.setPreferredSize(new Dimension(400, 350));
         tablePanel.setOpaque(false);
 
         tablePanel.add(new TransparentScrollPanel(transactions,400,200), BorderLayout.CENTER);
         tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 200));
         
-        tablePanel.add(new BlankPanel(new Dimension(1, 50)), BorderLayout.SOUTH);
+        allTransactionsButton = UiUtil.createStyledButton("Load all");
+        allTransactionsButton.setForeground(UiUtil.CAPPUCCINO);
+
+        JPanel allTransactionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        allTransactionsPanel.setOpaque(false);
+        allTransactionsPanel.add(new BlankPanel(new Dimension(190, 1)), FlowLayout.LEFT);
+        allTransactionsPanel.add(allTransactionsButton);
+        
+        tablePanel.add(allTransactionsPanel, BorderLayout.SOUTH);
         tablePanel.add(new BlankPanel(new Dimension(200, 1)), BorderLayout.WEST);
 
+        JPanel filterPanel = createFilterPanel();
+
+        tablePanel.add(filterPanel, BorderLayout.NORTH);
+
+        this.add(tablePanel, BorderLayout.SOUTH);
+    }
+
+    private JPanel createFilterPanel() 
+    {
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 13, 10));
         filterPanel.setOpaque(false);
 
@@ -236,12 +182,14 @@ public class HomePanel extends JPanel
         filterButton.setContentAreaFilled(true);
         filterButton.setBackground(UiUtil.DARK_CAPPUCCINO);
         filterButton.setMargin(new Insets(3, 35, 3, 35));
+        UiUtil.addKeyBinding(filterButton, "ENTER");
         filterPanel.add(filterButton);
 
-        clearFilterButton = UiUtil.createStyledButton("Reset Filter");
+        clearFilterButton = UiUtil.createStyledButton("Reset");
         clearFilterButton.setContentAreaFilled(true);
         clearFilterButton.setBackground(UiUtil.DARK_CAPPUCCINO);
         clearFilterButton.setMargin(new Insets(3, 35, 3, 35));
+        UiUtil.addKeyBinding(clearFilterButton, "DELETE");
         filterPanel.add(clearFilterButton);
 
         filterPanel.add(new BlankPanel(new Dimension(30, 1)));
@@ -250,10 +198,7 @@ public class HomePanel extends JPanel
         filterErrorLabel.setFont(new Font("Arial", Font.PLAIN, 18));
         filterErrorLabel.setForeground(UiUtil.ERROR_RED);
         filterPanel.add(filterErrorLabel);
-
-        tablePanel.add(filterPanel, BorderLayout.NORTH);
-
-        this.add(tablePanel, BorderLayout.SOUTH);
+        return filterPanel;
     }
     
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
@@ -311,7 +256,23 @@ public class HomePanel extends JPanel
 
     public void showTransactions(List<Transaction> transactionList)
     {
-        Object[][] data = new Object[(transactionList != null) ? transactionList.size() : 0][4];
+        Object[][] data;
+
+        if(transactionList.isEmpty())
+        {
+            data = new Object[1][1];
+            data[0][0] = "No transactions found :(";
+            transactions.setModel(new javax.swing.table.DefaultTableModel(data, new String[] {""}));
+
+            DefaultTableCellRenderer centerAlignRenderer = new DefaultTableCellRenderer();
+            centerAlignRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+            transactions.getColumnModel().getColumn(0).setCellRenderer(centerAlignRenderer);
+
+            return;
+        }
+        
+        
+        data = new Object[transactionList.size()][4];
 
         for (int i = 0; i < transactionList.size(); i++)
         {
@@ -325,7 +286,6 @@ public class HomePanel extends JPanel
                 categories += c + " ";
             }
             
-
             data[i][2] = categories;
 
             Color color = (transaction.getDirection() == Transaction.Direction.INCOME) ? UiUtil.CAPPUCCINO : Color.WHITE;
@@ -360,5 +320,72 @@ public class HomePanel extends JPanel
     public void clearErrorMessage()
     {
         filterErrorLabel.setText(" ");
+    }
+
+    /***********************************************************GETTERS****************************************************** */
+    public Navbar getNavbar() { return navbar; }
+
+    public JButton getCardButton() { return cardButton; }
+
+    public TriangleButton getLeftTriangleButton() { return leftTriangleButton; }
+
+    public TriangleButton getRightTriangleButton() { return rightTriangleButton; }
+
+    public JLabel getIncomeLabel() { return incomeLabel; }
+
+    public JLabel getExpensesLabel() { return expensesLabel; }
+
+    public JLabel getBalanceLabel() { return balanceLabel; }
+
+    public JFormattedTextField getFilterInitialDate() { return filterInitialDate; }
+
+    public JFormattedTextField getFilterFinalDate() { return filterFinalDate; }
+
+    public JComboBox<String> getFilterDirection() { return filterDirection; }
+
+    public JComboBox<Category> getFilterCategory() { return filterCategory; }
+
+    public JButton getFilterButton() { return filterButton; }
+
+    public JButton getClearFilterButton() { return clearFilterButton; }
+
+    public JButton getAllTransactionButton() {return allTransactionsButton; }
+
+    public LocalDate getInitialDateValue() throws Exception 
+    {
+        String text = filterInitialDate.getText();
+
+        if (text.equals("--/--/----")) 
+            return null;
+
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
+    }
+
+    public LocalDate getFinalDateValue() throws Exception 
+    {
+        String text = filterFinalDate.getText();
+        
+        if (text.equals("--/--/----")) 
+            return null;
+        
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
+    }
+
+    public Direction getFilterDirectionValue() 
+    {
+        String direction = (String) filterDirection.getSelectedItem();
+        if (direction.equals("All directions")) 
+            return null;
+        else 
+            return Direction.valueOf(direction.toUpperCase());
+    }
+
+    public Category getFilterCategoryValue() 
+    {
+        Category category = (Category) filterCategory.getSelectedItem();
+        if (category.getName().equals("All categories")) 
+            return null;
+        else 
+            return category;
     }
 }

@@ -45,7 +45,8 @@ public class MainController
         mainPanel.add(loginPanel, "Login"); 
         
         mainFrame.add(mainPanel);
-        }
+    }
+
     public void showScreen(String screenName) 
     {
         cardLayout.show(mainPanel, screenName);
@@ -63,12 +64,11 @@ public class MainController
 
     public static void main(String[] args) 
     {
-        //populate();
         SwingUtilities.invokeLater(MainController::new);
     }
 
 
-
+    //used for populating the db only for first time running of the application
     public static void populate()
     {
         /* ************************************************************ALICE FIRST CARD****************************************************************** */

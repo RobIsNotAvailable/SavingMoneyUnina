@@ -45,11 +45,10 @@ public class LoginController
                 main.loadScreens(user);
                 main.showScreen("Home");
                 view.clearMessage();
+                view.clearFields();
             } 
             else 
-            {
                 view.showErrorMessage("Invalid credentials");
-            }
         }
     }
 }

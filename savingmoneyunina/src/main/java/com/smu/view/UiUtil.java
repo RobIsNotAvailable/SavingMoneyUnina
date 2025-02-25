@@ -15,18 +15,23 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.JTableHeader;
+import java.awt.event.ActionEvent;
 
 public class UiUtil
 {
@@ -83,6 +88,8 @@ public class UiUtil
             reportButton = createStyledButton("Family");
             logoutButton = createStyledButton("Log out");
 
+            addKeyBinding(logoutButton, "ESCAPE");
+
             add(homeButton);
             add(new BlankPanel(new Dimension(50, 1)));
             add(familyButton);
@@ -94,30 +101,15 @@ public class UiUtil
             wrapperPanel.add(this, BorderLayout.CENTER);
         }
 
-        public JButton getHomeButton()
-        {
-            return homeButton;
-        }
+        public JButton getHomeButton() { return homeButton; }
 
-        public JButton getFamilyButton()
-        {
-            return familyButton;
-        }
+        public JButton getFamilyButton() { return familyButton; }
 
-        public JButton getNewTransactionButton()
-        {
-            return newTransactionButton;
-        }
+        public JButton getNewTransactionButton() { return newTransactionButton; }
 
-        public JButton getreportButton()
-        {
-            return reportButton;
-        }
+        public JButton getreportButton() { return reportButton; }
 
-        public JButton getLogoutButton()
-        {
-            return logoutButton;
-        }
+        public JButton getLogoutButton() { return logoutButton; }
     }
 
     public static JButton createStyledButton(String text)
@@ -158,9 +150,9 @@ public class UiUtil
         button.addActionListener(listener);
     }
 
-    public static class TriangleButton extends JButton
+    public static class TriangleButton extends JButton 
     {
-        public enum Direction
+        public enum Direction 
         {
             LEFT, RIGHT
         }
@@ -168,34 +160,40 @@ public class UiUtil
         private Polygon triangle;
         private Direction direction;
 
-        public TriangleButton(Direction direction)
+        public TriangleButton(Direction direction) 
         {
             super();
             this.direction = direction;
             setContentAreaFilled(false);
             setFocusPainted(false);
             setBorderPainted(false);
+            setFocusable(true);
+
+            if (direction == Direction.RIGHT) 
+                addKeyBinding(this, "RIGHT");
+            else 
+                addKeyBinding(this, "LEFT");
+
         }
 
         @Override
-        protected void paintComponent(Graphics g)
+        protected void paintComponent(Graphics g) 
         {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
             int width = getWidth();
             int height = getHeight();
 
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); // anti aliasing (no jagged edges)
-
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
             int[] xPoints;
             int[] yPoints;
 
-            if (direction == Direction.LEFT)
+            if (direction == Direction.LEFT) 
             {
                 xPoints = new int[]{width, 0, width};
                 yPoints = new int[]{0, height / 2, height};
-            }
-            else
+            } 
+            else 
             {
                 xPoints = new int[]{0, width, 0};
                 yPoints = new int[]{0, height / 2, height};
@@ -208,34 +206,29 @@ public class UiUtil
         }
 
         @Override
-        public boolean contains(int x, int y)
+        public boolean contains(int x, int y) 
         {
             int width = getWidth();
             int height = getHeight();
             int[] xPoints;
             int[] yPoints;
 
-            if (direction == Direction.LEFT)
+            if (direction == Direction.LEFT) 
             {
                 xPoints = new int[]{width, 0, width};
                 yPoints = new int[]{0, height / 2, height};
-            }
-            else
+            } 
+            else 
             {
                 xPoints = new int[]{0, width, 0};
                 yPoints = new int[]{0, height / 2, height};
             }
 
             triangle = new Polygon(xPoints, yPoints, 3);
-
-            // Return true if the clicked point is inside the triangle
             return triangle.contains(x, y);
         }
 
-        public Direction getDirection()
-        {
-            return direction;
-        }
+        public Direction getDirection() {return direction;}
     }
 
     public static class TransparentTable extends JTable
@@ -332,5 +325,22 @@ public class UiUtil
 
             getVerticalScrollBar().setPreferredSize(new Dimension(10, 0));
         }
+    }
+
+    public static void addKeyBinding(JButton button, String keyName)
+    {
+        InputMap inputMap = button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = button.getActionMap();
+        
+        inputMap.put(KeyStroke.getKeyStroke(keyName), "click");
+
+        actionMap.put("click", new AbstractAction()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                button.doClick();
+            }
+        });
     }
 }

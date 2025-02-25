@@ -57,6 +57,16 @@ public class PaymentCardDAO
         return TransactionDAO.getByCard(card);
     }
 
+    public static BigDecimal getTotalMonthlyIncome(PaymentCard card, LocalDate date)
+    {
+        return IncomeDetailsDAO.get(card, date).getTotalIncome();
+    }
+
+    public static BigDecimal getTotalMonthlyExpense(PaymentCard card, LocalDate date)
+    {
+        return ExpenseDetailsDAO.get(card, date).getTotalExpense();
+    }
+
     public static void update(PaymentCard card)
     {
         String sql = "UPDATE payment_card SET balance = ? WHERE card_number = ?";
@@ -74,13 +84,4 @@ public class PaymentCardDAO
         }
     }
 
-    public static BigDecimal getTotalMonthlyIncome(PaymentCard card, LocalDate date)
-    {
-        return IncomeDetailsDAO.get(card, date).getTotalIncome();
-    }
-
-    public static BigDecimal getTotalMonthlyExpense(PaymentCard card, LocalDate date)
-    {
-        return ExpenseDetailsDAO.get(card, date).getTotalExpense();
-    }
 }   

@@ -45,7 +45,7 @@ public class UserDAO
         return null;
     }
 
-    public static List<PaymentCard> getCards(User user)
+    public static List<PaymentCard> getCards(User user) 
     {
         List<PaymentCard> cards = new ArrayList<>();
 

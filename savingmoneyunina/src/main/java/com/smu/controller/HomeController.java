@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import java.util.List;
+import com.smu.model.Transaction;
 
 import com.smu.model.PaymentCard;
 import com.smu.model.TransactionFilter;
@@ -34,11 +36,13 @@ public class HomeController
         UiUtil.addListener(view.getCardButton(), new CardListener());
         UiUtil.addListener(view.getFilterButton(), new FilterListener());
         UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());
+        UiUtil.addListener(view.getAllTransactionButton(), new allTransactionsListener());
+
 
         updateButton();
         updateDetails();
         setFilterBoxes(user);
-        updateTable();
+        initializeTable();
     }
 
     private class CardChangerListener implements ActionListener 
@@ -61,9 +65,11 @@ public class HomeController
 
             cardIndex = (cardIndex + length) % length; 
 
+            view.getAllTransactionButton().setVisible(true);
+
             updateButton();
             updateDetails();
-            updateTable();
+            initializeTable();
         }
     }
 
@@ -83,6 +89,7 @@ public class HomeController
         public void actionPerformed(ActionEvent e)
         {
             updateTable();
+            view.getAllTransactionButton().setVisible(false);
         }
     }
 
@@ -97,6 +104,19 @@ public class HomeController
             view.getFilterFinalDate().setValue(null);
             view.getFilterDirection().setSelectedIndex(0);
             view.getFilterCategory().setSelectedIndex(0);
+
+            view.getAllTransactionButton().setVisible(true);
+            initializeTable();
+        }
+    }
+
+    private class allTransactionsListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            updateTable();
+            view.getAllTransactionButton().setVisible(false);
         }
     }
 
@@ -141,7 +161,14 @@ public class HomeController
         {
             view.showErrorMessage("Date is not valid");
         }
+    }
 
+    private void initializeTable()
+    {
+        List<Transaction> list = PaymentCardList.get(cardIndex).getTransactions();
+        List<Transaction> firstTenTransactions = list.stream().limit(10).toList();
+
+        view.showTransactions(firstTenTransactions);
     }
 
     private void setFilterBoxes(User user)

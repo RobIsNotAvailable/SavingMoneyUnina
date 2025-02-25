@@ -9,26 +9,19 @@ public class Family
     private String name;
     private List<User> members;
 
-/*************************************CONSTRUCTORS******************************************* */ 
     public Family(String name, List<User> members)
     {
         this.name = name;
         this.members = new ArrayList<User>(members);
     }
 
-/*************************************GETTER******************************************* */ 
+    /*************************************GETTER******************************************* */ 
 
-    public String getName()
-    {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public List<User> getMembers()
-    {
-        return members;
-    }
+    public List<User> getMembers() { return members; }
 
-/*************************************DEBUG******************************************* */ 
+    /*************************************DEBUG******************************************* */ 
     public String toString()
     {
         String string = "Family name: " + name + " | Members:";	

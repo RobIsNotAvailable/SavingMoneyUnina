@@ -21,26 +21,17 @@ public class IncomeDetails
         }
     }
 
-    public BigDecimal getMaxIncome()
-    {
-        return maxIncome;
-    }
+    /************************************************GETTERS****************************************************** */
 
-    public BigDecimal getMinIncome()
-    {
-        return minIncome;
-    }
+    public BigDecimal getMaxIncome() { return maxIncome; }
 
-    public BigDecimal getAvgIncome()
-    {
-        return avgIncome;
-    }
+    public BigDecimal getMinIncome() { return minIncome; }
 
-    public BigDecimal getTotalIncome()
-    {
-        return totalIncome;
-    }
-/***************************************************DEBUG************************************************** */
+    public BigDecimal getAvgIncome() { return avgIncome; }
+
+    public BigDecimal getTotalIncome() { return totalIncome; }
+    
+    /***************************************************DEBUG************************************************** */
     public String toString()
     {
         return "Max income: " + maxIncome + "\n" +

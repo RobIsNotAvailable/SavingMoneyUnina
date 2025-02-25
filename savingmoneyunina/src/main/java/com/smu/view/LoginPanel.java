@@ -31,7 +31,7 @@ public class LoginPanel extends JPanel
     {   
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
-    
+
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
     
@@ -138,9 +138,13 @@ public class LoginPanel extends JPanel
         loginButton.setBackground(UiUtil.DARK_CAPPUCCINO);
         loginButton.setFont(new Font("Arial", Font.BOLD, 20));
         loginButton.setContentAreaFilled(true);
+        
         gbc.weighty = 1;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        UiUtil.addKeyBinding(loginButton,"ENTER");
+
         panel.add(loginButton, gbc);
         gbc.gridy++;
         setDefaultGbc();
@@ -154,21 +158,6 @@ public class LoginPanel extends JPanel
             panel.add(blankLabel, gbc);
             gbc.gridy++;
         }
-    }
-
-    public JButton getLoginButton()
-    {
-        return loginButton;
-    }
-
-    public String getUsername() 
-    {
-        return usernameField.getText();
-    }
-
-    public String getPassword() 
-    {
-        return new String(passwordField.getPassword());
     }
 
     public void showErrorMessage(String message) 
@@ -188,4 +177,25 @@ public class LoginPanel extends JPanel
         messageLabel.setText(" ");
     }
 
+    public void clearFields()
+    {
+        usernameField.setText("");
+        passwordField.setText("");
+    }
+    /***********************************************************GETTERS****************************************************** */
+    
+    public JButton getLoginButton()
+    {
+        return loginButton;
+    }
+
+    public String getUsername() 
+    {
+        return usernameField.getText();
+    }
+
+    public String getPassword() 
+    {
+        return new String(passwordField.getPassword());
+    }
 }

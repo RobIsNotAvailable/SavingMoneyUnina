@@ -15,43 +15,20 @@ public class User
         this.password = password;
     }
 
-    public String getUsername()
-    {
-        return username;
-    }
+        public Boolean verify(){return UserDAO.verify(this);}
 
-    public String getPassword()
-    {
-        return password;
-    }
+        public String toString(){return "Username: " + username + "\nPassword: " + password;}
+    /***********************************************************GETTERS****************************************************** */
 
-    public List<PaymentCard> getCards()
-    {
-        return UserDAO.getCards(this);
-    }
+    public String getUsername() { return username; }
 
-    public List<Category> getCategories()
-    {
-        return UserDAO.getCategories(this);
-    }
+    public String getPassword() { return password; }
 
-    public Category getCategory(String name)
-    {
-        return UserDAO.getCategory(this, name);
-    }
+    public List<PaymentCard> getCards() { return UserDAO.getCards(this); }
+
+    public List<Category> getCategories() { return UserDAO.getCategories(this); }
+
+    public Category getCategory(String name) { return UserDAO.getCategory(this, name); }
     
-    public Family getFamily()
-    {
-        return UserDAO.getFamily(this);
-    }
-
-    public Boolean verify()
-    {
-        return UserDAO.verify(this);
-    }
-
-    public String toString()
-    {
-        return "Username: " + username + "\nPassword: " + password;
-    }
+    public Family getFamily() { return UserDAO.getFamily(this); }
 }

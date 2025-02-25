@@ -20,26 +20,16 @@ public class ExpenseDetails
             this.totalExpense = totalExpense;
         }
     }
+    
+    /************************************************GETTERS****************************************************** */
+    
+    public BigDecimal getMaxExpense() { return maxExpense; }
 
-    public BigDecimal getMaxExpense()
-    {
-        return maxExpense;
-    }
+    public BigDecimal getMinExpense() { return minExpense; }
 
-    public BigDecimal getMinExpense()
-    {
-        return minExpense;
-    }
+    public BigDecimal getAvgExpense() { return avgExpense; }
 
-    public BigDecimal getAvgExpense()
-    {
-        return avgExpense;
-    }
-
-    public BigDecimal getTotalExpense()
-    {
-        return totalExpense;
-    }
+    public BigDecimal getTotalExpense() { return totalExpense; }
     /***************************************************DEBUG************************************************** */
     public String toString()
     {

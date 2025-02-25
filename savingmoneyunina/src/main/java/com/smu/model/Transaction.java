@@ -55,7 +55,18 @@ public class Transaction
     public User getUser() { return card.getOwner(); }
 
     public List<Category> getCategories() { return TransactionDAO.getCategories(this); }
-/************************************************METHODS****************************************************** */
+
+    public List<Category> getUserCategories()
+    {
+        return getUser().getCategories();
+    }
+
+    public Category getUserOtherCategory()
+    {
+        return getUser().getCategory("Other");
+    }
+    
+    /************************************************METHODS****************************************************** */
 
     public void insert()
     {
@@ -74,16 +85,6 @@ public class Transaction
         {
             getUserOtherCategory().insertTransaction(this);
         }
-    }
-
-    public List<Category> getUserCategories()
-    {
-        return getUser().getCategories();
-    }
-
-    public Category getUserOtherCategory()
-    {
-        return getUser().getCategory("Other");
     }
 
     public String toString() 

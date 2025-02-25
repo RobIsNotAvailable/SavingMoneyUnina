@@ -30,25 +30,13 @@ public class Category
 
 /*****************************************************GETTERS******************************************** */
 
-    public String getName()
-    {
-        return name;
-    }
+    public String getName() { return name; }
 
-    public User getCreator()
-    {
-        return creator;
-    }
+    public User getCreator() { return creator; }
 
-    public List<Transaction> getTransactions()
-    {
-        return categorizedTransactions;
-    }
+    public List<Transaction> getTransactions() { return categorizedTransactions; }
 
-    public List<String> getKeywords()
-    {
-        return keywords;
-    }
+    public List<String> getKeywords() { return keywords; }
 
 /*****************************************************SETTERS******************************************** */
 

@@ -46,8 +46,6 @@ public class NavbarController
 
             if (response == JOptionPane.YES_OPTION)
                 main.showScreen("Login");
-            
-
         }
     }
 }
