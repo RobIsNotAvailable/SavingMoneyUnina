@@ -16,7 +16,7 @@ import com.smu.model.User;
 import com.smu.view.HomePanel;
 import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
-import com.smu.view.UiUtil.Navbar;
+import com.smu.view.Navbar;
 
 public class MainController 
 {

@@ -38,7 +38,6 @@ public class HomeController
         UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());
         UiUtil.addListener(view.getAllTransactionButton(), new allTransactionsListener());
 
-
         updateButton();
         updateDetails();
         setFilterBoxes(user);

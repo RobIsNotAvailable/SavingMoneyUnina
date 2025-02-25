@@ -64,54 +64,6 @@ public class UiUtil
         }
     }
 
-    public static class Navbar extends JPanel
-    {
-        private JPanel wrapperPanel;
-        private JButton homeButton;
-        private JButton familyButton;
-        private JButton newTransactionButton;
-        private JButton reportButton;
-        private JButton logoutButton;
-
-        public Navbar()
-        {
-            wrapperPanel = new JPanel(new BorderLayout());
-            setBackground(DARK_CAPPUCCINO);
-
-            setLayout(new GridLayout(1, 0, 20, 0));
-
-            homeButton = createStyledButton("");
-            homeButton.setMargin(new Insets(0, 15, 0, 15));
-            homeButton.add(new LogoLabel(0.2));
-            familyButton = createStyledButton("New Transaction");
-            newTransactionButton = createStyledButton("Reports");
-            reportButton = createStyledButton("Family");
-            logoutButton = createStyledButton("Log out");
-
-            addKeyBinding(logoutButton, "ESCAPE");
-
-            add(homeButton);
-            add(new BlankPanel(new Dimension(50, 1)));
-            add(familyButton);
-            add(newTransactionButton);
-            add(reportButton);
-            add(new BlankPanel(new Dimension(50, 1)));
-            add(logoutButton);
-
-            wrapperPanel.add(this, BorderLayout.CENTER);
-        }
-
-        public JButton getHomeButton() { return homeButton; }
-
-        public JButton getFamilyButton() { return familyButton; }
-
-        public JButton getNewTransactionButton() { return newTransactionButton; }
-
-        public JButton getreportButton() { return reportButton; }
-
-        public JButton getLogoutButton() { return logoutButton; }
-    }
-
     public static JButton createStyledButton(String text)
     {
         JButton button = new JButton(text);

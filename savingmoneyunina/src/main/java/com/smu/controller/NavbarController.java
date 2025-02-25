@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import com.smu.MainController;
+import com.smu.view.Navbar;
 import com.smu.view.UiUtil;
-import com.smu.view.UiUtil.Navbar;
 
 public class NavbarController
 {
