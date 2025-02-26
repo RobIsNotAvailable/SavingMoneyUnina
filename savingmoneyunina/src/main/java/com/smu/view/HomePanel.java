@@ -42,8 +42,6 @@ public class HomePanel extends DefaultPanel
 
     public HomePanel()
     {   
-        this.add(cardManager, BorderLayout.CENTER);
-
         addTablePanel();
     }
 

@@ -69,7 +69,6 @@ public class MainController
         SwingUtilities.invokeLater(MainController::new);
     }
 
-
     //used for populating the db only for first time running of the application
     public static void populate()
     {

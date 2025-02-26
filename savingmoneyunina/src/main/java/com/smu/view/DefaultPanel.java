@@ -20,7 +20,7 @@ public class DefaultPanel extends JPanel
 
         this.cardManager = new CardManager();
         
-        this.add(cardManager, BorderLayout.WEST);
+        this.add(cardManager, BorderLayout.CENTER);
     }
 
     public Navbar getNavbar() { return navbar; }
