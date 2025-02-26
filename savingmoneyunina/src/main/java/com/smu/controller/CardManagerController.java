@@ -50,8 +50,6 @@ public class CardManagerController
 
             updateButton();
             updateDetails();
-
-            System.out.println("STAMPA DENTRO CHANGE LISTENER "+cardIndex);
         }
     }
 

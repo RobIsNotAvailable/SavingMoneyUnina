@@ -27,11 +27,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
-public class HomePanel extends JPanel
+public class HomePanel extends DefaultPanel
 {
-    private Navbar navbar;
-    private CardManager cardManager;
-    
     private JFormattedTextField filterInitialDate;
     private JFormattedTextField filterFinalDate;
     private JComboBox<String> filterDirection;
@@ -45,21 +42,6 @@ public class HomePanel extends JPanel
 
     public HomePanel()
     {   
-        this.setOpaque(false);
-        this.setLayout(new BorderLayout());
-
-        this.navbar = new Navbar();
-
-        this.add(navbar, BorderLayout.NORTH);
-
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setOpaque(false);
-        centerPanel.add(new BlankPanel(new Dimension(1,150)),BorderLayout.NORTH);
-
-        this.cardManager = new CardManager();
-
-        centerPanel.add(cardManager, BorderLayout.CENTER);
-
         this.add(cardManager, BorderLayout.CENTER);
 
         addTablePanel();
@@ -88,9 +70,7 @@ public class HomePanel extends JPanel
         tablePanel.add(allTransactionsPanel, BorderLayout.SOUTH);
         tablePanel.add(new BlankPanel(new Dimension(200, 1)), BorderLayout.WEST);
 
-        JPanel filterPanel = createFilterPanel();
-
-        tablePanel.add(filterPanel, BorderLayout.NORTH);
+        tablePanel.add(createFilterPanel(), BorderLayout.NORTH);
 
         this.add(tablePanel, BorderLayout.SOUTH);
     }
@@ -227,19 +207,9 @@ public class HomePanel extends JPanel
     {
         filterErrorLabel.setText(" ");
     }
-
-    public void addComponents()
-    {
-        this.add(navbar,BorderLayout.NORTH);
-        this.add(cardManager,BorderLayout.CENTER);
-    }
     
     /***********************************************************GETTERS****************************************************** */
     
-    public Navbar getNavbar() { return navbar; }
-
-    public CardManager getCardManager() { return cardManager; }
-
     public JFormattedTextField getFilterInitialDate() { return filterInitialDate; }
 
     public JFormattedTextField getFilterFinalDate() { return filterFinalDate; }

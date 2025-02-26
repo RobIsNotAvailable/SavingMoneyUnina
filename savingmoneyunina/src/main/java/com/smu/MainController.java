@@ -8,7 +8,6 @@ import javax.swing.SwingUtilities;
 
 import com.smu.controller.HomeController;
 import com.smu.controller.LoginController;
-import com.smu.controller.NewTransactionController;
 import com.smu.dao.PaymentCardDAO;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
@@ -16,7 +15,6 @@ import com.smu.model.User;
 import com.smu.view.HomePanel;
 import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
-import com.smu.view.NewTransactionPanel;
 
 public class MainController 
 {
@@ -57,11 +55,7 @@ public class MainController
         HomePanel homePanel = new HomePanel();
         new HomeController(this, homePanel, user);
 
-        NewTransactionPanel ntp = new NewTransactionPanel();
-        new NewTransactionController(this, ntp, user);
-
         mainPanel.add(homePanel, "Home");
-        mainPanel.add(ntp, "New transaction");
     }
 
     public static void main(String[] args) 

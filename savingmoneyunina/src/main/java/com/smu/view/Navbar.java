@@ -28,6 +28,7 @@ public class Navbar extends JPanel
         homeButton = UiUtil.createStyledButton("");
         homeButton.setMargin(new Insets(0, 15, 0, 15));
         homeButton.add(new UiUtil.LogoLabel(0.2));
+        
         newTransactionButton = UiUtil.createStyledButton("New Transaction");
         reportButton = UiUtil.createStyledButton("Reports");
         familyButton = UiUtil.createStyledButton("Family");
