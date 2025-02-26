@@ -8,16 +8,15 @@ import javax.swing.SwingUtilities;
 
 import com.smu.controller.HomeController;
 import com.smu.controller.LoginController;
-import com.smu.controller.NavbarController;
+import com.smu.controller.NewTransactionController;
 import com.smu.dao.PaymentCardDAO;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 import com.smu.model.User;
-import com.smu.view.CardManager;
 import com.smu.view.HomePanel;
 import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
-import com.smu.view.Navbar;
+import com.smu.view.NewTransactionPanel;
 
 public class MainController 
 {
@@ -55,16 +54,14 @@ public class MainController
 
     public void loadScreens(User user)
     {
-        Navbar navbar = new Navbar();
-        new NavbarController(this, navbar);
+        HomePanel homePanel = new HomePanel();
+        new HomeController(this, homePanel, user);
 
-        CardManager cardManager = new CardManager();
-
-        HomePanel homePanel = new HomePanel(navbar, cardManager);
-        new HomeController(cardManager, homePanel, user);
+        NewTransactionPanel ntp = new NewTransactionPanel();
+        new NewTransactionController(this, ntp, user);
 
         mainPanel.add(homePanel, "Home");
-        // add further panels here
+        mainPanel.add(ntp, "New transaction");
     }
 
     public static void main(String[] args) 
@@ -199,3 +196,13 @@ public class MainController
         card.executeTransaction(new Transaction(BigDecimal.valueOf(1150), "Spent on a holiday trip to create lasting memories.", LocalDate.parse("2024-12-15"), Transaction.Direction.EXPENSE, card));
     }
 }
+
+
+
+
+
+
+
+
+
+ 

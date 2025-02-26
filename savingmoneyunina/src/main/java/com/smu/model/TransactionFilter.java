@@ -1,6 +1,7 @@
 package com.smu.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionFilter 
@@ -22,10 +23,10 @@ public class TransactionFilter
 
     public List<Transaction> filter(List<Transaction> transactions)
     {
-        List<Transaction> filteredTransactions = transactions;
+        List<Transaction> filteredTransactions = new ArrayList<>(transactions);
 
         if(category != null)
-            filteredTransactions = category.getTransactions();
+            filteredTransactions.removeIf(t -> !t.getCategories().contains(category));
 
         if(initialDate != null)
             filteredTransactions.removeIf(t -> t.getDate().isBefore(initialDate));

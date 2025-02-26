@@ -28,7 +28,7 @@ public class Category
     }
 
 
-/*****************************************************GETTERS******************************************** */
+    /*****************************************************GETTERS******************************************** */
 
     public String getName() { return name; }
 
@@ -38,7 +38,7 @@ public class Category
 
     public List<String> getKeywords() { return keywords; }
 
-/*****************************************************SETTERS******************************************** */
+    /*****************************************************SETTERS******************************************** */
 
     public void setTransactions(List<Transaction> categorizedTransactions)
     {
@@ -50,7 +50,8 @@ public class Category
         this.keywords = keywords;
     }
 
-/*****************************************************METHODS******************************************** */
+    /*****************************************************METHODS******************************************** */
+    
     public Boolean insertIfMatches(Transaction transaction)
     {
         for (String keyword : getKeywords())
@@ -71,6 +72,19 @@ public class Category
         CategoryDAO.insertTransaction(transaction, this);
     }
 
+    @Override
+    public boolean equals(Object obj)  
+    {  
+        if (this == obj) 
+            return true;  
+
+        if (obj == null || getClass() != obj.getClass()) 
+            return false;  
+
+        Category category = (Category) obj;
+
+        return (name.equals(category.name) && creator.equals(category.creator));
+    }
     /*****************************************************DEBUG******************************************** */
    public String toString()
     {

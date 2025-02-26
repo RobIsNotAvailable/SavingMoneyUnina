@@ -20,6 +20,20 @@ public class User
         public String toString(){return "Username: " + username + "\nPassword: " + password;}
     /***********************************************************GETTERS****************************************************** */
 
+    @Override
+    public boolean equals(Object obj)  
+    {  
+        if (this == obj) 
+            return true;  
+
+        if (obj == null || getClass() != obj.getClass()) 
+            return false;  
+
+        User user = (User) obj;
+
+        return username.equals(user.username);
+    }
+
     public String getUsername() { return username; }
 
     public String getPassword() { return password; }

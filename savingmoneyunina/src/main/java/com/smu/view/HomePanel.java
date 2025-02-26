@@ -43,19 +43,20 @@ public class HomePanel extends JPanel
 
     private JTable transactions = null;
 
-    public HomePanel(Navbar navbar, CardManager cardManager)
+    public HomePanel()
     {   
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
 
-        this.navbar = navbar;
+        this.navbar = new Navbar();
+
         this.add(navbar, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
         centerPanel.add(new BlankPanel(new Dimension(1,150)),BorderLayout.NORTH);
 
-        this.cardManager = cardManager;
+        this.cardManager = new CardManager();
 
         centerPanel.add(cardManager, BorderLayout.CENTER);
 
@@ -227,7 +228,14 @@ public class HomePanel extends JPanel
         filterErrorLabel.setText(" ");
     }
 
+    public void addComponents()
+    {
+        this.add(navbar,BorderLayout.NORTH);
+        this.add(cardManager,BorderLayout.CENTER);
+    }
+    
     /***********************************************************GETTERS****************************************************** */
+    
     public Navbar getNavbar() { return navbar; }
 
     public CardManager getCardManager() { return cardManager; }

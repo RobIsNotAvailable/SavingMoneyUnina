@@ -16,19 +16,15 @@ import com.smu.view.UiUtil.TriangleButton;
 
 public class CardManagerController
 {
-    private CardManager view;
+    protected CardManager cardManager;
     protected ArrayList<PaymentCard> PaymentCardList;
-    protected static int cardIndex = 0;
+    protected int cardIndex = 0;
 
     public CardManagerController(CardManager view, User user) 
     {
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
 
-        this.view = view;
-
-        UiUtil.addListener(view.getRightTriangleButton(), new CardChangerListener(view.getRightTriangleButton()));
-        UiUtil.addListener(view.getLeftTriangleButton(), new CardChangerListener(view.getLeftTriangleButton()));
-        UiUtil.addListener(view.getCardButton(), new CardListener());
+        this.cardManager = view;
     }
 
     protected class CardChangerListener implements ActionListener 
@@ -44,6 +40,7 @@ public class CardManagerController
         public void actionPerformed(ActionEvent e) 
         {
             int length = PaymentCardList.size();
+            
             if(direction == TriangleButton.Direction.RIGHT)
                 cardIndex++;
             else    
@@ -53,6 +50,8 @@ public class CardManagerController
 
             updateButton();
             updateDetails();
+
+            System.out.println("STAMPA DENTRO CHANGE LISTENER "+cardIndex);
         }
     }
 
@@ -62,7 +61,7 @@ public class CardManagerController
         public void actionPerformed(ActionEvent e)
         {
             PaymentCard card = PaymentCardList.get(cardIndex);
-            view.displayCardDetails(card.getCardNumber(), card.getPin(), card.getExpirationDate().format(DateTimeFormatter.ofPattern("MM/yy")), card.getCvv());
+            cardManager.displayCardDetails(card.getCardNumber(), card.getPin(), card.getExpirationDate().format(DateTimeFormatter.ofPattern("MM/yy")), card.getCvv());
         }
     }
 
@@ -70,7 +69,7 @@ public class CardManagerController
     {
         String cardType = getCorrespondingCard();
         ImageIcon cardImage = new ImageIcon(new ImageIcon(HomeController.class.getResource("/" + cardType + ".png")).getImage().getScaledInstance(450, 280, java.awt.Image.SCALE_SMOOTH));
-        view.getCardButton().setIcon(cardImage);
+        cardManager.getCardButton().setIcon(cardImage);
     }
 
     public void updateDetails()
@@ -78,7 +77,21 @@ public class CardManagerController
         PaymentCard card = PaymentCardList.get(cardIndex);
         LocalDate now = LocalDate.now();
 
-        view.updateDetails(card.getTotalMonthlyIncome(now), card.getTotalMonthlyExpense(now), card.getBalance());
+        cardManager.updateDetails(card.getTotalMonthlyIncome(now), card.getTotalMonthlyExpense(now), card.getBalance());
+    }
+
+    public void initializeDefaultListeners()
+    {
+        UiUtil.addListener(cardManager.getRightTriangleButton(), new CardChangerListener(cardManager.getRightTriangleButton()));
+        UiUtil.addListener(cardManager.getLeftTriangleButton(), new CardChangerListener(cardManager.getLeftTriangleButton()));
+        UiUtil.addListener(cardManager.getCardButton(), new CardListener());
+    }
+
+    public void initializeCustomListeners(CardListener cardListener, CardChangerListener rightButtonListener, CardChangerListener leftButtonListener)
+    {
+        UiUtil.addListener(cardManager.getRightTriangleButton(), rightButtonListener);
+        UiUtil.addListener(cardManager.getLeftTriangleButton(), leftButtonListener);
+        UiUtil.addListener(cardManager.getCardButton(), cardListener);
     }
 
     private String getCorrespondingCard() 

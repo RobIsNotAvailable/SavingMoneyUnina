@@ -8,9 +8,10 @@ import java.util.List;
 import com.smu.model.Transaction;
 
 import com.smu.model.TransactionFilter;
+import com.smu.MainController;
 import com.smu.model.Category;
 import com.smu.model.User;
-import com.smu.view.CardManager;
+
 import com.smu.view.HomePanel;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.TriangleButton;
@@ -19,14 +20,18 @@ public class HomeController extends CardManagerController
 {
     private HomePanel view;
 
-    public HomeController(CardManager cardManager, HomePanel view, User user) 
+    public HomeController(MainController main, HomePanel view, User user) 
     {
-        super(cardManager, user);
+        super(view.getCardManager(), user);
         this.view = view;
+
+        new NavbarController(main, view.getNavbar());
 
         UiUtil.addListener(view.getFilterButton(), new FilterListener());
         UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());
         UiUtil.addListener(view.getAllTransactionButton(), new AllTransactionsListener());
+
+        initializeCustomListeners(new CardListener(),new HomeCardChangerListener(getRighttButton()), new HomeCardChangerListener(getLeftButton()));
 
         updateButton();
         updateDetails();
@@ -49,14 +54,7 @@ public class HomeController extends CardManagerController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            view.clearErrorMessage();
-            
-            view.getFilterInitialDate().setValue(null);
-            view.getFilterFinalDate().setValue(null);
-            view.getFilterDirection().setSelectedIndex(0);
-            view.getFilterCategory().setSelectedIndex(0);
-
-            view.getAllTransactionButton().setVisible(true);
+            clearFilters();
             initializeTable();
         }
     }
@@ -71,9 +69,9 @@ public class HomeController extends CardManagerController
         }
     }
 
-    private class CustomCardChangerListener extends CardChangerListener
+    private class HomeCardChangerListener extends CardChangerListener
     {
-        public CustomCardChangerListener(TriangleButton button)
+        public HomeCardChangerListener(TriangleButton button)
         {
             super(button);
         }
@@ -83,8 +81,11 @@ public class HomeController extends CardManagerController
         {
             super.actionPerformed(e);
             initializeTable();
+            clearFilters();
+            view.getAllTransactionButton().setVisible(true);
         }
     }
+    
     private void updateTable()
     {
         view.clearErrorMessage();
@@ -123,4 +124,20 @@ public class HomeController extends CardManagerController
         directions.addItem("Income");
         directions.addItem("Expense");
     }
+
+    private void clearFilters() 
+    {
+        view.clearErrorMessage();
+        
+        view.getFilterInitialDate().setValue(null);
+        view.getFilterFinalDate().setValue(null);
+        view.getFilterDirection().setSelectedIndex(0);
+        view.getFilterCategory().setSelectedIndex(0);
+
+        view.getAllTransactionButton().setVisible(true);
+    }
+
+    private TriangleButton getLeftButton() { return cardManager.getLeftTriangleButton(); }
+
+    private TriangleButton getRighttButton() { return cardManager.getRightTriangleButton(); }
 }

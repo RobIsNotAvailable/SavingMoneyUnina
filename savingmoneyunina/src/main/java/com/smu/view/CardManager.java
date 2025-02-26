@@ -70,7 +70,7 @@ public class CardManager extends JPanel
         add(buttonRow);
     }
 
-     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
+    public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
         String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
         String expenseColor = "rgb(255,255, 255)";

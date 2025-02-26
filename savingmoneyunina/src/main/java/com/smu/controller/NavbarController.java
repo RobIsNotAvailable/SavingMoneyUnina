@@ -19,6 +19,8 @@ public class NavbarController
 
         UiUtil.addListener(view.getHomeButton(), new HomeListener());
         UiUtil.addListener(view.getLogoutButton(), new LogoutListener());
+        UiUtil.addListener(view.getNewTransactionButton(), new NewTransactionListener());
+
     }
 
     private class HomeListener implements ActionListener
@@ -46,6 +48,15 @@ public class NavbarController
 
             if (response == JOptionPane.YES_OPTION)
                 main.showScreen("Login");
+        }
+    }
+
+    private class NewTransactionListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            main.showScreen("New transaction");
         }
     }
 }
