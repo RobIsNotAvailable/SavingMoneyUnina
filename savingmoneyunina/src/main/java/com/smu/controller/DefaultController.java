@@ -8,23 +8,30 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
+import com.smu.MainController;
 import com.smu.model.PaymentCard;
 import com.smu.model.User;
 import com.smu.view.CardManager;
+import com.smu.view.DefaultPanel;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.TriangleButton;
 
-public class CardManagerController
+public class DefaultController
 {
     protected CardManager cardManager;
     protected ArrayList<PaymentCard> PaymentCardList;
     protected int cardIndex = 0;
 
-    public CardManagerController(CardManager view, User user) 
+    public DefaultController(MainController main, DefaultPanel view, User user) 
     {
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
 
-        this.cardManager = view;
+        this.cardManager = view.getCardManager();
+
+        new NavbarController(main, view.getNavbar());
+
+        updateButton();
+        updateDetails();
     }
 
     protected class CardChangerListener implements ActionListener 

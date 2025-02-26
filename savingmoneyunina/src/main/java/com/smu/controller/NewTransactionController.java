@@ -4,20 +4,15 @@ import com.smu.MainController;
 import com.smu.model.User;
 import com.smu.view.NewTransactionPanel;
 
-public class NewTransactionController extends CardManagerController
+public class NewTransactionController extends DefaultController
 {
     NewTransactionPanel view;
 
     public NewTransactionController(MainController main, NewTransactionPanel view, User user) 
     {
-        super(view.getCardManager(), user);
-
-        new NavbarController(main, view.getNavbar());
-
+        super(main, view, user);
         this.view = view;
 
-        updateButton();
-        updateDetails();
         initializeDefaultListeners();
     }
     

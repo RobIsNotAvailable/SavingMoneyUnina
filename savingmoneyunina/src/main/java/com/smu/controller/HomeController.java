@@ -16,25 +16,21 @@ import com.smu.view.HomePanel;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.TriangleButton;
 
-public class HomeController extends CardManagerController
+public class HomeController extends DefaultController
 {
     private HomePanel view;
 
     public HomeController(MainController main, HomePanel view, User user) 
     {
-        super(view.getCardManager(), user);
+        super(main, view, user);
         this.view = view;
 
-        new NavbarController(main, view.getNavbar());
-
+        initializeCustomListeners(new CardListener(),new HomeCardChangerListener(getRighttButton()), new HomeCardChangerListener(getLeftButton()));
+        
         UiUtil.addListener(view.getFilterButton(), new FilterListener());
         UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());
         UiUtil.addListener(view.getAllTransactionButton(), new AllTransactionsListener());
 
-        initializeCustomListeners(new CardListener(),new HomeCardChangerListener(getRighttButton()), new HomeCardChangerListener(getLeftButton()));
-
-        updateButton();
-        updateDetails();
         setFilterBoxes(user);
         initializeTable();
     }
