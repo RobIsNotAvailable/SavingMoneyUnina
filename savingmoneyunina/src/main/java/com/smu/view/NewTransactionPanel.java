@@ -13,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.smu.model.Transaction.Direction;
@@ -22,10 +21,6 @@ public class NewTransactionPanel extends DefaultPanel
 {
     private JTextField amount;
     private JTextField description;
-    private JRadioButton incomeButton;
-    private JRadioButton expenseButton;
-    private JRadioButton eurButton;
-    private JRadioButton usdButton;
 
     private JButton insertButton;
     private JLabel errorLabel;
@@ -128,14 +123,6 @@ public class NewTransactionPanel extends DefaultPanel
 
     public JTextField getDescription() { return description; }
 
-    public JRadioButton getIncomeButton() { return incomeButton; }
-
-    public JRadioButton getExpenseButton() { return expenseButton; }
-
-    public JRadioButton getEurButton() { return eurButton; }
-
-    public JRadioButton getUsdButton() { return usdButton; }
-
     public JButton getInsertButton() { return insertButton; }
 
     public JLabel getErrorLabel() { return errorLabel; }
@@ -146,20 +133,9 @@ public class NewTransactionPanel extends DefaultPanel
 
     public double getAmount() { return Double.parseDouble(amount.getText()); }
 
-    public String getDescriptionValue(){return description.getText();}
+    public String getDescriptionValue() { return description.getText(); }
 
-    public String getCurrencyType() 
-    {
-        if (eurButton.isSelected()) 
-        {
-            return "EUR";
-        } 
-        else if (usdButton.isSelected()) 
-        {
-            return "USD";
-        }
-        return null;
-    }
+    public String getCurrencyType() { return currencyButton.getText(); }
     
     public Direction getDirection() throws Exception
     {
