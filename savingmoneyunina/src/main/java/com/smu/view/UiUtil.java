@@ -33,7 +33,7 @@ import java.awt.event.ActionEvent;
 
 public class UiUtil
 {
-    public static final Color BACKGROUND_GRAY = new Color(35, 35, 35);
+    public static final Color BACKGROUND_BLACK = new Color(35, 35, 35);
 
     public static final Color DARK_CAPPUCCINO = new Color(107, 88, 75);
 
@@ -43,7 +43,7 @@ public class UiUtil
 
     public static final Color SUCCESS_GREEN = new Color (58, 224, 97);
 
-    public static final Color LOGO_BLACK = new Color(84, 84, 84, 255); 
+    public static final Color LOGO_GRAY = new Color(84, 84, 84, 255); 
 
     public static class LogoLabel extends JLabel
     {
@@ -95,6 +95,13 @@ public class UiUtil
         wrapper.add(label);
 
         return label;
+    }
+
+    public static void styleComponent(JComponent component)
+    {
+        component.setBackground(UiUtil.LOGO_GRAY);
+        component.setBorder(BorderFactory.createLineBorder(UiUtil.CAPPUCCINO, 2));
+        component.setForeground(Color.WHITE);
     }
 
     public static void addListener(JButton button, ActionListener listener)

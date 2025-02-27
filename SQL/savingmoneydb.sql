@@ -60,7 +60,7 @@ CREATE TABLE transaction
     (
         id NUMERIC PRIMARY KEY,
         amount NUMERIC NOT NULL,
-        description VARCHAR(250) NOT NULL,
+        description VARCHAR(70) NOT NULL,
         date DATE NOT NULL,
         direction direction NOT NULL,
         card_number VARCHAR NOT NULL,
@@ -286,7 +286,9 @@ INSERT INTO monthly_balances
     (9000, 9000, '2024-02-01', '8765432187654321'),
     (1000, 1000, '2024-02-01', '1122334455667788'),
     (3000, 3000, '2024-02-01', '3498734875349033'),
-    (3000, 3000, '2024-02-01', '3498734875349456');
+    (3000, 3000, '2024-02-01', '3498734875349456'),
+    (0, 0, '2024-02-01', '5678111111111111'),
+    (1234.56, 1234.56, '2024-02-01', '1111222233334444');
 
 INSERT INTO category (name, creator_username)
     VALUES

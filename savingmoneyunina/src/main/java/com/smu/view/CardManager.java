@@ -39,8 +39,9 @@ public class CardManager extends JPanel
         cardButton = UiUtil.createStyledButton("");
         cardButton.setMargin(new Insets(30, 0, -20, 0));
         cardButton.setPreferredSize(new Dimension(450, 330));
+        cardButton.setOpaque(true);
 
-        JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
+        JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         financePanel.setOpaque(false);
         financePanel.setPreferredSize(new Dimension(530, 40));
 
@@ -88,7 +89,7 @@ public class CardManager extends JPanel
         cardDetailsFrame = new JFrame();
         cardDetailsFrame.setTitle("Card Details");
         cardDetailsFrame.setIconImage(new ImageIcon(HomePanel.class.getResource("/logo.png")).getImage());
-        cardDetailsFrame.getContentPane().setBackground(UiUtil.BACKGROUND_GRAY);
+        cardDetailsFrame.getContentPane().setBackground(UiUtil.BACKGROUND_BLACK);
 
         cardDetailsFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

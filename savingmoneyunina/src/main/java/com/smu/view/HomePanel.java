@@ -91,14 +91,17 @@ public class HomePanel extends DefaultPanel
             e.printStackTrace();
         }
 
+        
         filterPanel.add(new BlankPanel(new Dimension(185, 1)));
 
         filterInitialDate.setFont(new Font("Arial", Font.PLAIN, 18));
+        UiUtil.styleComponent(filterInitialDate);
         filterInitialDate.setColumns(8);
         filterPanel.add(UiUtil.createStyledLabel("From:"));
         filterPanel.add(filterInitialDate);
 
         filterFinalDate.setFont(new Font("Arial", Font.PLAIN, 18));
+        UiUtil.styleComponent(filterFinalDate);
         filterFinalDate.setColumns(8);
         filterPanel.add(UiUtil.createStyledLabel("To:"));
         filterPanel.add(filterFinalDate);
@@ -106,10 +109,14 @@ public class HomePanel extends DefaultPanel
         filterPanel.add(new BlankPanel(new Dimension(30, 1)));
 
         filterDirection = new JComboBox<>();
+        UiUtil.styleComponent(filterDirection);
+        filterDirection.setFocusable(false);
         filterDirection.setFont(new Font("Arial", Font.PLAIN, 18));
         filterPanel.add(filterDirection);
 
         filterCategory = new JComboBox<>();
+        UiUtil.styleComponent(filterCategory);
+        filterCategory.setFocusable(false);
         filterCategory.setFont(new Font("Arial", Font.PLAIN, 18));
         filterPanel.add(filterCategory);
 

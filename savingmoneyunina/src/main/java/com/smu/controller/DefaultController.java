@@ -30,8 +30,8 @@ public class DefaultController
 
         new NavbarController(main, view.getNavbar());
 
-        updateButton();
-        updateDetails();
+        updateCardImage();
+        updateCardDetails();
     }
 
     protected class CardChangerListener implements ActionListener 
@@ -55,8 +55,8 @@ public class DefaultController
 
             cardIndex = (cardIndex + length) % length; 
 
-            updateButton();
-            updateDetails();
+            updateCardImage();
+            updateCardDetails();
         }
     }
 
@@ -70,14 +70,14 @@ public class DefaultController
         }
     }
 
-    public void updateButton()
+    public void updateCardImage()
     {
         String cardType = getCorrespondingCard();
         ImageIcon cardImage = new ImageIcon(new ImageIcon(HomeController.class.getResource("/" + cardType + ".png")).getImage().getScaledInstance(450, 280, java.awt.Image.SCALE_SMOOTH));
         cardManager.getCardButton().setIcon(cardImage);
     }
 
-    public void updateDetails()
+    public void updateCardDetails()
     {
         PaymentCard card = PaymentCardList.get(cardIndex);
         LocalDate now = LocalDate.now();

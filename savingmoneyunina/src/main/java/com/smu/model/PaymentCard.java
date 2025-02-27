@@ -52,8 +52,10 @@ public class PaymentCard
     /***************************************************************METHODS**************************************************************** */
     public void executeTransaction(Transaction transaction)
     {
+        transaction.insert();
+        transaction.sortInCategories();
+        PaymentCardDAO.update(this);
         
-
         if (transaction.getDirection() == Transaction.Direction.INCOME) 
             balance = balance.add(transaction.getAmount());
         else    
@@ -63,10 +65,7 @@ public class PaymentCard
             
             balance = balance.subtract(transaction.getAmount());
         }
- 
-        transaction.insert();
-        transaction.sortInCategories();
-        PaymentCardDAO.update(this);   
+
     }
  
     /***************************************************************DEBUG**************************************************************** */

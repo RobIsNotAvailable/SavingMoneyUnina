@@ -4,13 +4,16 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.awt.Font;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 
 import com.smu.MainController;
+import com.smu.model.CurrencyConverter;
+import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 import com.smu.model.User;
+import com.smu.model.CurrencyConverter.Currency;
 import com.smu.view.NewTransactionPanel;
 import com.smu.view.UiUtil;
 
@@ -19,9 +22,8 @@ import com.smu.model.Transaction.Direction;
 public class NewTransactionController extends DefaultController
 {
     NewTransactionPanel view;
-    public static int directionCounter = 0;
-    public static int currencyCounter = 0;
-
+    public int directionCounter = 0;
+    public int currencyCounter = 0;
 
     public NewTransactionController(MainController main, NewTransactionPanel view, User user) 
     {
@@ -29,86 +31,95 @@ public class NewTransactionController extends DefaultController
         this.view = view;
 
         initializeDefaultListeners();
-        setDirectionButton();
 
         UiUtil.addListener(view.getDirectionButton(), new DirectionListener());
         UiUtil.addListener(view.getCurrencyButton(), new CurrencyListener());
+        UiUtil.addListener(view.getInsertButton(), new InsertListener());
 
+        UiUtil.addKeyBinding(view.getInsertButton(), "ENTER");
     }
 
     private class DirectionListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            directionCounter++;
-            setDirectionButton();
+            directionCounter = (directionCounter + 1) % 2;
+            changeDirectionButton();
         }
     }
 
     private class CurrencyListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            currencyCounter++;
-            setCurrencyButton();
+            currencyCounter = (currencyCounter + 1) % 2;
+            changeCurrencyButton();
         }
     }
 
     private class InsertListener implements ActionListener
     {
-
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            BigDecimal amount = BigDecimal.valueOf(view.getAmount());
-
             try 
             {
+                BigDecimal amount = view.getAmountValue();
+                Currency currency = view.getCurrencyValue();
+                String description = view.getDescriptionValue();
+                LocalDate now = LocalDate.now();
                 Direction direction = view.getDirection();
-            } 
-            catch (Exception e1) 
-            {
-                view.showErrorMessage(e1.getMessage());
-            }
+                PaymentCard card = PaymentCardList.get(cardIndex);
 
-            
+                if (currency == Currency.USD)
+                    amount = CurrencyConverter.convertUsdToEur(amount);
+
+                if (direction == Direction.EXPENSE && amount.compareTo(card.getBalance()) > 0)
+                    throw new Exception("This card doesn't have enough money");
+                
+                System.out.println("Eseguo: (" + amount + " " + description + " " + now + " " + direction + " " + card.getCardNumber() + ")");
+                card.executeTransaction(new Transaction(amount, description, now, direction, card));
+                updateCardDetails();
+            } 
+            catch (Exception exception) 
+            {
+                view.showErrorMessage(exception.getMessage());
+            }
         }
-        
     }
 
 
-    private void setDirectionButton()
+    private void changeDirectionButton()
     {
-        JButton button = view.getDirectionButton();
+        JButton directionButton = view.getDirectionButton();
+        JButton currencyButton = view.getCurrencyButton();
 
-        if (directionCounter % 2 == 0) 
+        if (directionCounter == 0) 
         {
-            button.setText("+");
-            button.setFont(new Font("Courier New", Font.BOLD, 50));
-            button.setForeground(UiUtil.CAPPUCCINO);
-            view.getAmountButton().setForeground(UiUtil.CAPPUCCINO);
+            directionButton.setText("-");
+            directionButton.setForeground(Color.WHITE);
+            currencyButton.setForeground(Color.WHITE);
+            view.getAmountField().setForeground(Color.WHITE);
         }
         else
         {
-            button.setText("-");
-            button.setFont(new Font("Courier New", Font.BOLD, 50));
-            button.setForeground(Color.WHITE);
-            view.getAmountButton().setForeground(Color.WHITE);
+            directionButton.setText("+");
+            directionButton.setForeground(UiUtil.CAPPUCCINO);
+            currencyButton.setForeground(UiUtil.CAPPUCCINO);
+            view.getAmountField().setForeground(UiUtil.CAPPUCCINO);
         }
     }
 
-    private void setCurrencyButton()
+    private void changeCurrencyButton()
     {
         JButton button = view.getCurrencyButton();
 
-        if (currencyCounter % 2 == 0) 
-            button.setText("EUR");
+        if (currencyCounter == 0) 
+            button.setText("€");
         else
-            button.setText("USD");
+            button.setText("$");
     }
 
 }
