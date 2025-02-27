@@ -43,6 +43,8 @@ public class UiUtil
 
     public static final Color SUCCESS_GREEN = new Color (58, 224, 97);
 
+    public static final Color LOGO_BLACK = new Color(84, 84, 84, 255); 
+
     public static class LogoLabel extends JLabel
     {
         public LogoLabel(double scale)
