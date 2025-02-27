@@ -37,7 +37,7 @@ public class NewTransactionPanel extends DefaultPanel
     {
         addFormPanel();
     }
-        
+ 
     private void addFormPanel() 
     {
         JPanel formPanel = new JPanel(new GridBagLayout());
@@ -46,12 +46,11 @@ public class NewTransactionPanel extends DefaultPanel
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 5, 10, 5); // Padding
-
+    
         formPanel.setPreferredSize(new Dimension(1000, 400));
         formPanel.setOpaque(false);
-
-        // Large Amount Field
-        amount = new JTextField("00,00", 10);
+        
+        amount = new JTextField();
         amount.setBackground(UiUtil.LOGO_BLACK);
         amount.setBorder(BorderFactory.createLineBorder(UiUtil.CAPPUCCINO, 2));
         amount.setMinimumSize(new Dimension(300, 150)); // Reduced size
@@ -59,61 +58,68 @@ public class NewTransactionPanel extends DefaultPanel
         amount.setFont(new Font("Arial", Font.BOLD, 100)); 
         amount.setForeground(Color.WHITE);
         amount.setHorizontalAlignment(JTextField.CENTER); // Center text
-
-        directionButton = UiUtil.createStyledButton("+");;
-
+    
+        directionButton = UiUtil.createStyledButton("+");
+    
         currencyButton = UiUtil.createStyledButton("EUR");
         currencyButton.setFont(new Font("Courier New", Font.BOLD, 50));
+    
         // Add direction button
         gbc.gridx = 1; // Moved to the right
         formPanel.add(directionButton, gbc);
-
+    
         // Add amount field next to direction button
         gbc.gridx = 2; // Moved to the right
         gbc.insets = new Insets(10, 20, 10, 5); // Adjusted padding to move right
         formPanel.add(amount, gbc);
-
+    
         gbc.gridx = 3; // Moved to the right
         formPanel.add(currencyButton, gbc);
-
+    
         // Add blank panel to the left
         gbc.gridx = 0; // Position to the left
         formPanel.add(new UiUtil.BlankPanel(new Dimension(60, 100)), gbc);
-
+    
         JPanel blankPanel = new UiUtil.BlankPanel(new Dimension(1000,50));
         blankPanel.setOpaque(false);
         gbc.gridx = 2; // Moved to the right
         gbc.gridy = 1;
         formPanel.add(blankPanel, gbc);
         
-
-        // Description Field
-        description = new JTextField("Description", 20);
+        // Description Label
+        JLabel descriptionLabel = new JLabel("Description");
+        descriptionLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        descriptionLabel.setForeground(Color.WHITE);
+        gbc.gridx = 2; // Aligned with the description field
+        gbc.gridy = 2; // Positioned directly above the description field
+        gbc.insets = new Insets(0, 20, 0, 5); // No extra padding
+        formPanel.add(descriptionLabel, gbc);
+    
+        // Move to next row before adding description field
+        gbc.gridy++;
+        gbc.insets = new Insets(2, 20, 10, 5); // Small top padding for closeness
+    
+        description = new JTextField("", 20);
         description.setBackground(UiUtil.LOGO_BLACK);
         description.setBorder(BorderFactory.createLineBorder(UiUtil.CAPPUCCINO, 2));
         description.setMinimumSize(new Dimension(300, 100));
         description.setMaximumSize(new Dimension(500, 100));
         description.setFont(new Font("Arial", Font.PLAIN, 40));
         description.setForeground(Color.WHITE);
-        description.setHorizontalAlignment(JTextField.CENTER); // Center text
-
-        // Add description field under blank panel
-        gbc.gridx = 2; // Moved to the right
-        gbc.gridy = 2;
-        gbc.insets = new Insets(10, 20, 10, 5); // Adjusted padding to move right
+        description.setHorizontalAlignment(JTextField.CENTER);
         formPanel.add(description, gbc);
-
-
+    
         insertButton = UiUtil.createStyledButton("Insert");
+        insertButton.setBackground(UiUtil.DARK_CAPPUCCINO);
+        insertButton.setOpaque(true);
         insertButton.setFont(new Font("Arial", Font.BOLD, 20));
         gbc.gridx = 2; // Moved to the right
-        gbc.gridy = 3; // Positioned under the description field
+        gbc.gridy = 4; // Positioned under the description field
         gbc.insets = new Insets(20, 20, 10, 5); // Adjusted padding
         formPanel.add(insertButton, gbc);
-
+    
         this.add(formPanel, BorderLayout.SOUTH);
     }
-
     public void showErrorMessage(String message)
     {
         errorLabel.setText(message);
