@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.math.BigDecimal;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -31,15 +32,32 @@ public class CardManager extends JPanel
     
     public CardManager()
     {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setOpaque(false);
 
-        add(new BlankPanel(new Dimension(1,150)), BorderLayout.NORTH);
+        this.add(Box.createVerticalGlue());
 
         cardButton = UiUtil.createStyledButton("");
         cardButton.setMargin(new Insets(30, 0, -20, 0));
         cardButton.setPreferredSize(new Dimension(450, 330));
         cardButton.setOpaque(false);
+
+        leftTriangleButton = new TriangleButton(TriangleButton.Direction.LEFT);
+        rightTriangleButton = new TriangleButton(TriangleButton.Direction.RIGHT);
+
+        leftTriangleButton.setPreferredSize(new Dimension(80, 80));
+        rightTriangleButton.setPreferredSize(new Dimension(80, 80));
+
+        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, -50));
+        buttonRow.setOpaque(false);
+
+        buttonRow.add(leftTriangleButton);
+        buttonRow.add(cardButton);
+        buttonRow.add(rightTriangleButton);
+
+        buttonRow.setPreferredSize(new Dimension(800, 280));
+        buttonRow.setMinimumSize(buttonRow.getPreferredSize());
+        buttonRow.setMaximumSize(buttonRow.getPreferredSize());
 
         JPanel financePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         financePanel.setOpaque(false);
@@ -49,21 +67,13 @@ public class CardManager extends JPanel
         financePanel.add(expensesLabel);
         financePanel.add(balanceLabel);
 
-        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, -50));
-        buttonRow.setOpaque(false);
+        financePanel.setPreferredSize(new Dimension(800, 70));
+        financePanel.setMinimumSize(financePanel.getPreferredSize());
+        financePanel.setMaximumSize(financePanel.getPreferredSize());
 
-        leftTriangleButton = new TriangleButton(TriangleButton.Direction.LEFT);
-        rightTriangleButton = new TriangleButton(TriangleButton.Direction.RIGHT);
-
-        leftTriangleButton.setPreferredSize(new Dimension(80, 80));
-        rightTriangleButton.setPreferredSize(new Dimension(80, 80));
-
-        buttonRow.add(leftTriangleButton);
-        buttonRow.add(cardButton);
-        buttonRow.add(rightTriangleButton);
-
-        add(buttonRow, BorderLayout.CENTER);
-        add(financePanel, BorderLayout.SOUTH);
+        this.add(buttonRow);
+        this.add(Box.createVerticalStrut(10));
+        this.add(financePanel);
     }
 
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)

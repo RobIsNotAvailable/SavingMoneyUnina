@@ -15,11 +15,9 @@ public class DefaultPanel extends JPanel
         this.setLayout(new BorderLayout());
 
         this.navbar = new Navbar();
-
         this.add(navbar, BorderLayout.NORTH);
 
         this.cardManager = new CardManager();
-        
         this.add(cardManager, BorderLayout.CENTER);
     }
 
