@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
+
 import java.util.List;
 import com.smu.model.Transaction;
 
@@ -29,9 +30,16 @@ public class HomeController extends DefaultController
         
         UiUtil.addListener(view.getFilterButton(), new FilterListener());
         UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());
-        UiUtil.addListener(view.getAllTransactionButton(), new AllTransactionsListener());
+        UiUtil.addListener(view.getAllTransactionsButton(), new AllTransactionsListener());
 
         setFilterBoxes(user);
+        initializeTable();
+    }
+
+    @Override
+    public void refresh()
+    {
+        super.refresh();
         initializeTable();
     }
 
@@ -41,7 +49,7 @@ public class HomeController extends DefaultController
         public void actionPerformed(ActionEvent e)
         {
             updateTable();
-            view.getAllTransactionButton().setVisible(false);
+            view.getAllTransactionsButton().setVisible(false);
         }
     }
 
@@ -61,7 +69,7 @@ public class HomeController extends DefaultController
         public void actionPerformed(ActionEvent e)
         {
             updateTable();
-            view.getAllTransactionButton().setVisible(false);
+            view.getAllTransactionsButton().setVisible(false);
         }
     }
 
@@ -78,7 +86,6 @@ public class HomeController extends DefaultController
             super.actionPerformed(e);
             initializeTable();
             clearFilters();
-            view.getAllTransactionButton().setVisible(true);
         }
     }
     
@@ -98,10 +105,19 @@ public class HomeController extends DefaultController
 
     private void initializeTable()
     {
-        List<Transaction> list = PaymentCardList.get(cardIndex).getTransactions();
-        List<Transaction> firstTenTransactions = list.stream().limit(10).toList();
+        List<Transaction> transactions = PaymentCardList.get(cardIndex).getTransactions();
 
-        view.showTransactions(firstTenTransactions);
+        if (transactions.size() > 10)
+        {
+            transactions = transactions.stream().limit(10).toList();
+            view.getAllTransactionsButton().setVisible(true);
+        }
+        else
+        {
+            view.getAllTransactionsButton().setVisible(false);
+        }
+            
+        view.showTransactions(transactions);
     }
 
     private void setFilterBoxes(User user)
@@ -129,8 +145,6 @@ public class HomeController extends DefaultController
         view.getFilterFinalDate().setValue(null);
         view.getFilterDirection().setSelectedIndex(0);
         view.getFilterCategory().setSelectedIndex(0);
-
-        view.getAllTransactionButton().setVisible(true);
     }
 
     private TriangleButton getLeftButton() { return cardManager.getLeftTriangleButton(); }

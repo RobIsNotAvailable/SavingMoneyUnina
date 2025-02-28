@@ -28,6 +28,7 @@ public class NavbarController
         @Override
         public void actionPerformed(ActionEvent e)
         {
+            main.getHomeController().refresh();
             main.showScreen("Home");
         }
     }

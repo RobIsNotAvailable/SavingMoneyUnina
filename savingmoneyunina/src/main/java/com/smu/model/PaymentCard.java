@@ -52,12 +52,8 @@ public class PaymentCard
     /***************************************************************METHODS**************************************************************** */
     public void executeTransaction(Transaction transaction)
     {
-        transaction.insert();
-        transaction.sortInCategories();
-        PaymentCardDAO.update(this);
-        
         if (transaction.getDirection() == Transaction.Direction.INCOME) 
-            balance = balance.add(transaction.getAmount());
+            {balance = balance.add(transaction.getAmount()); System.out.println("aggiungimento soldi! il balancio è: " + balance);}
         else    
         {   
             if (transaction.getAmount().compareTo(balance) > 0)
@@ -66,6 +62,9 @@ public class PaymentCard
             balance = balance.subtract(transaction.getAmount());
         }
 
+        transaction.insert();
+        transaction.sortInCategories();
+        PaymentCardDAO.update(this);
     }
  
     /***************************************************************DEBUG**************************************************************** */

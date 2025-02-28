@@ -18,12 +18,15 @@ import com.smu.view.UiUtil.TriangleButton;
 
 public class DefaultController
 {
+    protected User user;
     protected CardManager cardManager;
     protected ArrayList<PaymentCard> PaymentCardList;
     protected int cardIndex = 0;
 
     public DefaultController(MainController main, DefaultPanel view, User user) 
     {
+        this.user = user;
+
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
 
         this.cardManager = view.getCardManager();
@@ -111,5 +114,11 @@ public class DefaultController
             return "americanespresso";
 
         return "smucard";
+    }
+
+    public void refresh() 
+    {
+        PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
+        updateCardDetails();
     }
 }

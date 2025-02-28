@@ -227,7 +227,7 @@ public class HomePanel extends DefaultPanel
 
     public JButton getClearFilterButton() { return clearFilterButton; }
 
-    public JButton getAllTransactionButton() {return allTransactionsButton; }
+    public JButton getAllTransactionsButton() {return allTransactionsButton; }
 
     public LocalDate getInitialDateValue() throws Exception 
     {

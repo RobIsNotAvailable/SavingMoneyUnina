@@ -24,6 +24,8 @@ public class MainController
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
+    private HomeController homeController;
+
     public MainController() 
     {
         mainFrame = new MainFrame();
@@ -55,7 +57,7 @@ public class MainController
     public void loadScreens(User user)
     {
         HomePanel homePanel = new HomePanel();
-        new HomeController(this, homePanel, user);
+        homeController = new HomeController(this, homePanel, user);
 
         NewTransactionPanel newTransactionPanel = new NewTransactionPanel();
         new NewTransactionController(this, newTransactionPanel, user);
@@ -69,6 +71,8 @@ public class MainController
         SwingUtilities.invokeLater(MainController::new);
     }
 
+    public HomeController getHomeController() { return homeController; }
+    
     //used for populating the db only for first time running of the application
     public static void populate()
     {

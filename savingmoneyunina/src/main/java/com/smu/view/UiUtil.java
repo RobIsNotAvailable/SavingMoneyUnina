@@ -127,6 +127,7 @@ public class UiUtil
             setFocusPainted(false);
             setBorderPainted(false);
             setFocusable(true);
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             if (direction == Direction.RIGHT) 
                 addKeyBinding(this, "RIGHT");
