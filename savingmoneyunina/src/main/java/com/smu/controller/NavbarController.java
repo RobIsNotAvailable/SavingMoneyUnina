@@ -57,6 +57,7 @@ public class NavbarController
         @Override
         public void actionPerformed(ActionEvent e)
         {
+            main.getNewTransactionController().refresh();
             main.showScreen("New transaction");
         }
     }

@@ -79,9 +79,9 @@ public class NewTransactionController extends DefaultController
                 if (direction == Direction.EXPENSE && amount.compareTo(card.getBalance()) > 0)
                     throw new Exception("This card doesn't have enough money");
                 
-                System.out.println("Eseguo: (" + amount + " " + description + " " + now + " " + direction + " " + card.getCardNumber() + ")");
                 card.executeTransaction(new Transaction(amount, description, now, direction, card));
-                updateCardDetails();
+                updateCard();
+                view.showSuccessMessage("Transaction registered correctly :)");
             } 
             catch (Exception exception) 
             {
@@ -89,7 +89,6 @@ public class NewTransactionController extends DefaultController
             }
         }
     }
-
 
     private void changeDirectionButton()
     {
@@ -122,4 +121,17 @@ public class NewTransactionController extends DefaultController
             button.setText("$");
     }
 
+    @Override
+    public void refresh()
+    {
+        emptyFields();
+    }
+
+    private void emptyFields()
+    {
+        view.resetMessage();
+        view.resetAmountField();
+        view.resetDescriptionField();
+        view.resetDirection();
+    }
 }

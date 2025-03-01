@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -32,9 +33,21 @@ public class Navbar extends JPanel
         newTransactionButton = UiUtil.createStyledButton("New Transaction");
         reportButton = UiUtil.createStyledButton("Reports");
         familyButton = UiUtil.createStyledButton("Family");
-        logoutButton = UiUtil.createStyledButton("Log out");
+        logoutButton = UiUtil.createStyledButton("");
 
         UiUtil.addKeyBinding(logoutButton, "ESCAPE");
+
+        familyButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/family.png")).getImage().getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH)));
+        familyButton.setHorizontalTextPosition(JButton.LEFT);
+
+        reportButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/report.png")).getImage().getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH)));
+        reportButton.setHorizontalTextPosition(JButton.LEFT);
+        
+        newTransactionButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/transaction.png")).getImage().getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH)));
+        newTransactionButton.setHorizontalTextPosition(JButton.LEFT);
+
+        logoutButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/log out.png")).getImage().getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH)));
+        logoutButton.setHorizontalTextPosition(JButton.LEFT);
 
         add(homeButton);
         add(new UiUtil.BlankPanel(new Dimension(50, 1)));

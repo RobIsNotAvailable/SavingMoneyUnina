@@ -49,7 +49,7 @@ public class UserDAO
     {
         List<PaymentCard> cards = new ArrayList<>();
 
-        String sql = "SELECT card_number FROM payment_card WHERE owner_username = ?";
+        String sql = "SELECT card_number FROM payment_card WHERE owner_username = ? ORDER BY card_number";
 
         try
         {

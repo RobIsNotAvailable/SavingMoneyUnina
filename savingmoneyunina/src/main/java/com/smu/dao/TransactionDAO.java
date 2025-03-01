@@ -21,7 +21,7 @@ public class TransactionDAO
     public static List<Transaction> getByCard(PaymentCard card)
     {
         String cardNumber = card.getCardNumber();
-        String sql = "SELECT * FROM transaction WHERE card_number = ? ORDER BY date DESC";
+        String sql = "SELECT * FROM transaction WHERE card_number = ? ORDER BY date DESC, id DESC";
         List<Transaction> transactions = new ArrayList<>();
         try
         {

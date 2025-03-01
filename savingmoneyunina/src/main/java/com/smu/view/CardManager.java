@@ -47,13 +47,24 @@ public class CardManager extends JPanel
 
         leftTriangleButton.setPreferredSize(new Dimension(80, 80));
         rightTriangleButton.setPreferredSize(new Dimension(80, 80));
+        JPanel leftButtonPanel = new JPanel(new BorderLayout());
+        leftButtonPanel.setOpaque(false);
+        leftButtonPanel.add(new BlankPanel(new Dimension(1,20)), BorderLayout.CENTER);
+        leftButtonPanel.add(leftTriangleButton, BorderLayout.SOUTH);
+        leftButtonPanel.setPreferredSize(new Dimension(80,130));
+
+        JPanel rightButtonPanel = new JPanel(new BorderLayout());
+        rightButtonPanel.setOpaque(false);
+        rightButtonPanel.add(new BlankPanel(new Dimension(1,20)), BorderLayout.CENTER);
+        rightButtonPanel.add(rightTriangleButton, BorderLayout.SOUTH);
+        rightButtonPanel.setPreferredSize(new Dimension(80,130));
 
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, -50));
         buttonRow.setOpaque(false);
 
-        buttonRow.add(leftTriangleButton);
+        buttonRow.add(leftButtonPanel);
         buttonRow.add(cardButton);
-        buttonRow.add(rightTriangleButton);
+        buttonRow.add(rightButtonPanel);
 
         buttonRow.setPreferredSize(new Dimension(800, 280));
         buttonRow.setMinimumSize(buttonRow.getPreferredSize());
@@ -74,6 +85,7 @@ public class CardManager extends JPanel
         this.add(buttonRow);
         this.add(Box.createVerticalStrut(10));
         this.add(financePanel);
+        this.add(new BlankPanel(new Dimension(1,50)));
     }
 
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)

@@ -25,6 +25,8 @@ public class MainController
     private CardLayout cardLayout;
 
     private HomeController homeController;
+    private NewTransactionController newTransactionController;
+
 
     public MainController() 
     {
@@ -60,7 +62,7 @@ public class MainController
         homeController = new HomeController(this, homePanel, user);
 
         NewTransactionPanel newTransactionPanel = new NewTransactionPanel();
-        new NewTransactionController(this, newTransactionPanel, user);
+        newTransactionController = new NewTransactionController(this, newTransactionPanel, user);
 
         mainPanel.add(homePanel, "Home");
         mainPanel.add(newTransactionPanel, "New transaction");
@@ -72,6 +74,8 @@ public class MainController
     }
 
     public HomeController getHomeController() { return homeController; }
+
+    public NewTransactionController getNewTransactionController() { return newTransactionController;}
     
     //used for populating the db only for first time running of the application
     public static void populate()

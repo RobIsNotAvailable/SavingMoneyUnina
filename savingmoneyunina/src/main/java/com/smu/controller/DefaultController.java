@@ -73,19 +73,26 @@ public class DefaultController
         }
     }
 
-    public void updateCardImage()
+    private void updateCardImage()
     {
         String cardType = getCorrespondingCard();
         ImageIcon cardImage = new ImageIcon(new ImageIcon(HomeController.class.getResource("/" + cardType + ".png")).getImage().getScaledInstance(450, 280, java.awt.Image.SCALE_SMOOTH));
         cardManager.getCardButton().setIcon(cardImage);
     }
 
-    public void updateCardDetails()
+    private void updateCardDetails()
     {
         PaymentCard card = PaymentCardList.get(cardIndex);
         LocalDate now = LocalDate.now();
 
         cardManager.updateDetails(card.getTotalMonthlyIncome(now), card.getTotalMonthlyExpense(now), card.getBalance());
+    }
+
+
+    public void updateCard()
+    {
+        updateCardDetails();
+        updateCardImage();
     }
 
     public void initializeDefaultListeners()
@@ -119,6 +126,6 @@ public class DefaultController
     public void refresh() 
     {
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
-        updateCardDetails();
+        updateCard();
     }
 }
