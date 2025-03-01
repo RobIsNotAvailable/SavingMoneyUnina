@@ -172,22 +172,8 @@ public class NewTransactionPanel extends DefaultPanel
     {
         messageLabel.setForeground(UiUtil.SUCCESS_GREEN);
         messageLabel.setText(message);
-            
         
-        new Thread(() ->  
-        {  
-            try  
-            {  
-                Thread.sleep(4000); 
-            }  
-            catch (InterruptedException e)  
-            {  
-                e.printStackTrace();  
-            }  
-
-            // Update UI safely after the delay
-            javax.swing.SwingUtilities.invokeLater(() -> resetMessage());  
-        }).start();  
+        UiUtil.delayExecution(4000, _ -> resetMessage());
     }
 
     public void resetMessage()

@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.JTableHeader;
@@ -302,5 +303,12 @@ public class UiUtil
                 button.doClick();
             }
         });
+    }
+
+    public static void delayExecution(int mills, ActionListener e)
+    {
+        Timer timer = new Timer(4000, e);
+        timer.setRepeats(false);
+        timer.start();
     }
 }

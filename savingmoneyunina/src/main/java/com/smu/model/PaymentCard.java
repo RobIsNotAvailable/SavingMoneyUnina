@@ -53,7 +53,7 @@ public class PaymentCard
     public void executeTransaction(Transaction transaction)
     {
         if (transaction.getDirection() == Transaction.Direction.INCOME) 
-            {balance = balance.add(transaction.getAmount()); System.out.println("aggiungimento soldi! il balancio è: " + balance);}
+            balance = balance.add(transaction.getAmount());
         else    
         {   
             if (transaction.getAmount().compareTo(balance) > 0)
