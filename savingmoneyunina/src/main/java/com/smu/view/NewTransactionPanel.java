@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.awt.Font;
 import java.text.DecimalFormat;
 
@@ -70,25 +71,22 @@ public class NewTransactionPanel extends DefaultPanel
 
     private void addAmountField(JPanel panel, GridBagConstraints gbc)
     {
-        DecimalFormat format = new DecimalFormat("0.00");
-        format.setMinimumFractionDigits(2);
-        format.setMaximumFractionDigits(2);
+        DecimalFormat format = new DecimalFormat("#,###.00");
+        format.setRoundingMode(RoundingMode.DOWN);
 
         NumberFormatter amountFormatter = new NumberFormatter(format);
         amountFormatter.setValueClass(Double.class);
-        amountFormatter.setAllowsInvalid(false);
-        amountFormatter.setOverwriteMode(false);
         amountFormatter.setMinimum(0.00);
+        amountFormatter.setAllowsInvalid(false);
 
         amountField = new JFormattedTextField(new DefaultFormatterFactory(amountFormatter));
-        amountField.setValue(0.00);
+        
         UiUtil.styleComponent(amountField);
         amountField.setMinimumSize(new Dimension(400, 150));
         amountField.setMaximumSize(new Dimension(500, 150));
 
         amountField.setFont(new Font("Arial", Font.BOLD, 100));
         amountField.setHorizontalAlignment(JTextField.CENTER);
-        amountField.setFocusLostBehavior(JFormattedTextField.COMMIT_OR_REVERT);
 
         gbc.gridx = 2;
         gbc.insets = new Insets(10, 20, 10, 5);

@@ -91,7 +91,7 @@ public class CardManager extends JPanel
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
         if(incomeLabel.getText().equals(" "))
-            return ;
+            return;
 
         String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
         String expenseColor = "rgb(255,255, 255)";
