@@ -88,7 +88,6 @@ public class DefaultController
         cardManager.updateDetails(card.getTotalMonthlyIncome(now), card.getTotalMonthlyExpense(now), card.getBalance());
     }
 
-
     public void updateCard()
     {
         updateCardDetails();

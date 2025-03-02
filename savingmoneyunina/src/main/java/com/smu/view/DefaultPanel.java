@@ -1,7 +1,6 @@
 package com.smu.view;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JPanel;
 
 public class DefaultPanel extends JPanel

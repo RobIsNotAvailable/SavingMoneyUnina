@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 import com.smu.controller.HomeController;
 import com.smu.controller.LoginController;
 import com.smu.controller.NewTransactionController;
+import com.smu.controller.ReportController;
 import com.smu.dao.PaymentCardDAO;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
@@ -17,6 +18,7 @@ import com.smu.view.HomePanel;
 import com.smu.view.LoginPanel;
 import com.smu.view.MainFrame;
 import com.smu.view.NewTransactionPanel;
+import com.smu.view.ReportPanel;
 
 public class MainController 
 {
@@ -26,7 +28,7 @@ public class MainController
 
     private HomeController homeController;
     private NewTransactionController newTransactionController;
-
+    private ReportController reportController;
 
     public MainController() 
     {
@@ -64,8 +66,12 @@ public class MainController
         NewTransactionPanel newTransactionPanel = new NewTransactionPanel();
         newTransactionController = new NewTransactionController(this, newTransactionPanel, user);
 
+        ReportPanel reportPanel = new ReportPanel();
+        reportController = new ReportController(this, reportPanel, user);
+
         mainPanel.add(homePanel, "Home");
         mainPanel.add(newTransactionPanel, "New transaction");
+        mainPanel.add(reportPanel, "Reports");
     }
 
     public static void main(String[] args) 
@@ -76,7 +82,9 @@ public class MainController
     public HomeController getHomeController() { return homeController; }
 
     public NewTransactionController getNewTransactionController() { return newTransactionController;}
-    
+
+    public ReportController getReportController() { return reportController;}
+
     //used for populating the db only for first time running of the application
     public static void populate()
     {

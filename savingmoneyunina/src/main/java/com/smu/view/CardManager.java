@@ -26,9 +26,9 @@ public class CardManager extends JPanel
     private TriangleButton leftTriangleButton;
     private TriangleButton rightTriangleButton;
     
-    private JLabel incomeLabel = UiUtil.createStyledLabel(" ");
-    private JLabel expensesLabel = UiUtil.createStyledLabel(" ");
-    private JLabel balanceLabel = UiUtil.createStyledLabel(" ");
+    private JLabel incomeLabel = UiUtil.createStyledLabel("0.00");
+    private JLabel expensesLabel = UiUtil.createStyledLabel("0.00");
+    private JLabel balanceLabel = UiUtil.createStyledLabel("0.00");
     
     public CardManager()
     {
@@ -90,6 +90,9 @@ public class CardManager extends JPanel
 
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
+        if(incomeLabel.getText().equals(" "))
+            return ;
+
         String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
         String expenseColor = "rgb(255,255, 255)";
         
@@ -152,4 +155,11 @@ public class CardManager extends JPanel
     public JLabel getExpensesLabel() { return expensesLabel; }
 
     public JLabel getBalanceLabel() { return balanceLabel; }
+
+    public void removeFinanceDetails()
+    {
+        incomeLabel.setText(" ");
+        balanceLabel.setText(" ");
+        expensesLabel.setText(" ");
+    }
 }
