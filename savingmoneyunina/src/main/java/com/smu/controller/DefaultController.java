@@ -127,4 +127,8 @@ public class DefaultController
         PaymentCardList = new ArrayList<PaymentCard>(user.getCards());
         updateCard();
     }
+
+    protected TriangleButton getLeftButton() { return cardManager.getLeftTriangleButton(); }
+
+    protected TriangleButton getRighttButton() { return cardManager.getRightTriangleButton(); }
 }

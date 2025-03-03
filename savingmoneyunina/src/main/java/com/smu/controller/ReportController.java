@@ -9,6 +9,7 @@ import com.smu.model.Report;
 import com.smu.model.User;
 import com.smu.view.ReportPanel;
 import com.smu.view.UiUtil;
+import com.smu.view.UiUtil.TriangleButton;
 
 public class ReportController extends DefaultController
 {
@@ -20,10 +21,11 @@ public class ReportController extends DefaultController
 
         this.view = view;
 
-        initializeDefaultListeners();
+        initializeCustomListeners(new CardListener(),new ReportCardChangeListener(getRighttButton()), new ReportCardChangeListener(getLeftButton()));
 
         UiUtil.addListener(view.getShowButton(), new showListener());
         view.getShowButton().doClick();
+        initializeDetails();
     }
 
     private class showListener implements ActionListener
@@ -31,15 +33,35 @@ public class ReportController extends DefaultController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            try 
-            {
-                Report report = ReportDAO.get(PaymentCardList.get(cardIndex), view.getDateValue());
-                view.showReport(report);
-            } 
-            catch (Exception e1) 
-            {
-                e1.printStackTrace();
-            }
+            initializeDetails();
+        }
+    } 
+
+    private class ReportCardChangeListener extends CardChangerListener
+    {
+        ReportCardChangeListener(TriangleButton button) 
+        {
+            super(button);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            super.actionPerformed(e);
+            initializeDetails();
+        }
+    }
+
+    private void initializeDetails()
+    {
+        try 
+        {
+            Report report = ReportDAO.get(PaymentCardList.get(cardIndex), view.getDateValue());
+            view.showReport(report);
+        } 
+        catch (Exception e1) 
+        {
+            e1.printStackTrace();
         }
     }
 }

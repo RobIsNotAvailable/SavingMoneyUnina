@@ -43,6 +43,10 @@ public class Report
 
     public LocalDate getDate() { return date; }
     
+    public IncomeDetails getIncomeDetails() { return incomeDetails; }
+
+    public ExpenseDetails getExpenseDetails() {return expenseDetails; }
+    
     /***************************************************DEBUG******************************************************* */
     public String toString()
     {

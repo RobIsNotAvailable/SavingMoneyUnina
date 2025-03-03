@@ -146,8 +146,4 @@ public class HomeController extends DefaultController
         view.getFilterDirection().setSelectedIndex(0);
         view.getFilterCategory().setSelectedIndex(0);
     }
-
-    private TriangleButton getLeftButton() { return cardManager.getLeftTriangleButton(); }
-
-    private TriangleButton getRighttButton() { return cardManager.getRightTriangleButton(); }
 }
