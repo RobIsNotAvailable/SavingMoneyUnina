@@ -79,6 +79,7 @@ public class NewTransactionPanel extends DefaultPanel
         amountFormatter.setMinimum(0.00);
         amountFormatter.setAllowsInvalid(false);
 
+
         amountField = new JFormattedTextField(new DefaultFormatterFactory(amountFormatter));
         
         UiUtil.styleComponent(amountField);
