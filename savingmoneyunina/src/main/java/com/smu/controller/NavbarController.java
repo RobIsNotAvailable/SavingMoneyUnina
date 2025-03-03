@@ -33,6 +33,27 @@ public class NavbarController
         }
     }
 
+    private class NewTransactionListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            main.getNewTransactionController().refresh();
+            main.showScreen("New transaction");
+        }
+    }
+
+    private class ReportListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            main.getReportController().refresh();
+            main.showScreen("Reports");
+        }
+        
+    }    
+    
     private class LogoutListener implements ActionListener
     {
         @Override
@@ -50,26 +71,5 @@ public class NavbarController
             if (response == JOptionPane.YES_OPTION)
                 main.showScreen("Login");
         }
-    }
-
-    private class NewTransactionListener implements ActionListener
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            main.getNewTransactionController().refresh();
-            main.showScreen("New transaction");
-        }
-    }
-
-    private class ReportListener implements ActionListener
-    {
-
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            main.showScreen("Reports");
-        }
-        
     }
 }

@@ -90,15 +90,12 @@ public class CardManager extends JPanel
 
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
-        if(incomeLabel.getText().equals(" "))
-            return;
-
         String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
         String expenseColor = "rgb(255,255, 255)";
         
-        incomeLabel.setText("<html><font color='white'>Income: </font><font color='" + incomeColor + "'>" + income + "€</font></html>");
-        expensesLabel.setText("<html><font color='white'>Expense: </font><font color='" + expenseColor + "'>" + expense + "€</font></html>");
-        balanceLabel.setText("<html><font color='white'>Balance: </font><font color='" + incomeColor + "'>" + balance + "€</font></html>");
+        incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>", incomeColor, income));
+        expensesLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>", expenseColor, expense));
+        balanceLabel.setText(String.format("<html><font color='white'>Balance: </font><font color='%s'>%.2f€</font></html>", incomeColor, balance));
     }
 
     public void displayCardDetails(String cardNumber, String pin, String expirationDate, String cvv)
@@ -156,10 +153,4 @@ public class CardManager extends JPanel
 
     public JLabel getBalanceLabel() { return balanceLabel; }
 
-    public void removeFinanceDetails()
-    {
-        incomeLabel.setText(" ");
-        balanceLabel.setText(" ");
-        expensesLabel.setText(" ");
-    }
 }

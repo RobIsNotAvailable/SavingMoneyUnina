@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.smu.MainController;
-import com.smu.dao.ReportDAO;
 import com.smu.model.Report;
 import com.smu.model.User;
 import com.smu.view.ReportPanel;
@@ -21,7 +20,7 @@ public class ReportController extends DefaultController
 
         this.view = view;
 
-        initializeCustomListeners(new CardListener(),new ReportCardChangeListener(getRighttButton()), new ReportCardChangeListener(getLeftButton()));
+        initializeCustomListeners(new CardListener(), new ReportCardChangeListener(getRighttButton()), new ReportCardChangeListener(getLeftButton()));
 
         UiUtil.addListener(view.getShowButton(), new showListener());
         view.getShowButton().doClick();
@@ -56,12 +55,19 @@ public class ReportController extends DefaultController
     {
         try 
         {
-            Report report = ReportDAO.get(PaymentCardList.get(cardIndex), view.getDateValue());
+            Report report = PaymentCardList.get(cardIndex).getReport(view.getDateValue());
             view.showReport(report);
         } 
-        catch (Exception e1) 
+        catch (Exception e) 
         {
-            e1.printStackTrace();
+            view.showErrorMessage(e.getMessage());
         }
+    }
+
+    @Override
+    public void refresh()
+    {
+        super.refresh();
+        initializeDetails();  
     }
 }

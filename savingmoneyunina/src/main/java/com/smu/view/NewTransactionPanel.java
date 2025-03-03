@@ -28,7 +28,6 @@ public class NewTransactionPanel extends DefaultPanel
     private JTextField descriptionField;
 
     private JButton insertButton;
-    private JLabel messageLabel;
 
     private JButton directionButton;
     private JButton currencyButton;
@@ -161,25 +160,6 @@ public class NewTransactionPanel extends DefaultPanel
         panel.add(messageLabel, gbc);  
     }
 
-    public void showErrorMessage(String message)
-    {
-        messageLabel.setForeground(UiUtil.ERROR_RED);
-        messageLabel.setText(message);
-    }
-
-    public void showSuccessMessage(String message)
-    {
-        messageLabel.setForeground(UiUtil.SUCCESS_GREEN);
-        messageLabel.setText(message);
-        
-        UiUtil.delayExecution(4000, _ -> resetMessage());
-    }
-
-    public void resetMessage()
-    {
-        messageLabel.setText(" ");
-    }
-
     public void resetAmountField()
     {
         amountField.setValue(0.00);
@@ -212,12 +192,13 @@ public class NewTransactionPanel extends DefaultPanel
     public BigDecimal getAmountValue() throws Exception
     {
         String amountString = amountField.getText();
-
-        if (amountString.equals("0,00"))
-            throw new Exception("The amount can't be zero");
-
         amountString = amountString.replace(",", ".");
-        return new BigDecimal(amountString);
+
+        BigDecimal amount = new BigDecimal(amountString);
+
+        if (amount.equals(BigDecimal.valueOf(000, 2)))
+            throw new Exception("The amount can't be zero");
+        return amount;
     }
 
     public String getDescriptionValue() throws Exception

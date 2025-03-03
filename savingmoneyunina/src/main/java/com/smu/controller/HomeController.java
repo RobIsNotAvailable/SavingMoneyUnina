@@ -91,7 +91,7 @@ public class HomeController extends DefaultController
     
     private void updateTable()
     {
-        view.clearErrorMessage();
+        view.resetMessage();
         try 
         {
             TransactionFilter filter = new TransactionFilter(view.getInitialDateValue(), view.getFinalDateValue(), view.getFilterDirectionValue(), view.getFilterCategoryValue());
@@ -139,7 +139,7 @@ public class HomeController extends DefaultController
 
     private void clearFilters() 
     {
-        view.clearErrorMessage();
+        view.resetMessage();
         
         view.getFilterInitialDate().setValue(null);
         view.getFilterFinalDate().setValue(null);

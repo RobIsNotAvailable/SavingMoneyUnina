@@ -1,12 +1,15 @@
 package com.smu.view;
 
 import java.awt.BorderLayout;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class DefaultPanel extends JPanel
 {
     private Navbar navbar;
     protected CardManager cardManager;
+    protected JLabel messageLabel;
     
     public DefaultPanel()
     {
@@ -18,6 +21,25 @@ public class DefaultPanel extends JPanel
 
         this.cardManager = new CardManager();
         this.add(cardManager, BorderLayout.CENTER);
+    }
+
+    public void showErrorMessage(String message)
+    {
+        messageLabel.setForeground(UiUtil.ERROR_RED);
+        messageLabel.setText(message);
+    }
+
+    public void showSuccessMessage(String message)
+    {
+        messageLabel.setForeground(UiUtil.SUCCESS_GREEN);
+        messageLabel.setText(message);
+        
+        UiUtil.delayExecution(4000, _ -> resetMessage());
+    }
+
+    public void resetMessage()
+    {
+        messageLabel.setText(" ");
     }
 
     public Navbar getNavbar() { return navbar; }

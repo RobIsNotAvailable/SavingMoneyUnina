@@ -21,7 +21,7 @@ public class DefaultController
     protected User user;
     protected CardManager cardManager;
     protected ArrayList<PaymentCard> PaymentCardList;
-    protected int cardIndex = 0;
+    protected static int cardIndex = 0;
 
     public DefaultController(MainController main, DefaultPanel view, User user) 
     {
@@ -110,13 +110,13 @@ public class DefaultController
 
     private String getCorrespondingCard() 
     {
-        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1234"))
+        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1003"))
             return "pastapay";
 
-        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("5678"))
+        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("3498"))
             return "viza";
 
-        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("1111"))
+        if(PaymentCardList.get(cardIndex).getCardNumber().startsWith("2402"))
             return "americanespresso";
 
         return "smucard";

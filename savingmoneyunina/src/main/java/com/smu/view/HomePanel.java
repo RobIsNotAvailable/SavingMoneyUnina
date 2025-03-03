@@ -14,7 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.smu.model.Category;
@@ -36,7 +35,6 @@ public class HomePanel extends DefaultPanel
     private JButton filterButton;
     private JButton clearFilterButton;
     private JButton allTransactionsButton;
-    private JLabel filterErrorLabel;
 
     private JTable transactions = null;
 
@@ -138,10 +136,10 @@ public class HomePanel extends DefaultPanel
 
         filterPanel.add(new BlankPanel(new Dimension(30, 1)));
 
-        filterErrorLabel = UiUtil.createStyledLabel("");
-        filterErrorLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        filterErrorLabel.setForeground(UiUtil.ERROR_RED);
-        filterPanel.add(filterErrorLabel);
+        messageLabel = UiUtil.createStyledLabel("");
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        messageLabel.setForeground(UiUtil.ERROR_RED);
+        filterPanel.add(messageLabel);
         return filterPanel;
     }
     
@@ -201,16 +199,6 @@ public class HomePanel extends DefaultPanel
         DefaultTableCellRenderer rightAlignRenderer = new DefaultTableCellRenderer();
         rightAlignRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         transactions.getColumnModel().getColumn(3).setCellRenderer(rightAlignRenderer);
-    }
-
-    public void showErrorMessage(String message)
-    {
-        filterErrorLabel.setText(message);
-    }
-
-    public void clearErrorMessage()
-    {
-        filterErrorLabel.setText(" ");
     }
     
     /***********************************************************GETTERS****************************************************** */

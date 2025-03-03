@@ -90,7 +90,7 @@ public class MainController
     {
         /* ************************************************************ALICE FIRST CARD****************************************************************** */
         PaymentCard card;
-        card = PaymentCardDAO.get("1234567812345678");
+        card = PaymentCardDAO.get("1003789453846743");
 
         card.executeTransaction(new Transaction(BigDecimal.valueOf(120), "Purchased groceries for the week.", LocalDate.parse("2024-02-05"), Transaction.Direction.EXPENSE, card));
         card.executeTransaction(new Transaction(BigDecimal.valueOf(2100), "Received salary as my monthly income.", LocalDate.parse("2024-02-10"), Transaction.Direction.INCOME, card));
@@ -165,7 +165,7 @@ public class MainController
 
         /***************************************************************************ALICE SECOND CARD******************************************************************** */
 
-        card = PaymentCardDAO.get("3498734875349033");
+        card = PaymentCardDAO.get("2402740937654901");
         card.executeTransaction(new Transaction(BigDecimal.valueOf(100), "Purchased groceries for the week.", LocalDate.parse("2024-02-05"), Transaction.Direction.EXPENSE, card));
         card.executeTransaction(new Transaction(BigDecimal.valueOf(2000), "Received salary as my monthly income.", LocalDate.parse("2024-02-10"), Transaction.Direction.INCOME, card));
         card.executeTransaction(new Transaction(BigDecimal.valueOf(150), "Bought shoes for everyday comfort.", LocalDate.parse("2024-02-15"), Transaction.Direction.EXPENSE, card));

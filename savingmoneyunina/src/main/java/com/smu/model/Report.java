@@ -16,7 +16,6 @@ public class Report
 
     public Report(PaymentCard card, LocalDate date)
     {
-        
         this.card = card;
         this.date = date.withDayOfMonth(1);
     }
@@ -46,6 +45,8 @@ public class Report
     public IncomeDetails getIncomeDetails() { return incomeDetails; }
 
     public ExpenseDetails getExpenseDetails() {return expenseDetails; }
+
+    public BigDecimal getMonthlyDifference() { return finalBalance.subtract(initialBalance); }
     
     /***************************************************DEBUG******************************************************* */
     public String toString()

@@ -124,6 +124,7 @@ public class NewTransactionController extends DefaultController
     @Override
     public void refresh()
     {
+        super.refresh();
         emptyFields();
     }
 
