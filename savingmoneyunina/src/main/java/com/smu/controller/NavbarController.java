@@ -19,6 +19,7 @@ public class NavbarController
 
         UiUtil.addListener(view.getHomeButton(), new HomeListener());
         UiUtil.addListener(view.getLogoutButton(), new LogoutListener());
+        UiUtil.addListener(view.getFamilyButton(), new FamilyListener());
         UiUtil.addListener(view.getNewTransactionButton(), new NewTransactionListener());
         UiUtil.addListener(view.getreportButton(), new ReportListener());
     }
@@ -40,6 +41,16 @@ public class NavbarController
         {
             main.getNewTransactionController().refresh();
             main.showScreen("New transaction");
+        }
+    }
+
+    private class FamilyListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            main.getFamilyController().refresh();
+            main.showScreen("Family");
         }
     }
 

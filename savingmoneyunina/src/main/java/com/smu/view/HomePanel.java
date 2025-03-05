@@ -36,7 +36,7 @@ public class HomePanel extends DefaultPanel
     private JButton clearFilterButton;
     private JButton allTransactionsButton;
 
-    private JTable transactions = null;
+    private JTable transactions;
 
     public HomePanel()
     {   

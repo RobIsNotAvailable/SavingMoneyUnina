@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 public class DefaultPanel extends JPanel
 {
-    private Navbar navbar;
+    protected Navbar navbar;
     protected CardManager cardManager;
     protected JLabel messageLabel;
     
