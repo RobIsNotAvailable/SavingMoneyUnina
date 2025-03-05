@@ -66,6 +66,11 @@ public class PaymentCard
         transaction.sortInCategories();
         PaymentCardDAO.update(this);
     }
+
+    public LocalDate getFirstReporDate()
+    {
+        return PaymentCardDAO.getFirstReporDate(this);
+    }
  
     /***************************************************************DEBUG**************************************************************** */
     public String toString()

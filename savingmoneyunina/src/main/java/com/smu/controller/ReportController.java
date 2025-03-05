@@ -2,6 +2,7 @@ package com.smu.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 import com.smu.MainController;
 import com.smu.model.Report;
@@ -55,7 +56,14 @@ public class ReportController extends DefaultController
     {
         try 
         {
-            Report report = PaymentCardList.get(cardIndex).getReport(view.getDateValue());
+            LocalDate Reportdate = view.getDateValue();
+            LocalDate FirsValidDate = PaymentCardList.get(cardIndex).getFirstReporDate();
+
+
+            if(Reportdate.isBefore(FirsValidDate) || Reportdate.isAfter(LocalDate.now())) 
+                throw new Exception("this date is not valid");
+            
+            Report report = PaymentCardList.get(cardIndex).getReport(Reportdate);
             view.showReport(report);
         } 
         catch (Exception e) 

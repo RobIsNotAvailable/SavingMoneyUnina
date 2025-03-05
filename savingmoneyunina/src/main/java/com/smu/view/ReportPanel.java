@@ -28,18 +28,19 @@ public class ReportPanel extends DefaultPanel
     private JButton showButton;
     private JPanel dataPanel;
 
-    private JLabel startingBalanceLabel;
-    private JLabel finalBalanceLabel;
-    private JLabel balanceDifferenceLabel;
+    private JLabel startingBalanceLabel = UiUtil.createStyledLabel(" ");
+    private JLabel finalBalanceLabel = UiUtil.createStyledLabel(" ");
+    private JLabel balanceDifferenceLabel = UiUtil.createStyledLabel(" ");
 
-    private JLabel minIncomeLabel;
-    private JLabel maxIncomeLabel;
-    private JLabel avgIncomeLabel;
+    private JLabel minIncomeLabel = UiUtil.createStyledLabel(" ");
+    private JLabel maxIncomeLabel = UiUtil.createStyledLabel(" ");
+    private JLabel avgIncomeLabel = UiUtil.createStyledLabel(" ");
 
-    private JLabel minExpenseLabel;
-    private JLabel maxExpenseLabel;
-    private JLabel avgExpenseLabel;
+    private JLabel minExpenseLabel = UiUtil.createStyledLabel(" ");
+    private JLabel maxExpenseLabel = UiUtil.createStyledLabel(" ");
+    private JLabel avgExpenseLabel = UiUtil.createStyledLabel(" ");
 
+    private JLabel reportName = UiUtil.createStyledLabel(" ");
 
     public ReportPanel()
     {
@@ -67,7 +68,7 @@ public class ReportPanel extends DefaultPanel
         dateField.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/uuuu")));
 
         dataPanel.add(new BlankPanel(new Dimension(1,100)));
-        dataPanel.add(UiUtil.createStyledLabel("Date: "));
+        dataPanel.add(UiUtil.createStyledLabel("Month: "));
         dataPanel.add(dateField);
 
         dataPanel.add(new BlankPanel(new Dimension(100,1)));
@@ -79,107 +80,48 @@ public class ReportPanel extends DefaultPanel
         UiUtil.addKeyBinding(showButton, "ENTER");
         dataPanel.add(showButton);
 
-        addBalanceLabel();
-        addIncomeLabel();
-        addExpenseLabel();
+        messageLabel = UiUtil.createStyledLabel(" ");
+        messageLabel.setPreferredSize(new Dimension(850, 50));
+        dataPanel.add(messageLabel);
 
+        reportName.setPreferredSize(new Dimension(850, 50));
+        dataPanel.add(reportName);
+
+        addReportSection("Balance", startingBalanceLabel, finalBalanceLabel, balanceDifferenceLabel);
+        addReportSection("Income", maxIncomeLabel, minIncomeLabel, avgIncomeLabel);
+        addReportSection("Expense", maxExpenseLabel, minExpenseLabel, avgExpenseLabel);
+        
         this.add(dataPanel,BorderLayout.EAST);
     }
 
-    private void addBalanceLabel()
+    private void addReportSection(String title, JLabel label1, JLabel label2, JLabel label3)
     {
-        JPanel balancePanel = new JPanel(new FlowLayout());
-        balancePanel.setOpaque(false);
-        balancePanel.setPreferredSize(new Dimension(900,250));
+        JPanel sectionPanel = new JPanel(new FlowLayout());
+        sectionPanel.setOpaque(false);
+        sectionPanel.setPreferredSize(new Dimension(900, 200));
 
-        JLabel panelName = UiUtil.createStyledLabel("Balance");
-        panelName.setPreferredSize(new Dimension(200,50));
-        balancePanel.add(panelName);
-        balancePanel.add(new BlankPanel(new Dimension(700,1)));
+        JLabel panelName = UiUtil.createStyledLabel(title);
+        panelName.setPreferredSize(new Dimension(850, 50)); 
+        panelName.setHorizontalAlignment(JLabel.LEFT); 
+        panelName.setFont(new Font("Arial", Font.BOLD, 30));
+
+        sectionPanel.add(panelName);
+        sectionPanel.add(new BlankPanel(new Dimension(700, 1)));
 
         JPanel coloredLine = new JPanel();
         coloredLine.setBackground(UiUtil.CAPPUCCINO);
         coloredLine.setPreferredSize(new Dimension(850, 5));
-        balancePanel.add(coloredLine);
-        
-        startingBalanceLabel = UiUtil.createStyledLabel(" ");
-        startingBalanceLabel.setPreferredSize(new Dimension(290,50));
+        sectionPanel.add(coloredLine);
 
-        finalBalanceLabel = UiUtil.createStyledLabel(" ");
-        finalBalanceLabel.setPreferredSize(new Dimension(290,50));
+        label1.setPreferredSize(new Dimension(290, 50));
+        label2.setPreferredSize(new Dimension(290, 50));
+        label3.setPreferredSize(new Dimension(290, 50));
 
-        balanceDifferenceLabel = UiUtil.createStyledLabel(" ");
-        balanceDifferenceLabel.setPreferredSize(new Dimension(290,50));
+        sectionPanel.add(label1);
+        sectionPanel.add(label2);
+        sectionPanel.add(label3);
 
-        balancePanel.add(startingBalanceLabel);
-        balancePanel.add(finalBalanceLabel);
-        balancePanel.add(balanceDifferenceLabel);
-
-        dataPanel.add(balancePanel);
-    }
-
-    private void addIncomeLabel()
-    {
-        JPanel incomePanel = new JPanel(new FlowLayout());
-        incomePanel.setOpaque(false);
-        incomePanel.setPreferredSize(new Dimension(900,250));
-
-        JLabel panelName = UiUtil.createStyledLabel("Income");
-        panelName.setPreferredSize(new Dimension(200,50));
-        incomePanel.add(panelName);
-        incomePanel.add(new BlankPanel(new Dimension(700,1)));
-
-        JPanel coloredLine = new JPanel();
-        coloredLine.setBackground(UiUtil.CAPPUCCINO);
-        coloredLine.setPreferredSize(new Dimension(850, 5));
-        incomePanel.add(coloredLine);
-        
-        maxIncomeLabel = UiUtil.createStyledLabel(" ");
-        maxIncomeLabel.setPreferredSize(new Dimension(290,50));
-
-        minIncomeLabel = UiUtil.createStyledLabel(" ");
-        minIncomeLabel.setPreferredSize(new Dimension(290,50));
-
-        avgIncomeLabel = UiUtil.createStyledLabel(" ");
-        avgIncomeLabel.setPreferredSize(new Dimension(290,50));
-
-        incomePanel.add(maxIncomeLabel);
-        incomePanel.add(minIncomeLabel);
-        incomePanel.add(avgIncomeLabel);
-
-        dataPanel.add(incomePanel);
-    }
-    
-    private void addExpenseLabel()
-    {
-        JPanel expensePanel = new JPanel(new FlowLayout());
-        expensePanel.setOpaque(false);
-        expensePanel.setPreferredSize(new Dimension(900,250));
-
-        JLabel panelName = UiUtil.createStyledLabel("Expense");
-        panelName.setPreferredSize(new Dimension(200,50));
-        expensePanel.add(panelName);
-        expensePanel.add(new BlankPanel(new Dimension(700,1)));
-
-        JPanel coloredLine = new JPanel();
-        coloredLine.setBackground(UiUtil.CAPPUCCINO);
-        coloredLine.setPreferredSize(new Dimension(850, 5));
-        expensePanel.add(coloredLine);
-        
-        maxExpenseLabel = UiUtil.createStyledLabel(" ");
-        maxExpenseLabel.setPreferredSize(new Dimension(290,50));
-
-        minExpenseLabel = UiUtil.createStyledLabel(" ");
-        minExpenseLabel.setPreferredSize(new Dimension(290,50));
-
-        avgExpenseLabel = UiUtil.createStyledLabel(" ");
-        avgExpenseLabel.setPreferredSize(new Dimension(290,50));
-
-        expensePanel.add(maxExpenseLabel);
-        expensePanel.add(minExpenseLabel);
-        expensePanel.add(avgExpenseLabel);
-
-        dataPanel.add(expensePanel);
+        dataPanel.add(sectionPanel);
     }
 
     public void showReport(Report report)
@@ -200,17 +142,38 @@ public class ReportPanel extends DefaultPanel
         /*****************income *************************/
         IncomeDetails incomeDetails = report.getIncomeDetails();
         
-        maxIncomeLabel.setText(String.format("<html><font color='white'>Max: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getMaxIncome()));
-        minIncomeLabel.setText(String.format("<html><font color='white'>Min: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getMinIncome()));
-        avgIncomeLabel.setText(String.format("<html><font color='white'>Avg: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getAvgIncome()));
+        maxIncomeLabel.setText(String.format("<html><font color='white'>Highest: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getMaxIncome()));
+        minIncomeLabel.setText(String.format("<html><font color='white'>Lowest: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getMinIncome()));
+        avgIncomeLabel.setText(String.format("<html><font color='white'>Avarage: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getAvgIncome()));
 
         /*****************expense *************************/
         ExpenseDetails expenseDetails = report.getExpenseDetails();
 
-        maxExpenseLabel.setText(String.format("<html><font color='white'>Max: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getMaxExpense()));
-        minExpenseLabel.setText(String.format("<html><font color='white'>Min: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getMinExpense()));
-        avgExpenseLabel.setText(String.format("<html><font color='white'>Avg: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getAvgExpense()));
+        maxExpenseLabel.setText(String.format("<html><font color='white'>Highest: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getMaxExpense()));
+        minExpenseLabel.setText(String.format("<html><font color='white'>Lowest: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getMinExpense()));
+        avgExpenseLabel.setText(String.format("<html><font color='white'>Avarage: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getAvgExpense()));
+    
+        setReportName();
     }
+    
+    private void setReportName()
+    {
+        try 
+        {
+            String month = getDateValue().getMonth().toString();
+            int year = getDateValue().getYear();
+
+            reportName.setText(month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year + " Report");
+            reportName.setFont(new Font("Arial", Font.BOLD, 30));
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+
     
     public LocalDate getDateValue() throws Exception 
     {
@@ -225,4 +188,6 @@ public class ReportPanel extends DefaultPanel
     }
 
     public JButton getShowButton(){ return showButton; }
+
+
 }

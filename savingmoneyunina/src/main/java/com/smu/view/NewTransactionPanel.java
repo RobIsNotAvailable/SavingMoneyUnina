@@ -192,12 +192,15 @@ public class NewTransactionPanel extends DefaultPanel
     public BigDecimal getAmountValue() throws Exception
     {
         String amountString = amountField.getText();
+
+        amountString = amountString.replace(".", "");
         amountString = amountString.replace(",", ".");
 
         BigDecimal amount = new BigDecimal(amountString);
 
         if (amount.equals(BigDecimal.valueOf(000, 2)))
             throw new Exception("The amount can't be zero");
+            
         return amount;
     }
 
