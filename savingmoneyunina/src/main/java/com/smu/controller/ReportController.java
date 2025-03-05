@@ -25,7 +25,7 @@ public class ReportController extends DefaultController
 
         UiUtil.addListener(view.getShowButton(), new showListener());
         view.getShowButton().doClick();
-        initializeDetails();
+        updateDetails();
     }
 
     private class showListener implements ActionListener
@@ -33,7 +33,7 @@ public class ReportController extends DefaultController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            initializeDetails();
+            updateDetails();
         }
     } 
 
@@ -48,24 +48,27 @@ public class ReportController extends DefaultController
         public void actionPerformed(ActionEvent e) 
         {
             super.actionPerformed(e);
-            initializeDetails();
+            updateDetails();
         }
     }
 
-    private void initializeDetails()
+    private void updateDetails()
     {
+        view.resetMessage();
+
         try 
         {
-            LocalDate Reportdate = view.getDateValue();
-            LocalDate FirsValidDate = PaymentCardList.get(cardIndex).getFirstReporDate();
+            LocalDate reportDate = view.getDateValue();
+            LocalDate firstValidDate = PaymentCardList.get(cardIndex).getFirstReporDate();            
+            Report report = PaymentCardList.get(cardIndex).getReport(reportDate);
 
-
-            if(Reportdate.isBefore(FirsValidDate) || Reportdate.isAfter(LocalDate.now())) 
-                throw new Exception("this date is not valid");
+            if (reportDate.isBefore(firstValidDate)) 
+                view.showErrorMessage("The selected month predates the card's registration");
+            if (reportDate.isAfter(LocalDate.now()))
+                view.showErrorMessage("We can't read the future yet");
             
-            Report report = PaymentCardList.get(cardIndex).getReport(Reportdate);
             view.showReport(report);
-        } 
+        }
         catch (Exception e) 
         {
             view.showErrorMessage(e.getMessage());
@@ -76,6 +79,6 @@ public class ReportController extends DefaultController
     public void refresh()
     {
         super.refresh();
-        initializeDetails();  
+        updateDetails();  
     }
 }

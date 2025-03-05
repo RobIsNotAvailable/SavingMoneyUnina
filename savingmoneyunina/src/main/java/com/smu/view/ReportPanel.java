@@ -178,13 +178,16 @@ public class ReportPanel extends DefaultPanel
     public LocalDate getDateValue() throws Exception 
     {
         String text = dateField.getText();
-
-        if (text.equals("--/----")) 
-            return null;
-        
         text = "01/" + text;
 
-        return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
+        try 
+        {
+            return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT));
+        } 
+        catch (Exception e) 
+        {
+            throw new Exception("Date is not valid");
+        }
     }
 
     public JButton getShowButton(){ return showButton; }

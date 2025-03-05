@@ -69,7 +69,7 @@ public class PaymentCard
 
     public LocalDate getFirstReporDate()
     {
-        return PaymentCardDAO.getFirstReporDate(this);
+        return PaymentCardDAO.getFirstReportDate(this);
     }
  
     /***************************************************************DEBUG**************************************************************** */

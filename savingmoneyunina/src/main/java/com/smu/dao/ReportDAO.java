@@ -22,7 +22,12 @@ public class ReportDAO
         BigDecimal startingBalance = null;
         BigDecimal endingBalance = null;	
         String sql = "select * from get_monthly_balances(?,?)";
-        date=date.withDayOfMonth(1);
+        date = date.withDayOfMonth(1);
+
+        if(date.isBefore(PaymentCardDAO.getFirstReportDate(card)) || date.isAfter(LocalDate.now()))
+        {
+            return new Report(card, date);
+        }
 
         try 
         {

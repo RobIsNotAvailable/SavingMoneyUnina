@@ -5,17 +5,20 @@ import java.time.LocalDate;
 
 public class Report 
 {
-    IncomeDetails incomeDetails;
-    ExpenseDetails expenseDetails;
+    private IncomeDetails incomeDetails;
+    private ExpenseDetails expenseDetails;
 
-    private BigDecimal initialBalance;
-    private BigDecimal finalBalance;
+    private BigDecimal initialBalance = BigDecimal.valueOf(0.00);
+    private BigDecimal finalBalance = BigDecimal.valueOf(0.00);
 
     private PaymentCard card;
     private LocalDate date;
 
     public Report(PaymentCard card, LocalDate date)
     {
+        this.incomeDetails = new IncomeDetails(null, null, null, null);
+        this.expenseDetails = new ExpenseDetails(null, null, null, null);
+
         this.card = card;
         this.date = date.withDayOfMonth(1);
     }

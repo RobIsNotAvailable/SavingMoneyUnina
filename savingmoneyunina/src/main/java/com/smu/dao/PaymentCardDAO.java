@@ -83,7 +83,7 @@ public class PaymentCardDAO
         }
     }
 
-    public static LocalDate getFirstReporDate(PaymentCard card)
+    public static LocalDate getFirstReportDate(PaymentCard card)
     {
         String sql = "SELECT date FROM monthly_balances where card_number = ? ORDER BY date ASC LIMIT 1";
 
