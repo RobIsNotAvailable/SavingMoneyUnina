@@ -69,13 +69,14 @@ public class PaymentCardDAO
 
     public static void update(PaymentCard card)
     {
-        String sql = "SELECT date FROM monthly_balances where card_number = ? ORDER BY date ASC  LIMIT 1";
+        String sql = "UPDATE payment_card SET balance = ? WHERE card_number = ?";
 
         try
         {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setBigDecimal(1, card.getBalance());
             ps.setString(2, card.getCardNumber());
+            ps.executeUpdate();
         }
         catch (SQLException e)
         {
@@ -85,7 +86,7 @@ public class PaymentCardDAO
 
     public static LocalDate getFirstReportDate(PaymentCard card)
     {
-        String sql = "SELECT date FROM monthly_balances where card_number = ? ORDER BY date ASC LIMIT 1";
+        String sql = "SELECT MIN(date) FROM monthly_balances where card_number = ?";
 
         try
         {
@@ -96,7 +97,7 @@ public class PaymentCardDAO
             
             if (rs.next())
             {
-                LocalDate date = rs.getDate("date").toLocalDate();
+                LocalDate date = rs.getDate("min").toLocalDate();
                 return date;
             }
         }

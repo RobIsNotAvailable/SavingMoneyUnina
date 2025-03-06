@@ -23,12 +23,12 @@ public class ReportController extends DefaultController
 
         initializeCustomListeners(new CardListener(), new ReportCardChangeListener(getRighttButton()), new ReportCardChangeListener(getLeftButton()));
 
-        UiUtil.addListener(view.getShowButton(), new showListener());
+        UiUtil.addListener(view.getShowButton(), new ShowListener());
         view.getShowButton().doClick();
         updateDetails();
     }
 
-    private class showListener implements ActionListener
+    private class ShowListener implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent e)
