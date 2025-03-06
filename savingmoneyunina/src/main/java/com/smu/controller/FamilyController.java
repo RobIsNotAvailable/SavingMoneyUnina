@@ -12,6 +12,9 @@ public class FamilyController extends DefaultController
         super(main, view, user);
 
         cardManager = null;
+
+        view.showUsers(user.getFamily().getMembers());
+        view.showFamilyDetails(user.getFamily());
     }
 
     @Override

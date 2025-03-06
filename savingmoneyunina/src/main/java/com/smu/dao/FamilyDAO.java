@@ -1,9 +1,11 @@
 package com.smu.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,4 +53,36 @@ public class FamilyDAO
         
         return family;
 	}
+
+    public static BigDecimal getFamilyInitialBalance(LocalDate date, Family family) 
+    {
+        String sql = "SELECT get_family_monthly_income(?,?)";
+
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            //ps.setInt(1, family.getId());
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static BigDecimal getFamilyFinalBalance(LocalDate date, Family family) 
+    {
+        throw new UnsupportedOperationException("Unimplemented method 'getFamilyFinalBalance'");
+    }
+
+    public static BigDecimal getTotalIncome(LocalDate date, Family family) 
+    {
+        throw new UnsupportedOperationException("Unimplemented method 'getTotalIncome'");
+    }
+
+    public static BigDecimal getTotalExpense(LocalDate date, Family family) 
+    {
+        throw new UnsupportedOperationException("Unimplemented method 'getTotalExpense'");
+    }
 }

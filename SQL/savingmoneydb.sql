@@ -253,6 +253,68 @@ CREATE OR REPLACE FUNCTION get_monthly_balances(input_number VARCHAR, input_date
     END;
     $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_family_monthly_income(input_family_id INTEGER, input_date DATE)
+    RETURNS NUMERIC AS $$
+    DECLARE
+        result NUMERIC;
+    BEGIN
+        SELECT SUM(amount)
+        INTO result
+        FROM transaction AS t
+        WHERE t.card_number IN 
+            (
+                SELECT card_number 
+                FROM payment_card
+                WHERE owner_username IN 
+                    (
+                        SELECT username 
+                        FROM "user"
+                        WHERE family_id = input_family_id
+                    )
+            )
+        AND direction = 'INCOME'
+        AND DATE_TRUNC('month', t.date) = DATE_TRUNC('month', input_date);
+
+        RETURN result;
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_family_monthly_expense(input_family_id INTEGER, input_date DATE)
+    RETURNS NUMERIC AS $$
+    DECLARE
+        result NUMERIC;
+    BEGIN
+        SELECT SUM(amount)
+        INTO result
+        FROM transaction AS t
+        WHERE t.card_number IN 
+            (
+                SELECT card_number 
+                FROM payment_card
+                WHERE owner_username IN 
+                    (
+                        SELECT username 
+                        FROM "user"
+                        WHERE family_id = input_family_id
+                    )
+            )
+        AND direction = 'EXPENSE'
+        AND DATE_TRUNC('month', t.date) = DATE_TRUNC('month', input_date);
+
+        RETURN result;
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_family_monthly_initial_balance(input_family_id INTEGER, input_date DATE)
+    RETURNS NUMERIC AS $$
+    DECLARE
+        result NUMERIC;
+    BEGIN
+        --da fare
+    END;
+    $$ LANGUAGE plpgsql;
+
+
 /********************************************** POPULATION ************************************************/
 INSERT INTO family (name)
     VALUES
