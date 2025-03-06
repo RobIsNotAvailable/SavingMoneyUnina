@@ -8,8 +8,7 @@ public class Report
     private IncomeDetails incomeDetails;
     private ExpenseDetails expenseDetails;
 
-    private BigDecimal initialBalance = BigDecimal.valueOf(0.00);
-    private BigDecimal finalBalance = BigDecimal.valueOf(0.00);
+    private MonthlyBalance monthlyBalance;
 
     private PaymentCard card;
     private LocalDate date;
@@ -24,22 +23,23 @@ public class Report
     }
     
     //constructor for the DAO
-    public Report(IncomeDetails incomeDetails, ExpenseDetails expenseDetails, BigDecimal initialBalance, BigDecimal finalBalance, PaymentCard card, LocalDate date)
+    public Report(IncomeDetails incomeDetails, ExpenseDetails expenseDetails, MonthlyBalance monthlyBalance, PaymentCard card, LocalDate date)
     {
         this(card, date);
 
         this.expenseDetails = expenseDetails;
         this.incomeDetails = incomeDetails;
 
-        this.initialBalance = initialBalance;
-        this.finalBalance = finalBalance;
+        this.monthlyBalance = monthlyBalance;
     }
 
     /************************************************GETTERS****************************************************** */
 
-    public BigDecimal getInitialBalance() { return initialBalance; }
+    public MonthlyBalance getMonthlyBalance() { return monthlyBalance; }
 
-    public BigDecimal getFinalBalance() { return finalBalance; }
+    public BigDecimal getInitialBalance() { return monthlyBalance.getInitialBalance(); }
+
+    public BigDecimal getFinalBalance() { return monthlyBalance.getFinalBalance(); }
 
     public PaymentCard getCard() { return card; }
 
@@ -49,14 +49,5 @@ public class Report
 
     public ExpenseDetails getExpenseDetails() {return expenseDetails; }
 
-    public BigDecimal getMonthlyDifference() { return finalBalance.subtract(initialBalance); }
-    
-    /***************************************************DEBUG******************************************************* */
-    public String toString()
-    {
-        return "Initial balance: " + initialBalance + "\n" +
-                "Final balance: " + finalBalance + "\n\n" +
-                "Income details: " + incomeDetails + "\n\n" +
-                "Expense details: " + expenseDetails + "\n\n" ;
-    }
+    public BigDecimal getMonthlyDifference() { return getFinalBalance().subtract(getInitialBalance()); }
 }

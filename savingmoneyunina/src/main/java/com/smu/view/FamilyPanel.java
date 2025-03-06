@@ -31,11 +31,10 @@ public class FamilyPanel extends DefaultPanel
 
     public FamilyPanel()
     {
-
-
+        remove(cardManager);
         usersTable = new JPanel(new GridLayout());
         usersTable.setOpaque(false);
-        remove(cardManager);
+        this.add(usersTable, BorderLayout.CENTER);
 
         famillyDetails = new JPanel(new FlowLayout());
         famillyDetails.setOpaque(false);
@@ -45,8 +44,6 @@ public class FamilyPanel extends DefaultPanel
     public void showUsers(List<User> users)
     {
         
-
-        this.add(usersTable, BorderLayout.CENTER);
     }
 
     public void showFamilyDetails(Family family)
@@ -97,27 +94,22 @@ public class FamilyPanel extends DefaultPanel
         famillyDetails.add(coloredLine);
 
 
-        JLabel detailsLabel = UiUtil.createStyledLabel("informazione ");
+        JLabel detailsLabel = UiUtil.createStyledLabel(String.format("Initial Balance: %.2f", family.getInitialBalance(LocalDate.now())));
         detailsLabel.setPreferredSize(new Dimension(350, 100));
 
-        JLabel detailsLabel2 = UiUtil.createStyledLabel("informazione ");
+        JLabel detailsLabel2 = UiUtil.createStyledLabel(String.format("Final Balance: %.2f", family.getFinalBalance(LocalDate.now())));
         detailsLabel2.setPreferredSize(new Dimension(350, 100));
 
-        JLabel detailsLabel3 = UiUtil.createStyledLabel("informazione ");
+        JLabel detailsLabel3 = UiUtil.createStyledLabel(String.format("Income: %.2f", family.getMonthlyIncome(LocalDate.now())));
         detailsLabel3.setPreferredSize(new Dimension(350, 100));
 
-        JLabel detailsLabel4 = UiUtil.createStyledLabel("informazione ");
+        JLabel detailsLabel4 = UiUtil.createStyledLabel(String.format("Expense: %.2f", family.getMonthlyExpense(LocalDate.now())));
         detailsLabel4.setPreferredSize(new Dimension(350, 100));
 
         famillyDetails.add(detailsLabel);
         famillyDetails.add(detailsLabel2);
         famillyDetails.add(detailsLabel3);
         famillyDetails.add(detailsLabel4);
-
-
-
-
-
 
         this.add(famillyDetails,BorderLayout.WEST);
     }

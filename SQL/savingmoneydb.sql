@@ -70,10 +70,10 @@ CREATE TABLE transaction
         CONSTRAINT positive_amount CHECK (amount >= 0)
     );
 
-CREATE TABLE monthly_balances
+CREATE TABLE monthly_balance
     (
-        starting_balance NUMERIC NOT NULL,
-        ending_balance NUMERIC NOT NULL,
+        initial_balance NUMERIC NOT NULL,
+        final_balance NUMERIC NOT NULL,
         date DATE NOT NULL,
         card_number VARCHAR NOT NULL,
         
@@ -134,7 +134,7 @@ CREATE OR REPLACE FUNCTION exists_balance(input_card_number VARCHAR, report_date
 	    report_found NUMERIC;
 	BEGIN 
 	    SELECT COUNT(*) INTO report_found
-        FROM monthly_balances AS m
+        FROM monthly_balance AS m
         WHERE
             m.card_number = input_card_number AND
             date = DATE_TRUNC('month', report_date);
@@ -152,8 +152,8 @@ CREATE OR REPLACE FUNCTION get_latest_balance(input_card_number VARCHAR, input_d
     DECLARE  
         latest_balance NUMERIC;
     BEGIN 
-        SELECT ending_balance INTO latest_balance
-        FROM monthly_balances AS m
+        SELECT final_balance INTO latest_balance
+        FROM monthly_balance AS m
         WHERE
             m.card_number = input_card_number AND
             date < input_date
@@ -170,7 +170,7 @@ CREATE OR REPLACE FUNCTION is_date_valid(input_card_number VARCHAR, input_date D
         card_registration_date DATE;
     BEGIN
         SELECT MIN(date) INTO card_registration_date 
-        FROM monthly_balances AS m
+        FROM monthly_balance AS m
         WHERE m.card_number = input_card_number;
 
         RETURN DATE_TRUNC('month', input_date) >= DATE_TRUNC('month', card_registration_date) AND DATE_TRUNC('month', input_date) <= DATE_TRUNC('month', CURRENT_DATE);
@@ -178,7 +178,7 @@ CREATE OR REPLACE FUNCTION is_date_valid(input_card_number VARCHAR, input_date D
     $$ LANGUAGE plpgsql;
 /********************************************** TRIGGER FUNCTIONS ************************************************/
 
-CREATE OR REPLACE FUNCTION update_monthly_balances()
+CREATE OR REPLACE FUNCTION update_monthly_balance()
 	RETURNS TRIGGER AS $$
 	DECLARE  
 	    exist BOOLEAN;
@@ -188,17 +188,17 @@ CREATE OR REPLACE FUNCTION update_monthly_balances()
 	
 	    IF NOT exist THEN
 	        balance := get_latest_balance(NEW.card_number, NEW.date);
-	        INSERT INTO monthly_balances 
+	        INSERT INTO monthly_balance 
 	        VALUES (balance, balance, DATE_TRUNC('month', NEW.date), NEW.card_number);
 	    END IF;
 	    
 	    IF NEW.direction = 'EXPENSE' THEN
-	        UPDATE monthly_balances
-	        SET ending_balance = ending_balance - NEW.amount
+	        UPDATE monthly_balance
+	        SET final_balance = final_balance - NEW.amount
 	        WHERE card_number = NEW.card_number AND date = DATE_TRUNC('month', NEW.date);
 	    ELSE
-	        UPDATE monthly_balances
-	        SET ending_balance = ending_balance + NEW.amount
+	        UPDATE monthly_balance
+	        SET final_balance = final_balance + NEW.amount
 	        WHERE card_number = NEW.card_number AND date = DATE_TRUNC('month', NEW.date);
 	    END IF;
 	
@@ -208,10 +208,10 @@ CREATE OR REPLACE FUNCTION update_monthly_balances()
 
 /********************************************** TRIGGERS ************************************************/
 
-CREATE TRIGGER trigger_update_monthly_balances
+CREATE TRIGGER trigger_update_monthly_balance
 BEFORE INSERT ON transaction
 FOR EACH ROW
-EXECUTE FUNCTION update_monthly_balances();
+EXECUTE FUNCTION update_monthly_balance();
 
 /***************************************************** DAO FUNCTIONS *************************************************************/
 
@@ -241,8 +241,8 @@ CREATE OR REPLACE FUNCTION get_monthly_income_details(input_number VARCHAR, inpu
     END;
     $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_monthly_balances(input_number VARCHAR, input_date DATE)
-    RETURNS TABLE(starting_balance NUMERIC, ending_balance NUMERIC) AS $$
+CREATE OR REPLACE FUNCTION get_monthly_balance(input_number VARCHAR, input_date DATE)
+    RETURNS TABLE(initial_balance NUMERIC, final_balance NUMERIC) AS $$
 	DECLARE 
 		exist BOOLEAN;
 		balance NUMERIC;
@@ -251,13 +251,13 @@ CREATE OR REPLACE FUNCTION get_monthly_balances(input_number VARCHAR, input_date
 	
 	    IF NOT exist THEN
 	        balance := get_latest_balance(input_number, input_date);
-	        INSERT INTO monthly_balances 
+	        INSERT INTO monthly_balance 
 	        VALUES (balance, balance, DATE_TRUNC('month', input_date), input_number);
 	    END IF;
 
         RETURN QUERY
-            SELECT m.starting_balance, m.ending_balance 
-            FROM monthly_balances AS m
+            SELECT m.initial_balance, m.final_balance 
+            FROM monthly_balance AS m
             WHERE 
                 m.card_number = input_number AND
                 DATE_TRUNC('month', m.date) = DATE_TRUNC('month', input_date);
@@ -286,7 +286,7 @@ CREATE OR REPLACE FUNCTION get_family_monthly_income(input_family_id INTEGER, in
         AND direction = 'INCOME'
         AND DATE_TRUNC('month', t.date) = DATE_TRUNC('month', input_date);
 
-        RETURN result;
+        RETURN COALESCE(result, 0.00);
     END;
     $$ LANGUAGE plpgsql;
 
@@ -312,12 +312,12 @@ CREATE OR REPLACE FUNCTION get_family_monthly_expense(input_family_id INTEGER, i
         AND direction = 'EXPENSE'
         AND DATE_TRUNC('month', t.date) = DATE_TRUNC('month', input_date);
 
-        RETURN result;
+        RETURN COALESCE(result, 0.00);
     END;
     $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_family_monthly_balances(input_family_id INTEGER, input_date DATE)
-    RETURNS TABLE(starting_balance NUMERIC, ending_balance NUMERIC) AS $$
+CREATE OR REPLACE FUNCTION get_family_monthly_balance(input_family_id INTEGER, input_date DATE)
+    RETURNS TABLE(initial_balance NUMERIC, final_balance NUMERIC) AS $$
     DECLARE
         initial_balance NUMERIC := 0;
         final_balance NUMERIC := 0;
@@ -329,9 +329,9 @@ CREATE OR REPLACE FUNCTION get_family_monthly_balances(input_family_id INTEGER, 
                         (SELECT username FROM "user" WHERE family_id = input_family_id)) 
         LOOP
             IF is_date_valid(card.card_number, input_date) THEN
-                SELECT gmb.starting_balance, gmb.ending_balance
+                SELECT gmb.initial_balance, gmb.final_balance
                 INTO tmp_start, tmp_end
-                FROM get_monthly_balances(card.card_number, input_date) AS gmb;
+                FROM get_monthly_balance(card.card_number, input_date) AS gmb;
                 
                 initial_balance := initial_balance + tmp_start;
                 final_balance   := final_balance + tmp_end;
@@ -369,7 +369,7 @@ INSERT INTO payment_card (card_number, cvv, pin, expiration_date, balance, owner
     ('3498734875349033', '648', '8906', '2029-12-01', 3000.00, 'alice'),
     ('1003789453846743', '673', '5648', '2029-12-01', 20000.00, 'alice');
 
-INSERT INTO monthly_balances 
+INSERT INTO monthly_balance 
     VALUES
     (20000.00, 20000.00, '2024-02-01', '1003789453846743'),
     (9000.00, 9000.00, '2024-02-01', '2402432187654321'),

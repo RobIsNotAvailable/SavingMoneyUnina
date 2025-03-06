@@ -24,13 +24,15 @@ public class Family
 
     public List<User> getMembers() { return members; }
     
-    public BigDecimal getInitialBalance(LocalDate date){return FamilyDAO.getFamilyInitialBalance(date, this); }
+    public MonthlyBalance getMonthlyBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date); }
 
-    public BigDecimal getFinalBalance(LocalDate date){return FamilyDAO.getFamilyFinalBalance(date, this); }
+    public BigDecimal getInitialBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date).getInitialBalance(); }
 
-    public BigDecimal getTotalIncome(LocalDate date){return FamilyDAO.getTotalIncome(date, this); }
+    public BigDecimal getFinalBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date).getFinalBalance(); }
 
-    public BigDecimal getTotalExpense(LocalDate date){return FamilyDAO.getTotalExpense(date, this); }
+    public BigDecimal getMonthlyIncome(LocalDate date){return FamilyDAO.getMonthlyIncome(date, this); }
+
+    public BigDecimal getMonthlyExpense(LocalDate date){return FamilyDAO.getMonthlyExpense(date, this); }
 
     /*************************************DEBUG******************************************* */ 
     public String toString()

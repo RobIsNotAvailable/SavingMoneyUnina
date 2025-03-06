@@ -86,7 +86,7 @@ public class PaymentCardDAO
 
     public static LocalDate getFirstReportDate(PaymentCard card)
     {
-        String sql = "SELECT MIN(date) FROM monthly_balances where card_number = ?";
+        String sql = "SELECT MIN(date) FROM monthly_balance where card_number = ?";
 
         try
         {

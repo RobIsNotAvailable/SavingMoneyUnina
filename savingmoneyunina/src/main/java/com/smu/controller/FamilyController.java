@@ -6,7 +6,6 @@ import com.smu.view.FamilyPanel;
 
 public class FamilyController extends DefaultController
 {
-
     public FamilyController(MainController main, FamilyPanel view, User user) 
     {
         super(main, view, user);

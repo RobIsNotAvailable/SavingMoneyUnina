@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.smu.databaseConnection.DbConnection;
 import com.smu.model.Family;
+import com.smu.model.MonthlyBalance;
 import com.smu.model.User;
 
 
@@ -54,16 +55,27 @@ public class FamilyDAO
         return family;
 	}
 
-    public static BigDecimal getFamilyInitialBalance(LocalDate date, Family family) 
+    public static MonthlyBalance getFamilyMonthlyBalance(Family family, LocalDate date) 
     {
-        String sql = "SELECT get_family_monthly_income(?,?)";
+        String sql = "SELECT initial_balance, final_balance FROM get_family_monthly_balance(?, ?)";
 
         try 
         {
             PreparedStatement ps = conn.prepareStatement(sql);
-            //ps.setInt(1, family.getId());
-        } 
-        catch (SQLException e) 
+            ps.setInt(1, getId(family));
+            ps.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                BigDecimal initialBalance = rs.getBigDecimal("initial_balance");
+                BigDecimal finalBalance = rs.getBigDecimal("final_balance");
+                
+                return new MonthlyBalance(initialBalance, finalBalance);
+            }
+        }
+        catch(SQLException e)
         {
             e.printStackTrace();
         }
@@ -71,18 +83,76 @@ public class FamilyDAO
         return null;
     }
 
-    public static BigDecimal getFamilyFinalBalance(LocalDate date, Family family) 
+    public static BigDecimal getMonthlyIncome(LocalDate date, Family family) 
     {
-        throw new UnsupportedOperationException("Unimplemented method 'getFamilyFinalBalance'");
+        String sql = "SELECT get_family_monthly_income(?, ?)";
+
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, getId(family));
+            ps.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                return rs.getBigDecimal("get_family_monthly_income");
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
-    public static BigDecimal getTotalIncome(LocalDate date, Family family) 
+    public static BigDecimal getMonthlyExpense(LocalDate date, Family family) 
     {
-        throw new UnsupportedOperationException("Unimplemented method 'getTotalIncome'");
+        String sql = "SELECT get_family_monthly_expense(?, ?)";
+
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, getId(family));
+            ps.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                return rs.getBigDecimal("get_family_monthly_expense");
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
-    public static BigDecimal getTotalExpense(LocalDate date, Family family) 
+    private static int getId(Family family)
     {
-        throw new UnsupportedOperationException("Unimplemented method 'getTotalExpense'");
+        String sql = "SELECT family_id FROM \"user\" WHERE username = ?";
+
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, family.getMembers().get(0).getUsername());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) 
+            {
+                return rs.getInt("family_id");                
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        
+        return 0;
     }
 }

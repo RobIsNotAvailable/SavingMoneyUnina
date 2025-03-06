@@ -8,16 +8,17 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import com.smu.databaseConnection.DbConnection;
-import com.smu.model.ExpenseDetails;
+import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 
-public class ExpenseDetailsDAO 
+public class MonthlyBalanceDAO 
 {
     static Connection conn = DbConnection.getConnection();
 
-    public static ExpenseDetails get(PaymentCard card, LocalDate date)
+    public static MonthlyBalance get(PaymentCard card, LocalDate date)
     {
-        String sql = "select max_expense, min_expense, avg_expense, total_expense from get_monthly_expense_details(?, ?)";
+        String sql = "select initial_balance, final_balance FROM get_monthly_balance(?, ?)";
+        date = date.withDayOfMonth(1);
 
         try
         {
@@ -29,13 +30,10 @@ public class ExpenseDetailsDAO
 
             if(rs.next())
             {
-                BigDecimal maxExpense = rs.getBigDecimal("max_expense");
-                BigDecimal minExpense = rs.getBigDecimal("min_expense");
-                BigDecimal avgExpense = rs.getBigDecimal("avg_expense");
-                BigDecimal totalExpense = rs.getBigDecimal("total_expense");
-
-
-                return new ExpenseDetails(maxExpense, minExpense, avgExpense, totalExpense);
+                BigDecimal initialBalance = rs.getBigDecimal("initial_balance");
+                BigDecimal finalBalance = rs.getBigDecimal("final_balance");;
+                
+                return new MonthlyBalance(initialBalance, finalBalance);
             }
         }
         catch(SQLException e)
@@ -44,5 +42,5 @@ public class ExpenseDetailsDAO
         }
 
         return null;
-    }   
+    }
 }

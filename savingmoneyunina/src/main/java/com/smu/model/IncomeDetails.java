@@ -12,7 +12,7 @@ public class IncomeDetails
     
     public IncomeDetails(BigDecimal maxIncome, BigDecimal minIncome, BigDecimal avgIncome, BigDecimal totalIncome)
     {
-        if(maxIncome != null)
+        if (maxIncome != null)
         {
             this.maxIncome = maxIncome.setScale(2);
             this.minIncome = minIncome.setScale(2);
