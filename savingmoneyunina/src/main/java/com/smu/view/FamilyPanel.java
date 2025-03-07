@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
 import com.smu.view.UiUtil.*;
@@ -32,6 +33,8 @@ public class FamilyPanel extends DefaultPanel
     private JLabel finalBalanceLabel;
     private JLabel incomeLabel;
     private JLabel expenseLabel;
+
+    private JPanel usersPanel;
 
     public FamilyPanel()
     {
@@ -125,15 +128,64 @@ public class FamilyPanel extends DefaultPanel
 
     private void addUsersPanel()
     {
-        JPanel usersPanel = new JPanel(new FlowLayout());
+        usersPanel = new JPanel(new FlowLayout());
         usersPanel.setOpaque(false);
         usersPanel.setPreferredSize(new Dimension(900, 1000));
-        this.add(usersPanel, BorderLayout.EAST);
+
+        TransparentScrollPanel scrollPanel = new TransparentScrollPanel(usersPanel, 900, 2000);
+
+        this.add(scrollPanel, BorderLayout.EAST);
     }
 
     public void showUsers(List<User> users)
     {
-        
+        final int PANEL_WIDTH = 900;
+
+        for(User user : users)
+        {
+            usersPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,100)));
+
+            JPanel userPanel = new JPanel(new FlowLayout());
+            userPanel.setOpaque(false);
+            userPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 50));
+
+            JLabel iconLabel = UiUtil.createStyledLabel(" ");
+            iconLabel.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/profile.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
+            iconLabel.setPreferredSize(new Dimension(60,50));
+
+            JLabel nameLabel = UiUtil.createStyledLabel(" ");
+            nameLabel.setPreferredSize(new Dimension(PANEL_WIDTH-300,50));
+            nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            nameLabel.setText(user.getUsername());
+            nameLabel.setFont(new Font("Arial", Font.BOLD, 30));
+
+            userPanel.add(iconLabel);
+            userPanel.add(nameLabel);
+            
+            JPanel coloredLine = new JPanel();
+            coloredLine.setBackground(UiUtil.CAPPUCCINO);
+            coloredLine.setPreferredSize(new Dimension(PANEL_WIDTH-100, 5));
+            
+
+            JLabel userIncome = UiUtil.createStyledLabel("placeholder");
+            JLabel userExpense = UiUtil.createStyledLabel("placeholder");
+            JLabel userInitialBalance = UiUtil.createStyledLabel("placeholder");
+            JLabel userFinalBalance = UiUtil.createStyledLabel("placeholder");
+
+            userIncome.setPreferredSize(new Dimension((PANEL_WIDTH/2)-10, 50));
+            userExpense.setPreferredSize(new Dimension((PANEL_WIDTH/2)-10, 50));
+            userInitialBalance.setPreferredSize(new Dimension((PANEL_WIDTH/2)-10, 50));
+            userFinalBalance.setPreferredSize(new Dimension((PANEL_WIDTH/2)-10, 50));
+
+            usersPanel.add(userPanel);
+            usersPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,20)));
+            usersPanel.add(coloredLine);
+            usersPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,20)));
+            usersPanel.add(userIncome);
+            usersPanel.add(userExpense);
+            usersPanel.add(userInitialBalance);
+            usersPanel.add(userFinalBalance);
+        }
     }
 
     public void showFamilyDetails(Family family)

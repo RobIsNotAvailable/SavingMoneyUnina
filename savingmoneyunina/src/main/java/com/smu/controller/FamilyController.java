@@ -40,6 +40,7 @@ public class FamilyController extends DefaultController
         public void actionPerformed(ActionEvent e)
         {
             view.showFamilyDetails(family);
+            view.showUsers(family.getMembers());
         }
     } 
 }

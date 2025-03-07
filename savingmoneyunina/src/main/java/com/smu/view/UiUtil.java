@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
@@ -228,62 +229,78 @@ public class UiUtil
         }
     }
 
-    public static class TransparentScrollPanel extends JScrollPane
-    {
-        public TransparentScrollPanel(Component component, int width, int height)
-        {
-            super(component);
+    public static class TransparentScrollPanel extends JScrollPane  
+    {  
+        public TransparentScrollPanel(Component component, int width, int height)  
+        {  
+            super(component);  
 
-            setPreferredSize(new Dimension(width, height));
-            setOpaque(false);
-            getViewport().setOpaque(false);
-            setBorder(BorderFactory.createEmptyBorder());
+            setPreferredSize(new Dimension(width, height));  
+            setOpaque(false);  
+            getViewport().setOpaque(false);  
+            setBorder(BorderFactory.createEmptyBorder());  
 
-            getVerticalScrollBar().setOpaque(false);
-            getHorizontalScrollBar().setOpaque(false);
+            setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);  
 
-            getVerticalScrollBar().setUI(new BasicScrollBarUI()
-            {
-                @Override
-                protected void configureScrollBarColors()
-                {
-                    this.thumbColor = UiUtil.CAPPUCCINO;
-                    this.trackColor = new Color(0,0,0,0);
-                }
+            JScrollBar verticalScrollBar = getVerticalScrollBar();  
+            verticalScrollBar.setOpaque(false);  
+            verticalScrollBar.setUnitIncrement(20);   
 
-                @Override
-                protected JButton createDecreaseButton(int orientation)
-                {
-                    JButton btn = new JButton();
-                    btn.setPreferredSize(new Dimension(0, 0));
-                    btn.setVisible(false);
-                    return btn;
-                }
+            verticalScrollBar.setUI(new BasicScrollBarUI()  
+            {  
+                private final int FIXED_THUMB_HEIGHT = 50; 
 
-                @Override
-                protected JButton createIncreaseButton(int orientation)
-                {
-                    JButton btn = new JButton();
-                    btn.setPreferredSize(new Dimension(0, 0));
-                    btn.setVisible(false);
-                    return btn;
-                }
+                @Override  
+                protected void configureScrollBarColors()  
+                {  
+                    this.thumbColor = UiUtil.CAPPUCCINO;  
+                    this.trackColor = new Color(0, 0, 0, 0);  
+                }  
 
-                @Override //changin shape of the scroll wheel
-                protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds)
-                {
-                    Graphics2D g2d = (Graphics2D) g.create();
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2d.setColor(thumbColor);
-                    g2d.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, 10, 10);
-                    g2d.dispose();
-                }
-            });
+                @Override  
+                protected JButton createDecreaseButton(int orientation)  
+                {  
+                    return createHiddenButton();  
+                }  
 
-            getVerticalScrollBar().setPreferredSize(new Dimension(10, 0));
-        }
+                @Override  
+                protected JButton createIncreaseButton(int orientation)  
+                {  
+                    return createHiddenButton();  
+                }  
+
+                private JButton createHiddenButton()  
+                {  
+                    JButton btn = new JButton();  
+                    btn.setPreferredSize(new Dimension(0, 0));  
+                    btn.setVisible(false);  
+                    return btn;  
+                }  
+
+                @Override  
+                protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds)  
+                {  
+                    Graphics2D g2d = (Graphics2D) g.create();  
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);  
+                    g2d.setColor(thumbColor);  
+
+                    JScrollBar scrollbar = (JScrollBar) c;  
+                    int maxScroll = scrollbar.getMaximum() - scrollbar.getVisibleAmount();  
+                    int currentScroll = scrollbar.getValue();  
+ 
+                    float scrollRatio = (float) currentScroll / maxScroll;  
+                    int availableHeight = c.getHeight() - FIXED_THUMB_HEIGHT;  
+                    int newY = (int) (scrollRatio * availableHeight);  
+
+                    g2d.fillRoundRect(thumbBounds.x, newY, thumbBounds.width, FIXED_THUMB_HEIGHT, 10, 10);  
+                    g2d.dispose();  
+                }  
+            });  
+
+            verticalScrollBar.setPreferredSize(new Dimension(10, 0));  
+        }  
     }
-
+    
     public static void addKeyBinding(JButton button, String keyName)
     {
         InputMap inputMap = button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
