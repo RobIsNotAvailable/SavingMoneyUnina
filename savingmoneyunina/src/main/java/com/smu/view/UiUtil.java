@@ -40,6 +40,8 @@ public class UiUtil
 
     public static final Color CAPPUCCINO = new Color(200,165,140);
 
+    public static final String CAPPUCCINO_RGB = "rgb(" + CAPPUCCINO.getRed() + ", " + CAPPUCCINO.getGreen() + ", " + CAPPUCCINO.getBlue() + ")";
+
     public static final Color ERROR_RED = new Color (224, 58, 58);
 
     public static final Color SUCCESS_GREEN = new Color (58, 224, 97);
@@ -88,12 +90,6 @@ public class UiUtil
 
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Arial", Font.BOLD, 20));
-
-        JPanel wrapper = new JPanel();
-        wrapper.setPreferredSize(new Dimension(200, 50));
-        wrapper.setMaximumSize(new Dimension(200, 50));
-        wrapper.setOpaque(false);
-        wrapper.add(label);
 
         return label;
     }

@@ -31,7 +31,7 @@ public class MainFrame extends JFrame
         try 
         {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            MetalLookAndFeel.setCurrentTheme(new NewTheme());
+            MetalLookAndFeel.setCurrentTheme(new SMUTheme());
         } 
         catch (Exception e) 
         {
@@ -46,7 +46,7 @@ public class MainFrame extends JFrame
         return defaultScreen.getDefaultConfiguration().getBounds();
     }
 
-    public class NewTheme extends OceanTheme
+    public class SMUTheme extends OceanTheme
     {
         public  ColorUIResource getControlShadow()
         {

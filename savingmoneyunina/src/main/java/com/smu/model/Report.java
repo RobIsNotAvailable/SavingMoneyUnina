@@ -18,6 +18,8 @@ public class Report
         this.incomeDetails = new IncomeDetails(null, null, null, null);
         this.expenseDetails = new ExpenseDetails(null, null, null, null);
 
+        this.monthlyBalance = new MonthlyBalance(null, null);
+
         this.card = card;
         this.date = date.withDayOfMonth(1);
     }

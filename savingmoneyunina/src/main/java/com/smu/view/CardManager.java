@@ -90,8 +90,8 @@ public class CardManager extends JPanel
 
     public void updateDetails(BigDecimal income, BigDecimal expense, BigDecimal balance)
     {
-        String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
-        String expenseColor = "rgb(255,255, 255)";
+        String incomeColor = UiUtil.CAPPUCCINO_RGB;
+        String expenseColor = "rgb(255, 255, 255)";
         
         incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>", incomeColor, income));
         expensesLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>", expenseColor, expense));

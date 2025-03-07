@@ -1,7 +1,6 @@
 package com.smu.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -177,11 +176,9 @@ public class HomePanel extends DefaultPanel
             
             data[i][2] = categories;
 
-            Color color = (transaction.getDirection() == Transaction.Direction.INCOME) ? UiUtil.CAPPUCCINO : Color.WHITE;
-            
-            String hexColor = String.format("#%06X", (0xFFFFFF & color.getRGB()));
+            String colorRGB = (transaction.getDirection() == Transaction.Direction.INCOME) ? UiUtil.CAPPUCCINO_RGB : "rgb(255, 255, 255)";
             String sign = (transaction.getDirection() == Transaction.Direction.INCOME) ? "+ " : "- ";
-            data[i][3] = String.format("<html><font color='%s'>%s%.2f €    </font></html>", hexColor, sign, transaction.getAmount());
+            data[i][3] = String.format("<html><font color='%s'>%s%.2f €    </font></html>", colorRGB, sign, transaction.getAmount());
         }
         
         transactions.setModel(new javax.swing.table.DefaultTableModel(data, new String[] {"", "", "", ""}));

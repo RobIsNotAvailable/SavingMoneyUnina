@@ -85,13 +85,14 @@ public class ReportPanel extends DefaultPanel
         dataPanel.add(messageLabel);
 
         reportName.setPreferredSize(new Dimension(850, 50));
+        reportName.setFont(new Font("Arial", Font.BOLD, 30));
         dataPanel.add(reportName);
 
         addReportSection("Balance", startingBalanceLabel, finalBalanceLabel, balanceDifferenceLabel);
         addReportSection("Income", maxIncomeLabel, minIncomeLabel, avgIncomeLabel);
         addReportSection("Expense", maxExpenseLabel, minExpenseLabel, avgExpenseLabel);
         
-        this.add(dataPanel,BorderLayout.EAST);
+        this.add(dataPanel, BorderLayout.EAST);
     }
 
     private void addReportSection(String title, JLabel label1, JLabel label2, JLabel label3)
@@ -126,8 +127,8 @@ public class ReportPanel extends DefaultPanel
 
     public void showReport(Report report)
     {
-        String incomeColor = "rgb(" + UiUtil.CAPPUCCINO.getRed() + ", " + UiUtil.CAPPUCCINO.getGreen() + ", " + UiUtil.CAPPUCCINO.getBlue() + ")";
-        String expenseColor = "rgb(255,255, 255)";
+        String incomeColor = UiUtil.CAPPUCCINO_RGB;
+        String expenseColor = "rgb(255, 255, 255)";
 
 
         /*****************BALANCE *************************/
@@ -164,7 +165,6 @@ public class ReportPanel extends DefaultPanel
             int year = getDateValue().getYear();
 
             reportName.setText(month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year + " Report");
-            reportName.setFont(new Font("Arial", Font.BOLD, 30));
         } 
         catch (Exception e)
         {
@@ -172,9 +172,6 @@ public class ReportPanel extends DefaultPanel
         }
     }
 
-
-
-    
     public LocalDate getDateValue() throws Exception 
     {
         String text = dateField.getText();
