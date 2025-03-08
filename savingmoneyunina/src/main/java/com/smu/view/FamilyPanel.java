@@ -54,39 +54,6 @@ public class FamilyPanel extends DefaultPanel
 
         familyDetails.add(new BlankPanel(new Dimension(PANEL_WIDTH, 50)));
 
-        try
-        {
-            MaskFormatter formatter = new MaskFormatter("##/####");
-            formatter.setPlaceholderCharacter('-');
-            dateField = new JFormattedTextField(formatter);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        UiUtil.styleComponent(dateField);
-        dateField.setFont(new Font("Arial", Font.PLAIN, 18));
-        dateField.setColumns(7);
-        dateField.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/uuuu")));
-
-        familyDetails.add(UiUtil.createStyledLabel("Month: "));
-        familyDetails.add(dateField);
-        familyDetails.add(new BlankPanel(new Dimension(100,1)));
-
-        showButton = UiUtil.createStyledButton("Show");
-        showButton.setContentAreaFilled(true);
-        showButton.setBackground(UiUtil.DARK_CAPPUCCINO);
-        showButton.setMargin(new Insets(3, 35, 3, 35));
-        UiUtil.addKeyBinding(showButton, "ENTER");
-
-        familyDetails.add(showButton);
-
-        messageLabel = UiUtil.createStyledLabel(" ");
-        messageLabel.setPreferredSize(new Dimension(850, 50));
-
-        familyDetails.add(messageLabel);
-
         familyDetails.add(new BlankPanel(new Dimension(PANEL_WIDTH, 25)));
         JLabel iconLabel = UiUtil.createStyledLabel(" ");
         iconLabel.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/family.png")).getImage().getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH)));
@@ -132,9 +99,56 @@ public class FamilyPanel extends DefaultPanel
         usersPanel.setOpaque(false);
         usersPanel.setPreferredSize(new Dimension(900, 1000));
 
+        JPanel headerPanel = new JPanel(new FlowLayout());
+        headerPanel.setOpaque(false);
+        headerPanel.setPreferredSize(new Dimension(900, 140));
+
+        headerPanel.add(new BlankPanel(new Dimension(900, 28)));
+        try
+        {
+            MaskFormatter formatter = new MaskFormatter("##/####");
+            formatter.setPlaceholderCharacter('-');
+            dateField = new JFormattedTextField(formatter);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        UiUtil.styleComponent(dateField);
+        dateField.setFont(new Font("Arial", Font.PLAIN, 18));
+        dateField.setColumns(7);
+        dateField.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/uuuu")));
+
+        headerPanel.add(new BlankPanel(new Dimension(1, 1)));
+        headerPanel.add(UiUtil.createStyledLabel("Month: "));
+        headerPanel.add(dateField);
+
+        headerPanel.add(new BlankPanel(new Dimension(100,1)));
+
+        showButton = UiUtil.createStyledButton("Show");
+        showButton.setContentAreaFilled(true);
+        showButton.setBackground(UiUtil.DARK_CAPPUCCINO);
+        showButton.setMargin(new Insets(3, 35, 3, 35));
+        UiUtil.addKeyBinding(showButton, "ENTER");
+
+        headerPanel.add(showButton);
+
+        messageLabel = UiUtil.createStyledLabel(" ");
+        messageLabel.setPreferredSize(new Dimension(850, 50));
+
+        headerPanel.add(messageLabel);
+
         TransparentScrollPanel scrollPanel = new TransparentScrollPanel(usersPanel, 900, 2000);
 
-        this.add(scrollPanel, BorderLayout.EAST);
+        JPanel eastPanel = new JPanel(new BorderLayout());
+        eastPanel.setPreferredSize(new Dimension(900, 1000));
+        eastPanel.setOpaque(false);
+    
+        eastPanel.add(headerPanel, BorderLayout.NORTH);
+        eastPanel.add(scrollPanel, BorderLayout.CENTER);
+
+        this.add(eastPanel, BorderLayout.EAST);
     }
 
     public void showUsers(List<User> users)
@@ -143,11 +157,9 @@ public class FamilyPanel extends DefaultPanel
 
         for(User user : users)
         {
-            usersPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,100)));
-
             JPanel userPanel = new JPanel(new FlowLayout());
             userPanel.setOpaque(false);
-            userPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 50));
+            userPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 310));
 
             JLabel iconLabel = UiUtil.createStyledLabel(" ");
             iconLabel.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/profile.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
@@ -158,15 +170,11 @@ public class FamilyPanel extends DefaultPanel
             nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
             nameLabel.setText(user.getUsername());
             nameLabel.setFont(new Font("Arial", Font.BOLD, 30));
-
-            userPanel.add(iconLabel);
-            userPanel.add(nameLabel);
             
             JPanel coloredLine = new JPanel();
             coloredLine.setBackground(UiUtil.CAPPUCCINO);
             coloredLine.setPreferredSize(new Dimension(PANEL_WIDTH-100, 5));
             
-
             JLabel userIncome = UiUtil.createStyledLabel("placeholder");
             JLabel userExpense = UiUtil.createStyledLabel("placeholder");
             JLabel userInitialBalance = UiUtil.createStyledLabel("placeholder");
@@ -177,15 +185,20 @@ public class FamilyPanel extends DefaultPanel
             userInitialBalance.setPreferredSize(new Dimension((PANEL_WIDTH/2)-10, 50));
             userFinalBalance.setPreferredSize(new Dimension((PANEL_WIDTH/2)-10, 50));
 
+            userPanel.add(iconLabel);
+            userPanel.add(nameLabel);
+            userPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,10)));
+            userPanel.add(coloredLine);
+            userPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,20)));
+            userPanel.add(userIncome);
+            userPanel.add(userExpense);
+            userPanel.add(userInitialBalance);
+            userPanel.add(userFinalBalance);
+
             usersPanel.add(userPanel);
-            usersPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,20)));
-            usersPanel.add(coloredLine);
-            usersPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,20)));
-            usersPanel.add(userIncome);
-            usersPanel.add(userExpense);
-            usersPanel.add(userInitialBalance);
-            usersPanel.add(userFinalBalance);
         }
+
+        usersPanel.setPreferredSize(new Dimension(PANEL_WIDTH, users.size() * 330));
     }
 
     public void showFamilyDetails(Family family)
