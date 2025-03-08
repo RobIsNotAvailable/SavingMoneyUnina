@@ -43,6 +43,8 @@ public class UiUtil
 
     public static final String CAPPUCCINO_RGB = "rgb(" + CAPPUCCINO.getRed() + ", " + CAPPUCCINO.getGreen() + ", " + CAPPUCCINO.getBlue() + ")";
 
+    public static final String WHITE_RGB = "rgb(255, 255, 255)";
+
     public static final Color ERROR_RED = new Color (224, 58, 58);
 
     public static final Color SUCCESS_GREEN = new Color (58, 224, 97);

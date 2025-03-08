@@ -1,5 +1,7 @@
 package com.smu.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.smu.dao.UserDAO;
@@ -55,4 +57,13 @@ public class User
     public Category getCategory(String name) { return UserDAO.getCategory(this, name); }
     
     public Family getFamily() { return UserDAO.getFamily(this); }
+
+    public BigDecimal getInitialBalance(LocalDate date) { return new BigDecimal(21.00); } //placeholder
+
+    public BigDecimal getFinalBalance(LocalDate date) { return new BigDecimal(21.00); } //placeholder
+
+    public BigDecimal getMonthlyIncome(LocalDate date) { return new BigDecimal(21.00); } //placeholder
+
+    public BigDecimal getMonthlyExpense(LocalDate date) { return new BigDecimal(21.00); } //placeholder
+
 }

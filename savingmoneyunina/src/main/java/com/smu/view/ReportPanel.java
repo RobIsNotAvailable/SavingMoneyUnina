@@ -127,32 +127,28 @@ public class ReportPanel extends DefaultPanel
 
     public void showReport(Report report)
     {
-        String incomeColor = UiUtil.CAPPUCCINO_RGB;
-        String expenseColor = "rgb(255, 255, 255)";
-
-
         /*****************BALANCE *************************/
         BigDecimal initial = report.getInitialBalance();
         BigDecimal ending = report.getFinalBalance();
         BigDecimal difference = report.getMonthlyDifference();
 
-        startingBalanceLabel.setText(String.format("<html><font color='white'>Initial: </font><font color='%s'>%.2f€</font></html>", incomeColor, initial));
-        finalBalanceLabel.setText(String.format("<html><font color='white'>Final: </font><font color='%s'>%.2f€</font></html>", incomeColor, ending));
-        balanceDifferenceLabel.setText(String.format("<html><font color='white'>Difference: </font><font color='%s'>%.2f€</font></html>", (difference.compareTo(BigDecimal.ZERO) > 0 ? incomeColor : expenseColor), difference));
+        startingBalanceLabel.setText(String.format("<html><font color='white'>Initial: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, initial));
+        finalBalanceLabel.setText(String.format("<html><font color='white'>Final: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, ending));
+        balanceDifferenceLabel.setText(String.format("<html><font color='white'>Difference: </font><font color='%s'>%.2f€</font></html>", (difference.compareTo(BigDecimal.ZERO) > 0 ? UiUtil.CAPPUCCINO_RGB : UiUtil.WHITE_RGB), difference));
 
         /*****************income *************************/
         IncomeDetails incomeDetails = report.getIncomeDetails();
         
-        maxIncomeLabel.setText(String.format("<html><font color='white'>Highest: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getMaxIncome()));
-        minIncomeLabel.setText(String.format("<html><font color='white'>Lowest: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getMinIncome()));
-        avgIncomeLabel.setText(String.format("<html><font color='white'>Avarage: </font><font color='%s'>%.2f€</font></html>", incomeColor, incomeDetails.getAvgIncome()));
+        maxIncomeLabel.setText(String.format("<html><font color='white'>Highest: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, incomeDetails.getMaxIncome()));
+        minIncomeLabel.setText(String.format("<html><font color='white'>Lowest: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, incomeDetails.getMinIncome()));
+        avgIncomeLabel.setText(String.format("<html><font color='white'>Average: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, incomeDetails.getAvgIncome()));
 
         /*****************expense *************************/
         ExpenseDetails expenseDetails = report.getExpenseDetails();
 
-        maxExpenseLabel.setText(String.format("<html><font color='white'>Highest: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getMaxExpense()));
-        minExpenseLabel.setText(String.format("<html><font color='white'>Lowest: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getMinExpense()));
-        avgExpenseLabel.setText(String.format("<html><font color='white'>Avarage: </font><font color='%s'>%.2f€</font></html>", expenseColor, expenseDetails.getAvgExpense()));
+        maxExpenseLabel.setText(String.format("<html><font color='white'>Highest: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, expenseDetails.getMaxExpense()));
+        minExpenseLabel.setText(String.format("<html><font color='white'>Lowest: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, expenseDetails.getMinExpense()));
+        avgExpenseLabel.setText(String.format("<html><font color='white'>Average: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, expenseDetails.getAvgExpense()));
     
         setReportName();
     }
