@@ -24,7 +24,7 @@ public class FamilyDAO
         Family family = null;
         List<User> members = new ArrayList<>();
         
-		String sql = "SELECT * FROM family JOIN \"user\" ON family.id = \"user\".family_id WHERE id = (SELECT family_id FROM \"user\" WHERE username = ? )";
+		String sql = "SELECT family.name AS family_name, username, password, \"user\".name AS user_name  FROM family JOIN \"user\" ON family.id = \"user\".family_id WHERE id = (SELECT family_id FROM \"user\" WHERE username = ? )";
 		
         try 
         {
@@ -34,13 +34,14 @@ public class FamilyDAO
 
             if (rs.next()) 
             {
-                String familyName = rs.getString("name");                
+                String familyName = rs.getString("family_name");                
                 do
                 {
-                    String name = rs.getString("username");
+                    String username = rs.getString("username");
                     String password = rs.getString("password");
+                    String name = rs.getString("user_name");
 
-                    members.add(new User(name, password));
+                    members.add(new User(username, password, name));
                 }
                 while(rs.next());
 

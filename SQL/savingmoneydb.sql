@@ -19,6 +19,7 @@ CREATE TABLE "user"
     (
         username VARCHAR(30) PRIMARY KEY,
         password VARCHAR(30) NOT NULL,
+        name VARCHAR(30) NOT NULL,
         family_id INTEGER NOT NULL,
 
         CONSTRAINT fk_family_id FOREIGN KEY (family_id) REFERENCES family(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -35,6 +36,12 @@ CREATE TABLE "user"
             password ~ '[A-Z]' AND
             password ~ '[a-z]' AND
             password ~ '[0-9]'
+        ),
+
+        CONSTRAINT valid_name CHECK
+        (
+            LENGTH(name) >= 1 AND
+            name ~ '[A-Za-z]'
         )
     );
 
@@ -94,7 +101,7 @@ CREATE TABLE category
 
         CONSTRAINT valid_name CHECK
         (
-            LENGTH(name) >= 3 AND
+            LENGTH(name) >= 1 AND
             name ~ '[A-Za-z]'
         )
     );
@@ -349,25 +356,25 @@ INSERT INTO family (name)
     ('Johnson'),
     ('Brown');
 
-INSERT INTO "user" (username, password, family_id)
+INSERT INTO "user" (username, password, name, family_id)
     VALUES
-    ('alice', 'Password123', 1),
-    ('frankie', 'Password123', 1),
-    ('boby', 'Password456', 1),
-    ('charlie', 'Password789', 2);
+    ('alice104', 'Password123', 'Alice', 1),
+    ('frankiewastaken', 'Password123', 'Frankie', 1),
+    ('bobyyyy', 'Password456', 'Boby', 1),
+    ('charlie_el_guapo', 'Password789', 'Charlie', 2);
 
 INSERT INTO payment_card (card_number, cvv, pin, expiration_date, balance, owner_username)
     VALUES
-    ('2402432187654321', '385', '2758', '2029-06-01', 9000.00, 'boby'),
+    ('2402432187654321', '385', '2758', '2029-06-01', 9000.00, 'bobyyyy'),
     
-    ('1003673846299564', '640', '4658', '2029-08-01', 1000.00, 'charlie'),
+    ('1003673846299564', '640', '4658', '2029-08-01', 1000.00, 'charlie_el_guapo'),
 
-    ('3498567345687564', '904', '6349', '2029-06-01', 3000.00, 'frankie'),
+    ('3498567345687564', '904', '6349', '2029-06-01', 3000.00, 'frankiewastaken'),
 
-    ('4021640965634942', '549', '5483', '2029-06-01', 0.00, 'alice'),
-    ('2402740937654901', '945', '2378', '2029-06-01', 1250.38, 'alice'),
-    ('3498734875349033', '648', '8906', '2029-12-01', 3000.00, 'alice'),
-    ('1003789453846743', '673', '5648', '2029-12-01', 20000.00, 'alice');
+    ('4021640965634942', '549', '5483', '2029-06-01', 0.00, 'alice104'),
+    ('2402740937654901', '945', '2378', '2029-06-01', 1250.38, 'alice104'),
+    ('3498734875349033', '648', '8906', '2029-12-01', 3000.00, 'alice104'),
+    ('1003789453846743', '673', '5648', '2029-12-01', 20000.00, 'alice104');
 
 INSERT INTO monthly_balance 
     VALUES
@@ -381,28 +388,28 @@ INSERT INTO monthly_balance
 
 INSERT INTO category (name, creator_username)
     VALUES
-    ('Food', 'alice'),
-    ('Paycheck', 'alice'),
-    ('Health', 'alice'),
-    ('Travel', 'alice'),
-    ('Electronics', 'alice'),
+    ('Food', 'alice104'),
+    ('Paycheck', 'alice104'),
+    ('Health', 'alice104'),
+    ('Travel', 'alice104'),
+    ('Electronics', 'alice104'),
     
-    ('Entertainment', 'boby'),
-    ('Shopping', 'boby'),
+    ('Entertainment', 'bobyyyy'),
+    ('Shopping', 'bobyyyy'),
 
-    ('Utilities', 'charlie'),
-    ('Housing', 'charlie'),
+    ('Utilities', 'charlie_el_guapo'),
+    ('Housing', 'charlie_el_guapo'),
 
-    ('Transport', 'frankie'),
+    ('Transport', 'frankiewastaken'),
 
-    ('Other', 'alice'),
-    ('Other', 'boby'),
-    ('Other', 'charlie'),
-    ('Other', 'frankie');
+    ('Other', 'alice104'),
+    ('Other', 'bobyyyy'),
+    ('Other', 'charlie_el_guapo'),
+    ('Other', 'frankiewastaken');
     
 INSERT INTO keyword (keyword, category_id)
     VALUES
-    ('groceries', 1),      -- for Food (creator: alice)
+    ('groceries', 1),      -- for Food (creator: alice104)
     ('food', 1),
     ('supermarket', 1),
     ('restaurant', 1),
@@ -410,53 +417,53 @@ INSERT INTO keyword (keyword, category_id)
     ('coffee', 1),
     ('snacks', 1),
 
-    ('salary', 2),        -- for Paycheck (creator: alice)
+    ('salary', 2),        -- for Paycheck (creator: alice104)
     ('freelance', 2),
     ('bonus', 2),
 
-    ('health', 3),        -- for Health (creator: alice)
+    ('health', 3),        -- for Health (creator: alice104)
     ('medical', 3),
     ('doctor', 3),
     ('hospital', 3),
     ('pharmacy', 3),
 
-    ('travel', 4),        -- for Travel (creator: alice)
+    ('travel', 4),        -- for Travel (creator: alice104)
     ('vacation', 4),
     ('flight', 4),
     ('hotel', 4),
     ('tour', 4),
 
-    ('gadgets', 5),       -- for Electronics (creator: alice)
+    ('gadgets', 5),       -- for Electronics (creator: alice104)
     ('devices', 5),
     ('laptop', 5),
     ('phone', 5),
     ('tablet', 5),
 
-    ('movies', 6),        -- for Entertainment (creator: boby)
+    ('movies', 6),        -- for Entertainment (creator: bobyyyy)
     ('music', 6),
     ('games', 6),
     ('concert', 6),
     ('show', 6),
 
-    ('shopping', 7),      -- for Shopping (creator: boby)
+    ('shopping', 7),      -- for Shopping (creator: bobyyyy)
     ('clothes', 7),
     ('shoes', 7),
     ('accessories', 7),
     ('fashion', 7),
 
-    ('bills', 8),         -- for Utilities (creator: charlie)
+    ('bills', 8),         -- for Utilities (creator: charlie_el_guapo)
     ('subscriptions', 8),
     ('internet', 8),
     ('water', 8),
     ('gas', 8),
 
-    ('rent', 9),          -- for Housing (creator: charlie)
+    ('rent', 9),          -- for Housing (creator: charlie_el_guapo)
     ('mortgage', 9),
     ('maintenance', 9),
     ('furniture', 9),
     ('appliances', 9),
 
-    ('transport', 10),    -- for Transport (creator: frankie)
+    ('transport', 10),    -- for Transport (creator: frankiewastaken)
     ('bus', 10),
     ('train', 10),
     ('taxi', 10),

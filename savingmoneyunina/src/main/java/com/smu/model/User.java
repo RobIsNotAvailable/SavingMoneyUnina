@@ -8,6 +8,7 @@ public class User
 {
     private String username;
     private String password;
+    private String name = null;
 
     public User(String username, String password)
     {
@@ -15,9 +16,14 @@ public class User
         this.password = password;
     }
 
-        public Boolean verify(){return UserDAO.verify(this);}
+    public User(String username, String password, String name)
+    {
+        this(username, password);
+        this.name = name;
+    }
 
-        public String toString(){return "Username: " + username + "\nPassword: " + password;}
+    public Boolean verify(){ return UserDAO.verify(this); }
+
     /***********************************************************GETTERS****************************************************** */
 
     @Override
@@ -37,6 +43,10 @@ public class User
     public String getUsername() { return username; }
 
     public String getPassword() { return password; }
+
+    public String getName() { return name; }
+
+    public void retrieveName() { this.name = UserDAO.retrieveName(this); }
 
     public List<PaymentCard> getCards() { return UserDAO.getCards(this); }
 

@@ -43,7 +43,7 @@ public class MainController
 
         /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
         
-        loadScreens(new User("alice", "Password123"));
+        loadScreens(new User("alice104", "Password123", "Alice"));
         
         /* ********************************* EASY ACCESS TO HOME, USED FOR TESTING *********************************** */
 

@@ -31,8 +31,9 @@ public class UserDAO
             if (rs.next()) 
             {
                 String password = rs.getString("password");
+                String name = rs.getString("name");
 
-                return new User(username, password);
+                return new User(username, password, name);
             }
 
         } 
@@ -125,5 +126,31 @@ public class UserDAO
         }
 
         return false;
+    }
+
+    public static String retrieveName(User user)
+    {
+
+		String sql = "SELECT name FROM \"user\" WHERE username = ?";
+		
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) 
+            {
+                return rs.getString("name");
+            }
+
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+
+        }
+        
+        return null;
     }
 }

@@ -42,6 +42,7 @@ public class LoginController
             if (user.verify()) 
             {
                 view.showSuccessMessage("Login successful");
+                user.retrieveName();
                 main.loadScreens(user);
                 main.showScreen("Home");
                 view.clearMessage();
