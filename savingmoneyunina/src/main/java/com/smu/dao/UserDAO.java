@@ -13,6 +13,7 @@ import com.smu.databaseConnection.DbConnection;
 import com.smu.model.User;
 import com.smu.model.Category;
 import com.smu.model.Family;
+import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 
 public class UserDAO
@@ -156,7 +157,7 @@ public class UserDAO
         return null;
     }
 
-    public static BigDecimal getTotalMonthlyIncome(LocalDate date, User user)
+    public static BigDecimal getMonthlyIncome(User user, LocalDate date)
     {
         String sql = "SELECT get_user_monthly_income(?,?)";
         
@@ -173,9 +174,6 @@ public class UserDAO
             {
                 BigDecimal totalIncome = rs.getBigDecimal("get_user_monthly_income");
                 
-                if(totalIncome == null)
-                    return BigDecimal.ZERO;
-
                 return totalIncome;
             }
         } 
@@ -187,7 +185,7 @@ public class UserDAO
         return null;    
     }
 
-    public static BigDecimal getTotalMonthlyExpense(LocalDate date, User user)
+    public static BigDecimal getMonthlyExpense(User user, LocalDate date)
     {
         String sql = "SELECT get_user_monthly_expense(?,?)";
         
@@ -204,9 +202,6 @@ public class UserDAO
             {
                 BigDecimal totalExpense = rs.getBigDecimal("get_user_monthly_expense");
                 
-                if(totalExpense == null)
-                    return BigDecimal.ZERO;
-
                 return totalExpense;
             }
         } 
@@ -216,6 +211,34 @@ public class UserDAO
         }
 
         return null; 
+    }
+
+    public static MonthlyBalance getMonthlyBalance(User user, LocalDate date) 
+    {
+        String sql = "SELECT initial_balance, final_balance FROM get_user_monthly_balance(?, ?)";
+
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ps.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                BigDecimal initialBalance = rs.getBigDecimal("initial_balance");
+                BigDecimal finalBalance = rs.getBigDecimal("final_balance");
+                
+                return new MonthlyBalance(initialBalance, finalBalance);
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
     
 }

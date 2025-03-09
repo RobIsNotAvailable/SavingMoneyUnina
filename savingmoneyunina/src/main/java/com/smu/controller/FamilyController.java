@@ -24,8 +24,7 @@ public class FamilyController extends DefaultController
         
         UiUtil.addListener(view.getShowButton(), new ShowListener());
 
-        view.showFamilyDetails(family);
-        view.showUsers(family);
+        view.update(family);
     }
 
     @Override
@@ -39,8 +38,7 @@ public class FamilyController extends DefaultController
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            view.showFamilyDetails(family);
-            view.showUsers(family);
+            view.update(family);
         }
     } 
 }

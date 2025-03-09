@@ -26,16 +26,9 @@ public class Family
     
     public MonthlyBalance getMonthlyBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date); }
 
-    public BigDecimal getInitialBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date).getInitialBalance(); }
-
-    public BigDecimal getFinalBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date).getFinalBalance(); }
-
     public BigDecimal getMonthlyIncome(LocalDate date){return FamilyDAO.getMonthlyIncome(date, this); }
 
     public BigDecimal getMonthlyExpense(LocalDate date){return FamilyDAO.getMonthlyExpense(date, this); }
-
-    
-
 
     /*************************************DEBUG******************************************* */ 
     public String toString()

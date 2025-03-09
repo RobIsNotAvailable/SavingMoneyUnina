@@ -58,12 +58,9 @@ public class User
     
     public Family getFamily() { return UserDAO.getFamily(this); }
 
-    public BigDecimal getInitialBalance(LocalDate date) { return new BigDecimal(21.00); } //placeholder
-
-    public BigDecimal getFinalBalance(LocalDate date) { return new BigDecimal(21.00); } //placeholder
-
+    public MonthlyBalance getMonthlyBalance(LocalDate date) { return UserDAO.getMonthlyBalance(this, date); }
     
-    public BigDecimal getUserMonthlyIncome(LocalDate date){return UserDAO.getTotalMonthlyIncome(date, this); }
+    public BigDecimal getMonthlyIncome(LocalDate date) { return UserDAO.getMonthlyIncome(this, date); }
 
-    public BigDecimal getUserMonthlyExpense(LocalDate date){return UserDAO.getTotalMonthlyExpense(date, this); }
+    public BigDecimal getMonthlyExpense(LocalDate date) { return UserDAO.getMonthlyExpense(this, date); }
 }

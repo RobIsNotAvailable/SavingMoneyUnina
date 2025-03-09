@@ -394,7 +394,7 @@ CREATE OR REPLACE FUNCTION get_user_monthly_expense(input_username VARCHAR, inpu
     END;
     $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_user_monthly_balance(input_username INTEGER, input_date DATE)
+CREATE OR REPLACE FUNCTION get_user_monthly_balance(input_username VARCHAR, input_date DATE)
     RETURNS TABLE(initial_balance NUMERIC, final_balance NUMERIC) AS $$
     DECLARE
         initial_balance NUMERIC;

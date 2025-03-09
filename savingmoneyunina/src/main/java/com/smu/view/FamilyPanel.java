@@ -19,6 +19,7 @@ import javax.swing.text.MaskFormatter;
 
 import com.smu.view.UiUtil.*;
 import com.smu.model.Family;
+import com.smu.model.MonthlyBalance;
 import com.smu.model.User;
 
 public class FamilyPanel extends DefaultPanel
@@ -175,13 +176,11 @@ public class FamilyPanel extends DefaultPanel
         JLabel incomeLabel = UiUtil.createStyledLabel(" ");
         JLabel expenseLabel = UiUtil.createStyledLabel(" ");
 
-        initialBalanceLabel.setText(String.format("<html><font color='white'>Initial Balance: </font><font color='%s'>%.2f€</font></html>",UiUtil.CAPPUCCINO_RGB, user.getInitialBalance(date)));
-        
-        finalBalanceLabel.setText(String.format("<html><font color='white'>Final Balance: </font><font color='%s'>%.2f€</font></html>",UiUtil.CAPPUCCINO_RGB, user.getFinalBalance(date)));
-        
-        incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>",UiUtil.CAPPUCCINO_RGB, user.getUserMonthlyIncome(date)));
-
-        expenseLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>",UiUtil.WHITE_RGB, user.getUserMonthlyExpense(date)));
+        MonthlyBalance monthlyBalance = user.getMonthlyBalance(date);
+        initialBalanceLabel.setText(String.format("<html><font color='white'>Initial Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, monthlyBalance.getInitialBalance()));
+        finalBalanceLabel.setText(String.format("<html><font color='white'>Final Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, monthlyBalance.getFinalBalance()));
+        incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, user.getMonthlyIncome(date)));
+        expenseLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, user.getMonthlyExpense(date)));
     
 
         int labelWidth = (panelWidth / 2) - 10;
@@ -203,21 +202,10 @@ public class FamilyPanel extends DefaultPanel
         return userPanel;
     }
 
-    public void showUsers(Family family)
+    private void showUsers(Family family, LocalDate date)
     {
         final int PANEL_WIDTH = 900;
         usersPanel.removeAll();
-
-        LocalDate date;
-        try
-        {
-            date = getDateValue();
-        }
-        catch (Exception e)
-        {
-            showErrorMessage(e.getMessage());
-            return;
-        }
 
         for (User user : family.getMembers())
         {
@@ -228,28 +216,18 @@ public class FamilyPanel extends DefaultPanel
         usersPanel.setPreferredSize(new Dimension(PANEL_WIDTH, family.getMembers().size() * 330));
     }
 
-    public void showFamilyDetails(Family family)
+    private void showFamilyDetails(Family family, LocalDate date)
     {
-        try 
-        {
-            LocalDate date = getDateValue();
-            
-            if (date.isAfter(LocalDate.now()))
-                showErrorMessage("We can't read the future yet");
+        titleLabel.setText(family.getName() + "'s " + formatDate(date) + " Summary");
 
-            titleLabel.setText(family.getName() + "'s " + formatDate(date) + " Summary");
-            initialBalanceLabel.setText(String.format("<html><font color='white'>Initial Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, family.getInitialBalance(date) ));
-            finalBalanceLabel.setText(String.format("<html><font color='white'>Final Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, family.getFinalBalance(date)));
-            incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, family.getMonthlyIncome(date)));
-            expenseLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, family.getMonthlyExpense(date)));
-        } 
-        catch (Exception e)
-        {
-            showErrorMessage(e.getMessage());
-        }
+        MonthlyBalance monthlyBalance = family.getMonthlyBalance(date);
+        initialBalanceLabel.setText(String.format("<html><font color='white'>Initial Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, monthlyBalance.getInitialBalance()));
+        finalBalanceLabel.setText(String.format("<html><font color='white'>Final Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, monthlyBalance.getFinalBalance()));
+        incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, family.getMonthlyIncome(date)));
+        expenseLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, family.getMonthlyExpense(date)));
     }
 
-    public LocalDate getDateValue() throws Exception 
+    private LocalDate getDateValue() throws Exception 
     {
         String text = dateField.getText();
         text = "01/" + text;
@@ -270,6 +248,24 @@ public class FamilyPanel extends DefaultPanel
         int year = date.getYear();
 
         return month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year;
+    }
+
+    public void update(Family family)
+    {
+        try
+        {
+            LocalDate date = getDateValue();
+
+            if (date.isAfter(LocalDate.now()))
+                showErrorMessage("We can't read the future yet");
+
+            showFamilyDetails(family, date);
+            showUsers(family, date);
+        }
+        catch (Exception e)
+        {
+            messageLabel.setText(e.getMessage());
+        }
     }
 
     public JButton getShowButton(){ return showButton; }
