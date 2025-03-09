@@ -1,9 +1,11 @@
 package com.smu.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,4 +155,68 @@ public class UserDAO
         
         return null;
     }
+
+    public static BigDecimal getTotalMonthlyIncome(LocalDate date, User user)
+    {
+        String sql = "SELECT get_user_monthly_income(?,?)";
+        
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setString(1, user.getUsername());
+            ps.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                BigDecimal totalIncome = rs.getBigDecimal("get_user_monthly_income");
+                
+                if(totalIncome == null)
+                    return BigDecimal.ZERO;
+
+                return totalIncome;
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return null;    
+    }
+
+    public static BigDecimal getTotalMonthlyExpense(LocalDate date, User user)
+    {
+        String sql = "SELECT get_user_monthly_expense(?,?)";
+        
+        try 
+        {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            ps.setString(1, user.getUsername());
+            ps.setDate(2, java.sql.Date.valueOf(date));
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next())
+            {
+                BigDecimal totalExpense = rs.getBigDecimal("get_user_monthly_expense");
+                
+                if(totalExpense == null)
+                    return BigDecimal.ZERO;
+
+                return totalExpense;
+            }
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return null; 
+    }
+    
 }
+

@@ -17,7 +17,7 @@ public class IncomeDetailsDAO
 
     public static IncomeDetails get(PaymentCard card, LocalDate date)
     {
-        String sql = "select max_income, min_income, avg_income, total_income from get_monthly_income_details(?,?)";
+        String sql = "select max_income, min_income, avg_income, total_income from get_card_monthly_income_details(?,?)";
 
         try
         {

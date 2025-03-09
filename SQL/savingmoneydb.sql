@@ -222,7 +222,7 @@ EXECUTE FUNCTION update_monthly_balance();
 
 /***************************************************** DAO FUNCTIONS *************************************************************/
 
-CREATE OR REPLACE FUNCTION get_monthly_expense_details(input_number VARCHAR, input_date DATE)
+CREATE OR REPLACE FUNCTION get_card_monthly_expense_details(input_number VARCHAR, input_date DATE)
     RETURNS TABLE(max_expense NUMERIC, min_expense NUMERIC, avg_expense NUMERIC, total_expense NUMERIC) AS $$
     BEGIN
         RETURN QUERY
@@ -235,7 +235,7 @@ CREATE OR REPLACE FUNCTION get_monthly_expense_details(input_number VARCHAR, inp
     END;
     $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_monthly_income_details(input_number VARCHAR, input_date DATE)
+CREATE OR REPLACE FUNCTION get_card_monthly_income_details(input_number VARCHAR, input_date DATE)
     RETURNS TABLE(max_income NUMERIC, min_income NUMERIC, avg_income NUMERIC, total_income NUMERIC) AS $$
     BEGIN
         RETURN QUERY
@@ -248,7 +248,7 @@ CREATE OR REPLACE FUNCTION get_monthly_income_details(input_number VARCHAR, inpu
     END;
     $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION get_monthly_balance(input_number VARCHAR, input_date DATE)
+CREATE OR REPLACE FUNCTION get_card_monthly_balance(input_number VARCHAR, input_date DATE)
     RETURNS TABLE(initial_balance NUMERIC, final_balance NUMERIC) AS $$
 	DECLARE 
 		exist BOOLEAN;
@@ -270,6 +270,7 @@ CREATE OR REPLACE FUNCTION get_monthly_balance(input_number VARCHAR, input_date 
                 DATE_TRUNC('month', m.date) = DATE_TRUNC('month', input_date);
     END;
     $$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION get_family_monthly_income(input_family_id INTEGER, input_date DATE)
     RETURNS NUMERIC AS $$
@@ -326,26 +327,91 @@ CREATE OR REPLACE FUNCTION get_family_monthly_expense(input_family_id INTEGER, i
 CREATE OR REPLACE FUNCTION get_family_monthly_balance(input_family_id INTEGER, input_date DATE)
     RETURNS TABLE(initial_balance NUMERIC, final_balance NUMERIC) AS $$
     DECLARE
-        initial_balance NUMERIC := 0;
-        final_balance NUMERIC := 0;
-        tmp_start NUMERIC;
-        tmp_end NUMERIC;
-        card RECORD;
+        initial_balance NUMERIC;
+        final_balance NUMERIC;
     BEGIN
-        FOR card IN (SELECT card_number FROM payment_card WHERE owner_username IN 
-                        (SELECT username FROM "user" WHERE family_id = input_family_id)) 
-        LOOP
-            IF is_date_valid(card.card_number, input_date) THEN
-                SELECT gmb.initial_balance, gmb.final_balance
-                INTO tmp_start, tmp_end
-                FROM get_monthly_balance(card.card_number, input_date) AS gmb;
-                
-                initial_balance := initial_balance + tmp_start;
-                final_balance   := final_balance + tmp_end;
-            END IF;
-		END LOOP;
 
-        RETURN QUERY SELECT initial_balance, final_balance;
+        SELECT SUM(m.initial_balance), SUM(m.final_balance) INTO initial_balance, final_balance
+        FROM monthly_balance AS m
+        WHERE m.card_number IN 
+            (
+                SELECT card_number 
+                FROM payment_card
+                WHERE owner_username IN 
+                    (
+                        SELECT username 
+                        FROM "user"
+                        WHERE family_id = input_family_id
+                    )
+            )
+        AND DATE_TRUNC('month', m.date) = DATE_TRUNC('month', input_date);
+
+        RETURN QUERY SELECT COALESCE(initial_balance, 0.00), COALESCE(final_balance, 0.00);
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_user_monthly_income(input_username VARCHAR, input_date DATE)
+    RETURNS NUMERIC AS $$
+
+    DECLARE
+        total_income NUMERIC;
+    BEGIN 
+        SELECT SUM(amount) INTO total_income
+        FROM transaction AS t 
+        WHERE
+            direction = 'INCOME' AND
+            DATE_TRUNC('month', t.date) = DATE_TRUNC('month', input_date) AND
+            t.card_number in
+                (
+                    SELECT card_number FROM payment_card 
+                    WHERE owner_username = input_username
+                );
+
+        RETURN COALESCE(total_income,0.00);
+
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_user_monthly_expense(input_username VARCHAR, input_date DATE)
+    RETURNS NUMERIC AS $$
+
+    DECLARE
+        total_expense NUMERIC;
+    BEGIN 
+        SELECT SUM(amount) INTO total_expense
+        FROM transaction AS t 
+        WHERE
+            direction = 'EXPENSE' AND
+            DATE_TRUNC('month', t.date) = DATE_TRUNC('month', input_date) AND
+            t.card_number in
+                (
+                    SELECT card_number FROM payment_card 
+                    WHERE owner_username = input_username
+                );
+
+        RETURN COALESCE(total_expense,0.00);
+
+    END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_user_monthly_balance(input_username INTEGER, input_date DATE)
+    RETURNS TABLE(initial_balance NUMERIC, final_balance NUMERIC) AS $$
+    DECLARE
+        initial_balance NUMERIC;
+        final_balance NUMERIC;
+    BEGIN
+
+        SELECT SUM(m.initial_balance), SUM(m.final_balance) INTO initial_balance, final_balance
+        FROM monthly_balance AS m
+        WHERE m.card_number IN 
+            (
+                SELECT card_number 
+                FROM payment_card
+                WHERE owner_username = input_username
+            )
+        AND DATE_TRUNC('month', m.date) = DATE_TRUNC('month', input_date);
+
+        RETURN QUERY SELECT COALESCE(initial_balance, 0.00), COALESCE(final_balance, 0.00);
     END;
     $$ LANGUAGE plpgsql;
 

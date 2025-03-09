@@ -84,8 +84,11 @@ public class HomeController extends DefaultController
         public void actionPerformed(ActionEvent e) 
         {
             super.actionPerformed(e);
-            initializeTable();
-            clearFilters();
+
+            if(areFilters())
+                updateTable();
+            else
+                initializeTable();
         }
     }
     
@@ -145,5 +148,13 @@ public class HomeController extends DefaultController
         view.getFilterFinalDate().setValue(null);
         view.getFilterDirection().setSelectedIndex(0);
         view.getFilterCategory().setSelectedIndex(0);
+    }
+
+    private boolean areFilters()
+    {
+        return  view.getFilterInitialDate().getValue() != null || 
+                view.getFilterFinalDate().getValue() != null || 
+                view.getFilterDirection().getSelectedIndex() != 0 || 
+                view.getFilterCategory().getSelectedIndex() != 0;
     }
 }

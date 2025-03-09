@@ -34,6 +34,9 @@ public class Family
 
     public BigDecimal getMonthlyExpense(LocalDate date){return FamilyDAO.getMonthlyExpense(date, this); }
 
+    
+
+
     /*************************************DEBUG******************************************* */ 
     public String toString()
     {

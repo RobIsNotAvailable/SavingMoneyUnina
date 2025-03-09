@@ -8,7 +8,6 @@ import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,7 +40,7 @@ public class FamilyPanel extends DefaultPanel
         remove(cardManager);
 
         addFamilyDetails();
-        addUsersPanel();
+        setUpUserPanel();
     }
 
     private void addFamilyDetails()
@@ -93,7 +92,7 @@ public class FamilyPanel extends DefaultPanel
         this.add(familyDetails, BorderLayout.WEST);
     }
 
-    private void addUsersPanel()
+    private void setUpUserPanel()
     {
         usersPanel = new JPanel(new FlowLayout());
         usersPanel.setOpaque(false);
@@ -151,66 +150,99 @@ public class FamilyPanel extends DefaultPanel
         this.add(eastPanel, BorderLayout.EAST);
     }
 
-    public void showUsers(List<User> users)
+    private String formatDate(LocalDate date)
+    {
+        try 
+        {
+            String month = date.getMonth().toString();
+            int year = date.getYear();
+
+            return month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year;
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private JPanel createUserPanel(User user, LocalDate date, int panelWidth)
+    {
+        JPanel userPanel = new JPanel(new FlowLayout());
+        userPanel.setOpaque(false);
+        userPanel.setPreferredSize(new Dimension(panelWidth, 310));
+
+        JLabel iconLabel = UiUtil.createStyledLabel(" ");
+        iconLabel.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/profile.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
+        iconLabel.setPreferredSize(new Dimension(60, 50));
+        
+        JLabel nameLabel = UiUtil.createStyledLabel(" ");
+        nameLabel.setPreferredSize(new Dimension(panelWidth - 300, 50));
+        nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        nameLabel.setText(user.getName());
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 30));
+
+        JPanel coloredLine = new JPanel();
+        coloredLine.setBackground(UiUtil.CAPPUCCINO);
+        coloredLine.setPreferredSize(new Dimension(panelWidth - 100, 5));
+
+        JLabel initialBalanceLabel = UiUtil.createStyledLabel(" ");
+        JLabel finalBalanceLabel = UiUtil.createStyledLabel(" ");
+        JLabel incomeLabel = UiUtil.createStyledLabel(" ");
+        JLabel expenseLabel = UiUtil.createStyledLabel(" ");
+
+        initialBalanceLabel.setText(String.format("<html><font color='white'>Initial Balance: </font><font color='%s'>%.2f€</font></html>",UiUtil.CAPPUCCINO_RGB, user.getInitialBalance(date)));
+        
+        finalBalanceLabel.setText(String.format("<html><font color='white'>Final Balance: </font><font color='%s'>%.2f€</font></html>",UiUtil.CAPPUCCINO_RGB, user.getFinalBalance(date)));
+        
+        incomeLabel.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>",UiUtil.CAPPUCCINO_RGB, user.getUserMonthlyIncome(date)));
+
+        expenseLabel.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>",UiUtil.WHITE_RGB, user.getUserMonthlyExpense(date)));
+    
+
+        int labelWidth = (panelWidth / 2) - 10;
+        initialBalanceLabel.setPreferredSize(new Dimension(labelWidth, 50));
+        finalBalanceLabel.setPreferredSize(new Dimension(labelWidth, 50));
+        incomeLabel.setPreferredSize(new Dimension(labelWidth, 50));
+        expenseLabel.setPreferredSize(new Dimension(labelWidth, 50));
+
+        userPanel.add(iconLabel);
+        userPanel.add(nameLabel);
+        userPanel.add(new BlankPanel(new Dimension(panelWidth, 10)));
+        userPanel.add(coloredLine);
+        userPanel.add(new BlankPanel(new Dimension(panelWidth, 20)));
+        userPanel.add(initialBalanceLabel);
+        userPanel.add(finalBalanceLabel);
+        userPanel.add(incomeLabel);
+        userPanel.add(expenseLabel);
+
+        return userPanel;
+    }
+
+    public void showUsers(Family family)
     {
         final int PANEL_WIDTH = 900;
+        usersPanel.removeAll();
 
-        for(User user : users)
+        LocalDate date;
+        try
         {
-            JPanel userPanel = new JPanel(new FlowLayout());
-            userPanel.setOpaque(false);
-            userPanel.setPreferredSize(new Dimension(PANEL_WIDTH, 310));
+            date = getDateValue();
+        }
+        catch (Exception e)
+        {
+            showErrorMessage(e.getMessage());
+            return;
+        }
 
-            JLabel iconLabel = UiUtil.createStyledLabel(" ");
-            iconLabel.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/profile.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
-            iconLabel.setPreferredSize(new Dimension(60,50));
-
-            JLabel nameLabel = UiUtil.createStyledLabel(" ");
-            nameLabel.setPreferredSize(new Dimension(PANEL_WIDTH - 300,50));
-            nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-            nameLabel.setText(user.getName());
-            nameLabel.setFont(new Font("Arial", Font.BOLD, 30));
-            
-            JPanel coloredLine = new JPanel();
-            coloredLine.setBackground(UiUtil.CAPPUCCINO);
-            coloredLine.setPreferredSize(new Dimension(PANEL_WIDTH - 100, 5));
-            
-            JLabel userIncome = UiUtil.createStyledLabel(" ");
-            JLabel userExpense = UiUtil.createStyledLabel(" ");
-            JLabel userInitialBalance = UiUtil.createStyledLabel(" ");
-            JLabel userFinalBalance = UiUtil.createStyledLabel(" ");
-            try
-            {
-                LocalDate date = getDateValue();
-                userIncome.setText(String.format("<html><font color='white'>Initial Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, user.getInitialBalance(date) ));
-                userExpense.setText(String.format("<html><font color='white'>Final Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, user.getFinalBalance(date)));
-                userInitialBalance.setText(String.format("<html><font color='white'>Income: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, user.getMonthlyIncome(date)));
-                userFinalBalance.setText(String.format("<html><font color='white'>Expense: </font><font color='%s'>%.2f€</font></html>", UiUtil.WHITE_RGB, user.getMonthlyExpense(date)));
-            }
-            catch (Exception e) 
-            {
-                showErrorMessage(e.getMessage());
-            }
-
-            userIncome.setPreferredSize(new Dimension((PANEL_WIDTH / 2)-10, 50));
-            userExpense.setPreferredSize(new Dimension((PANEL_WIDTH / 2)-10, 50));
-            userInitialBalance.setPreferredSize(new Dimension((PANEL_WIDTH / 2)-10, 50));
-            userFinalBalance.setPreferredSize(new Dimension((PANEL_WIDTH / 2)-10, 50));
-
-            userPanel.add(iconLabel);
-            userPanel.add(nameLabel);
-            userPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH, 10)));
-            userPanel.add(coloredLine);
-            userPanel.add(new BlankPanel(new Dimension(PANEL_WIDTH,20)));
-            userPanel.add(userIncome);
-            userPanel.add(userExpense);
-            userPanel.add(userInitialBalance);
-            userPanel.add(userFinalBalance);
-
+        for (User user : family.getMembers())
+        {
+            JPanel userPanel = createUserPanel(user, date, PANEL_WIDTH);
             usersPanel.add(userPanel);
         }
 
-        usersPanel.setPreferredSize(new Dimension(PANEL_WIDTH, users.size() * 330));
+        usersPanel.setPreferredSize(new Dimension(PANEL_WIDTH, family.getMembers().size() * 330));
     }
 
     public void showFamilyDetails(Family family)
@@ -248,23 +280,6 @@ public class FamilyPanel extends DefaultPanel
             throw new Exception("Date is not valid");
         }
     }
-
-    private String formatDate(LocalDate date)
-    {
-        try 
-        {
-            String month = date.getMonth().toString();
-            int year = date.getYear();
-
-            return month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year;
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
+   
     public JButton getShowButton(){ return showButton; }
 }

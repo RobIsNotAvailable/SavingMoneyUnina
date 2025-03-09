@@ -17,7 +17,7 @@ public class ExpenseDetailsDAO
 
     public static ExpenseDetails get(PaymentCard card, LocalDate date)
     {
-        String sql = "select max_expense, min_expense, avg_expense, total_expense from get_monthly_expense_details(?, ?)";
+        String sql = "select max_expense, min_expense, avg_expense, total_expense from get_card_monthly_expense_details(?, ?)";
 
         try
         {

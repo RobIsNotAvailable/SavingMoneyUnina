@@ -62,8 +62,8 @@ public class User
 
     public BigDecimal getFinalBalance(LocalDate date) { return new BigDecimal(21.00); } //placeholder
 
-    public BigDecimal getMonthlyIncome(LocalDate date) { return new BigDecimal(21.00); } //placeholder
+    
+    public BigDecimal getUserMonthlyIncome(LocalDate date){return UserDAO.getTotalMonthlyIncome(date, this); }
 
-    public BigDecimal getMonthlyExpense(LocalDate date) { return new BigDecimal(21.00); } //placeholder
-
+    public BigDecimal getUserMonthlyExpense(LocalDate date){return UserDAO.getTotalMonthlyExpense(date, this); }
 }

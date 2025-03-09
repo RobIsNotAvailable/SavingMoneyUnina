@@ -17,7 +17,7 @@ public class MonthlyBalanceDAO
 
     public static MonthlyBalance get(PaymentCard card, LocalDate date)
     {
-        String sql = "select initial_balance, final_balance FROM get_monthly_balance(?, ?)";
+        String sql = "select initial_balance, final_balance FROM get_card_monthly_balance(?, ?)";
         date = date.withDayOfMonth(1);
 
         try
