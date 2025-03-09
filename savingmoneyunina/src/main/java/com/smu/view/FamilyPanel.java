@@ -150,23 +150,6 @@ public class FamilyPanel extends DefaultPanel
         this.add(eastPanel, BorderLayout.EAST);
     }
 
-    private String formatDate(LocalDate date)
-    {
-        try 
-        {
-            String month = date.getMonth().toString();
-            int year = date.getYear();
-
-            return month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year;
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     private JPanel createUserPanel(User user, LocalDate date, int panelWidth)
     {
         JPanel userPanel = new JPanel(new FlowLayout());
@@ -280,6 +263,14 @@ public class FamilyPanel extends DefaultPanel
             throw new Exception("Date is not valid");
         }
     }
-   
+
+    private String formatDate(LocalDate date)
+    {
+        String month = date.getMonth().toString();
+        int year = date.getYear();
+
+        return month.substring(0, 1).toUpperCase() + month.substring(1).toLowerCase() + " " + year;
+    }
+
     public JButton getShowButton(){ return showButton; }
 }
