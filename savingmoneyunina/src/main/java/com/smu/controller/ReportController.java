@@ -21,10 +21,9 @@ public class ReportController extends DefaultController
 
         this.view = view;
 
-        initializeCustomListeners(new CardListener(), new ReportCardChangeListener(getRighttButton()), new ReportCardChangeListener(getLeftButton()));
+        initializeCustomListeners(new CardListener(), new ReportCardChangerListener(getRightButton()), new ReportCardChangerListener(getLeftButton()));
 
         UiUtil.addListener(view.getShowButton(), new ShowListener());
-        view.getShowButton().doClick();
         updateDetails();
     }
 
@@ -37,9 +36,9 @@ public class ReportController extends DefaultController
         }
     } 
 
-    private class ReportCardChangeListener extends CardChangerListener
+    private class ReportCardChangerListener extends CardChangerListener
     {
-        ReportCardChangeListener(TriangleButton button) 
+        ReportCardChangerListener(TriangleButton button) 
         {
             super(button);
         }

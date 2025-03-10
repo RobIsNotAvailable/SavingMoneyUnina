@@ -26,7 +26,7 @@ public class HomeController extends DefaultController
         super(main, view, user);
         this.view = view;
 
-        initializeCustomListeners(new CardListener(),new HomeCardChangerListener(getRighttButton()), new HomeCardChangerListener(getLeftButton()));
+        initializeCustomListeners(new CardListener(),new HomeCardChangerListener(getRightButton()), new HomeCardChangerListener(getLeftButton()));
         
         UiUtil.addListener(view.getFilterButton(), new FilterListener());
         UiUtil.addListener(view.getClearFilterButton(), new ClearFilterListener());

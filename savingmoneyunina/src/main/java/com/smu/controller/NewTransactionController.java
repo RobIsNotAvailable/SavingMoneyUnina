@@ -21,9 +21,9 @@ import com.smu.model.Transaction.Direction;
 
 public class NewTransactionController extends DefaultController
 {
-    NewTransactionPanel view;
-    public int directionCounter = 0;
-    public int currencyCounter = 0;
+    private NewTransactionPanel view;
+    private int directionSelector = 0;
+    private int currencySelector = 0;
 
     public NewTransactionController(MainController main, NewTransactionPanel view, User user) 
     {
@@ -44,8 +44,8 @@ public class NewTransactionController extends DefaultController
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            directionCounter = (directionCounter + 1) % 2;
-            changeDirectionButton();
+            directionSelector = (directionSelector + 1) % 2;
+            changeDirection();
         }
     }
 
@@ -54,8 +54,8 @@ public class NewTransactionController extends DefaultController
         @Override
         public void actionPerformed(ActionEvent e) 
         {
-            currencyCounter = (currencyCounter + 1) % 2;
-            changeCurrencyButton();
+            currencySelector = (currencySelector + 1) % 2;
+            changeCurrency();
         }
     }
 
@@ -90,12 +90,12 @@ public class NewTransactionController extends DefaultController
         }
     }
 
-    private void changeDirectionButton()
+    private void changeDirection()
     {
         JButton directionButton = view.getDirectionButton();
         JButton currencyButton = view.getCurrencyButton();
 
-        if (directionCounter == 0) 
+        if (directionSelector == 0) 
         {
             directionButton.setText("-");
             directionButton.setForeground(Color.WHITE);
@@ -111,11 +111,11 @@ public class NewTransactionController extends DefaultController
         }
     }
 
-    private void changeCurrencyButton()
+    private void changeCurrency()
     {
         JButton button = view.getCurrencyButton();
 
-        if (currencyCounter == 0) 
+        if (currencySelector == 0) 
             button.setText("€");
         else
             button.setText("$");

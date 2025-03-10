@@ -8,7 +8,7 @@ import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 import com.smu.model.Report;
 
-public class ReportDAO implements DAOconnection
+public class ReportDAO
 {
     public static Report get(PaymentCard card, LocalDate date)
     {

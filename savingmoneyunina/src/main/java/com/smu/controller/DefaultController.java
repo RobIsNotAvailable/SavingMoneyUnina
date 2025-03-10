@@ -35,12 +35,12 @@ public class DefaultController
 
         updateCardImage();
         updateCardDetails();
-        UiUtil.addListener(cardManager.getEyeButton(), new eyeListener());
+        UiUtil.addListener(cardManager.getEyeButton(), new EyeListener());
     }
 
     protected class CardChangerListener implements ActionListener 
     {
-        TriangleButton.Direction direction;
+        private TriangleButton.Direction direction;
 
         CardChangerListener(TriangleButton button)
         {
@@ -74,15 +74,15 @@ public class DefaultController
         }
     }
 
-    protected class eyeListener implements ActionListener
+    protected class EyeListener implements ActionListener
     {
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            String isHidden = cardManager.getPinLabel().getText();
+            Boolean isHidden = cardManager.getPinLabel().getText().contains("***");
             PaymentCard card = PaymentCardList.get(cardIndex);
 
-            if (isHidden.contains("***"))
+            if (isHidden)
                 cardManager.showSensitiveData(card.getPin(), card.getCvv());
             else
                 cardManager.hideSensitiveData();
@@ -111,14 +111,14 @@ public class DefaultController
         updateCardImage();
     }
 
-    public void initializeDefaultListeners()
+    protected void initializeDefaultListeners()
     {
         UiUtil.addListener(cardManager.getRightTriangleButton(), new CardChangerListener(cardManager.getRightTriangleButton()));
         UiUtil.addListener(cardManager.getLeftTriangleButton(), new CardChangerListener(cardManager.getLeftTriangleButton()));
         UiUtil.addListener(cardManager.getCardButton(), new CardListener());
     }
 
-    public void initializeCustomListeners(CardListener cardListener, CardChangerListener rightButtonListener, CardChangerListener leftButtonListener)
+    protected void initializeCustomListeners(CardListener cardListener, CardChangerListener rightButtonListener, CardChangerListener leftButtonListener)
     {
         UiUtil.addListener(cardManager.getRightTriangleButton(), rightButtonListener);
         UiUtil.addListener(cardManager.getLeftTriangleButton(), leftButtonListener);
@@ -145,7 +145,7 @@ public class DefaultController
         updateCard();
     }
 
-    protected TriangleButton getLeftButton() { return cardManager.getLeftTriangleButton(); }
+    public TriangleButton getLeftButton() { return cardManager.getLeftTriangleButton(); }
 
-    protected TriangleButton getRighttButton() { return cardManager.getRightTriangleButton(); }
+    public TriangleButton getRightButton() { return cardManager.getRightTriangleButton(); }
 }
