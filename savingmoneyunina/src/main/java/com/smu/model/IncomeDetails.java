@@ -30,12 +30,4 @@ public class IncomeDetails
     public BigDecimal getAvgIncome() { return avgIncome; }
 
     public BigDecimal getTotalIncome() { return totalIncome; }
-    
-    /***************************************************DEBUG************************************************** */
-    public String toString()
-    {
-        return "Max income: " + maxIncome + "\n" +
-                "Min income: " + minIncome + "\n" +
-                "Avg income: " + avgIncome;
-    }
 }

@@ -86,10 +86,5 @@ public class Transaction
             getUserOtherCategory().insertTransaction(this);
         }
     }
-
-    public String toString() 
-    {
-        return "Transaction("+ id +"): " + amount + " " + direction + " " + description + " " + date + " Card: " + card.getCardNumber();
-    }
 }
 

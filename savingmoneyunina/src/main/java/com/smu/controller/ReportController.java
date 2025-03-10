@@ -58,7 +58,7 @@ public class ReportController extends DefaultController
         try 
         {
             LocalDate reportDate = view.getDateValue();
-            LocalDate firstValidDate = PaymentCardList.get(cardIndex).getFirstReporDate();            
+            LocalDate firstValidDate = PaymentCardList.get(cardIndex).getFirstReportDate();            
             Report report = PaymentCardList.get(cardIndex).getReport(reportDate);
 
             if (reportDate.isBefore(firstValidDate)) 

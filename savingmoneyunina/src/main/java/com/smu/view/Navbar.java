@@ -66,7 +66,7 @@ public class Navbar extends JPanel
 
     public JButton getNewTransactionButton() { return newTransactionButton; }
 
-    public JButton getreportButton() { return reportButton; }
+    public JButton getReportButton() { return reportButton; }
 
     public JButton getLogoutButton() { return logoutButton; }
 }

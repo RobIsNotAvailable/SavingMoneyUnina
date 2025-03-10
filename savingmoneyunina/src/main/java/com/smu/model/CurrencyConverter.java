@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 public class CurrencyConverter 
 {
-    public static enum Currency {EUR, USD};
+    public enum Currency {EUR, USD};
     
     public static BigDecimal eurToUsd = new BigDecimal("1.06");
     

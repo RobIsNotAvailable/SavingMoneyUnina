@@ -24,21 +24,9 @@ public class Family
 
     public List<User> getMembers() { return members; }
     
-    public MonthlyBalance getMonthlyBalance(LocalDate date){return FamilyDAO.getFamilyMonthlyBalance(this, date); }
+    public MonthlyBalance getMonthlyBalance(LocalDate date) { return FamilyDAO.getFamilyMonthlyBalance(this, date); }
 
-    public BigDecimal getMonthlyIncome(LocalDate date){return FamilyDAO.getMonthlyIncome(date, this); }
+    public BigDecimal getMonthlyIncome(LocalDate date) { return FamilyDAO.getMonthlyIncome(date, this); }
 
-    public BigDecimal getMonthlyExpense(LocalDate date){return FamilyDAO.getMonthlyExpense(date, this); }
-
-    /*************************************DEBUG******************************************* */ 
-    public String toString()
-    {
-        String string = "Family name: " + name + " | Members:";	
-        for (User member : members)
-        {
-            string += " " + member.getUsername();
-        }
-
-        return string;
-    }
+    public BigDecimal getMonthlyExpense(LocalDate date) { return FamilyDAO.getMonthlyExpense(date, this); }
 }

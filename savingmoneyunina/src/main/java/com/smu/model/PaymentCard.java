@@ -67,15 +67,8 @@ public class PaymentCard
         PaymentCardDAO.update(this);
     }
 
-    public LocalDate getFirstReporDate()
+    public LocalDate getFirstReportDate()
     {
         return PaymentCardDAO.getFirstReportDate(this);
     }
- 
-    /***************************************************************DEBUG**************************************************************** */
-    public String toString()
-    {
-        return "Card number: " + cardNumber + " Cvv: " + cvv + " Pin: " + pin + " Expiration Date " + expirationDate.toString() + " Balance: " + balance;
-    }
-
 }

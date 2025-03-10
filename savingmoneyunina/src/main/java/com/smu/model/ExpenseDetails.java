@@ -30,11 +30,4 @@ public class ExpenseDetails
     public BigDecimal getAvgExpense() { return avgExpense; }
 
     public BigDecimal getTotalExpense() { return totalExpense; }
-    /***************************************************DEBUG************************************************** */
-    public String toString()
-    {
-        return "Max expense: " + maxExpense + "\n" +
-            "Min expense: " + minExpense + "\n" +
-            "Avg expense: " + avgExpense;
-    }
 }

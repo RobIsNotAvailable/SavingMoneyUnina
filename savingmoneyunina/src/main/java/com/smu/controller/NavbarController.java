@@ -21,7 +21,7 @@ public class NavbarController
         UiUtil.addListener(view.getLogoutButton(), new LogoutListener());
         UiUtil.addListener(view.getFamilyButton(), new FamilyListener());
         UiUtil.addListener(view.getNewTransactionButton(), new NewTransactionListener());
-        UiUtil.addListener(view.getreportButton(), new ReportListener());
+        UiUtil.addListener(view.getReportButton(), new ReportListener());
     }
 
     private class HomeListener implements ActionListener

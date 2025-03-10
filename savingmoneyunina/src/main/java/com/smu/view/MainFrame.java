@@ -48,9 +48,9 @@ public class MainFrame extends JFrame
         return defaultScreen.getDefaultConfiguration().getBounds();
     }
 
-    public class SMUTheme extends OceanTheme
+    private class SMUTheme extends OceanTheme
     {
-        public  ColorUIResource getControlShadow()
+        public ColorUIResource getControlShadow()
         {
             return new ColorUIResource(UiUtil.LOGO_GRAY.getRed(), UiUtil.LOGO_GRAY.getGreen(), UiUtil.LOGO_GRAY.getBlue());
         }

@@ -86,7 +86,7 @@ public class Category
         return (name.equals(category.name) && creator.equals(category.creator));
     }
     /*****************************************************DEBUG******************************************** */
-   public String toString()
+    public String toString()
     {
         return name;
     }

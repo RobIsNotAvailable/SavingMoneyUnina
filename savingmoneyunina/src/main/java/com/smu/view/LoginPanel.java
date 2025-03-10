@@ -19,12 +19,11 @@ import javax.swing.SwingConstants;
 
 import com.smu.view.UiUtil.*;
 
-public class LoginPanel extends JPanel
+public class LoginPanel extends MessagePanel
 {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
-    private JLabel messageLabel;
     private GridBagConstraints gbc;
 
     public LoginPanel()
@@ -158,23 +157,6 @@ public class LoginPanel extends JPanel
             panel.add(blankLabel, gbc);
             gbc.gridy++;
         }
-    }
-
-    public void showErrorMessage(String message) 
-    {
-        messageLabel.setText(message);
-        messageLabel.setForeground(UiUtil.ERROR_RED);
-    }
-
-    public void showSuccessMessage(String message) 
-    {
-        messageLabel.setText(message);
-        messageLabel.setForeground(UiUtil.SUCCESS_GREEN);
-    }
-
-    public void clearMessage() 
-    {
-        messageLabel.setText(" ");
     }
 
     public void clearFields()

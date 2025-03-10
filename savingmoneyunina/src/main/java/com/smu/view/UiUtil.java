@@ -133,7 +133,6 @@ public class UiUtil
                 addKeyBinding(this, "RIGHT");
             else 
                 addKeyBinding(this, "LEFT");
-
         }
 
         @Override
@@ -193,9 +192,9 @@ public class UiUtil
 
     public static class TransparentTable extends JTable
     {
-        public TransparentTable(Object[][] data, String[] ColumnNames)
+        public TransparentTable(Object[][] data, String[] columnNames)
         {
-            super(data, ColumnNames);
+            super(data, columnNames);
 
             setFillsViewportHeight(true);
             setOpaque(false);
@@ -226,7 +225,8 @@ public class UiUtil
             setTableHeader(header);
         }
 
-        public void setData(Object[][] data, String[] columnNames) {
+        public void setData(Object[][] data, String[] columnNames)
+        {
             setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
         }
     }
