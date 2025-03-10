@@ -48,7 +48,7 @@ public class HomePanel extends DefaultPanel
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         
-        tablePanel.setPreferredSize(new Dimension(400, 350));
+        tablePanel.setPreferredSize(new Dimension(400, 370));
         tablePanel.setOpaque(false);
 
         tablePanel.add(new TransparentScrollPanel(transactions,400,200), BorderLayout.CENTER);

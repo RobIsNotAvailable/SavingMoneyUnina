@@ -162,10 +162,9 @@ public class FamilyPanel extends DefaultPanel
         iconLabel.setPreferredSize(new Dimension(60, 50));
         
         JLabel nameLabel = UiUtil.createStyledLabel(" ");
-        nameLabel.setPreferredSize(new Dimension(panelWidth - 300, 50));
+        nameLabel.setPreferredSize(new Dimension(panelWidth -160, 50));
         nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        nameLabel.setText(user.getName());
-        nameLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        nameLabel.setText(String.format("<html><span style='font-size:30px;'>%s</span> <span style='font-size:15px;'>(%s)</span></html>", user.getName(), user.getUsername()));
 
         JPanel coloredLine = new JPanel();
         coloredLine.setBackground(UiUtil.CAPPUCCINO);

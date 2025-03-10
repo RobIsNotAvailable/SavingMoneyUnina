@@ -30,7 +30,7 @@ public class FamilyController extends DefaultController
     @Override
     public void refresh()
     {
-        
+        view.update(family);
     }
 
     private class ShowListener implements ActionListener

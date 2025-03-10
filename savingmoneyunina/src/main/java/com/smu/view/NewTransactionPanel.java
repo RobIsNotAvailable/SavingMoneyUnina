@@ -40,7 +40,7 @@ public class NewTransactionPanel extends DefaultPanel
     private void addFormPanel()
     {
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setPreferredSize(new Dimension(1000, 400));
+        formPanel.setPreferredSize(new Dimension(1000, 370));
         formPanel.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -70,12 +70,13 @@ public class NewTransactionPanel extends DefaultPanel
 
     private void addAmountField(JPanel panel, GridBagConstraints gbc)
     {
-        DecimalFormat format = new DecimalFormat("#,###.00");
+        DecimalFormat format = new DecimalFormat("#,##0.00");
         format.setRoundingMode(RoundingMode.DOWN);
 
         NumberFormatter amountFormatter = new NumberFormatter(format);
         amountFormatter.setValueClass(Double.class);
         amountFormatter.setMinimum(0.00);
+        amountFormatter.setMaximum(9999999999.99);
         amountFormatter.setAllowsInvalid(false);
 
 
@@ -90,6 +91,7 @@ public class NewTransactionPanel extends DefaultPanel
 
         gbc.gridx = 2;
         gbc.insets = new Insets(10, 20, 10, 5);
+    
         panel.add(amountField, gbc);
     }
 

@@ -29,6 +29,11 @@ public class CardManager extends JPanel
     private JLabel incomeLabel = UiUtil.createStyledLabel("0.00");
     private JLabel expensesLabel = UiUtil.createStyledLabel("0.00");
     private JLabel balanceLabel = UiUtil.createStyledLabel("0.00");
+
+    private JButton eyeButton = UiUtil.createStyledButton(" ");
+
+    private JLabel pinLabel = UiUtil.createStyledLabel("Pin: ****");
+    private JLabel cvvLabel = UiUtil.createStyledLabel("CVV: ***");
     
     public CardManager()
     {
@@ -95,7 +100,7 @@ public class CardManager extends JPanel
         balanceLabel.setText(String.format("<html><font color='white'>Balance: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, balance));
     }
 
-    public void displayCardDetails(String cardNumber, String pin, String expirationDate, String cvv)
+    public void displayCardDetails(String cardNumber, String expirationDate)
     {
         if (cardDetailsFrame != null && cardDetailsFrame.isDisplayable()) 
             cardDetailsFrame.dispose();
@@ -106,29 +111,49 @@ public class CardManager extends JPanel
         cardDetailsFrame.getContentPane().setBackground(UiUtil.BACKGROUND_BLACK);
 
         cardDetailsFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        cardDetailsFrame.setPreferredSize(new Dimension(400, 350));
 
         JPanel detailsPanel = new JPanel();
-        detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
+        detailsPanel.setLayout(new FlowLayout());
         detailsPanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
         detailsPanel.setOpaque(false);
+        detailsPanel.setPreferredSize(new Dimension(400, 300));
                     
         JPanel coloredLine = new JPanel();
         coloredLine.setBackground(UiUtil.CAPPUCCINO);
-        coloredLine.setPreferredSize(new Dimension(30, 5));
+        coloredLine.setPreferredSize(new Dimension(330, 5));
 
         JLabel titleLabel = UiUtil.createStyledLabel("Card Details");
+        titleLabel.setPreferredSize(new Dimension(300, 30));
+        titleLabel.setHorizontalAlignment(JLabel.LEFT);
+        
         JLabel numberLabel = UiUtil.createStyledLabel("Number: " + cardNumber); 
-        JLabel pinLabel = UiUtil.createStyledLabel("Pin: " + pin); 
+        numberLabel.setPreferredSize(new Dimension(300, 30));
+        numberLabel.setHorizontalAlignment(JLabel.LEFT);
+        
+         
+        pinLabel.setPreferredSize(new Dimension(220, 30));
+        pinLabel.setHorizontalAlignment(JLabel.LEFT);
+        
         JLabel expiryLabel = UiUtil.createStyledLabel("Valid thru: " + expirationDate); 
-        JLabel cvvLabel = UiUtil.createStyledLabel("CVV: " + cvv);
+        expiryLabel.setPreferredSize(new Dimension(300, 30));
+        expiryLabel.setHorizontalAlignment(JLabel.LEFT);
+        
+        cvvLabel.setPreferredSize(new Dimension(300, 30));
+        cvvLabel.setHorizontalAlignment(JLabel.LEFT);
 
+        eyeButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/eye.png")).getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+     
         detailsPanel.add(titleLabel);
         detailsPanel.add(new BlankPanel(new Dimension(30, 10)));
         detailsPanel.add(coloredLine);
         detailsPanel.add(new BlankPanel(new Dimension(30, 10)));
         detailsPanel.add(numberLabel);
+
         detailsPanel.add(pinLabel);
+        detailsPanel.add(eyeButton);
         detailsPanel.add(cvvLabel);
+        detailsPanel.add(new BlankPanel(new Dimension(30, 10)));
         detailsPanel.add(expiryLabel);
 
         cardDetailsFrame.getContentPane().add(detailsPanel, BorderLayout.CENTER);
@@ -136,6 +161,21 @@ public class CardManager extends JPanel
         cardDetailsFrame.setLocationRelativeTo(null); 
         cardDetailsFrame.setVisible(true);
         cardDetailsFrame.setResizable(false);
+    }
+
+
+    public void showSensitiveData(String pin, String cvv)
+    {
+        pinLabel.setText("Pin: " + pin);
+        cvvLabel.setText("CVV: " + cvv);
+        eyeButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/openEye.png")).getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
+    }
+
+    public void hideSensitiveData()
+    {
+        pinLabel.setText("Pin: ****");
+        cvvLabel.setText("CVV: ***");
+        eyeButton.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/eye.png")).getImage().getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH)));
     }
 
     public JButton getCardButton() { return cardButton; }
@@ -150,4 +190,9 @@ public class CardManager extends JPanel
 
     public JLabel getBalanceLabel() { return balanceLabel; }
 
+    public JLabel getPinLabel() { return pinLabel; }
+
+    public JLabel getCvvLabel() { return cvvLabel; }
+
+    public JButton getEyeButton() { return eyeButton; }
 }

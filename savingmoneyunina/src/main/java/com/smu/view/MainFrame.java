@@ -20,7 +20,7 @@ public class MainFrame extends JFrame
         setTitle("SavingMoneyUnina");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         setSize(1728,972);
-        setMinimumSize(new Dimension(1650, 928));
+        setMinimumSize(new Dimension(1728, 850));
         ImageIcon logo = new ImageIcon(MainFrame.class.getResource("/logo.png"));
         setIconImage(logo.getImage());
         getContentPane().setBackground(UiUtil.BACKGROUND_BLACK);

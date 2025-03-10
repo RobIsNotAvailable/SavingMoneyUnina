@@ -35,6 +35,7 @@ public class DefaultController
 
         updateCardImage();
         updateCardDetails();
+        UiUtil.addListener(cardManager.getEyeButton(), new eyeListener());
     }
 
     protected class CardChangerListener implements ActionListener 
@@ -69,9 +70,25 @@ public class DefaultController
         public void actionPerformed(ActionEvent e)
         {
             PaymentCard card = PaymentCardList.get(cardIndex);
-            cardManager.displayCardDetails(card.getCardNumber(), card.getPin(), card.getExpirationDate().format(DateTimeFormatter.ofPattern("MM/yy")), card.getCvv());
+            cardManager.displayCardDetails(card.getCardNumber(), card.getExpirationDate().format(DateTimeFormatter.ofPattern("MM/yy")));
         }
     }
+
+    protected class eyeListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            String isHidden = cardManager.getPinLabel().getText();
+            PaymentCard card = PaymentCardList.get(cardIndex);
+
+            if (isHidden.contains("***"))
+                cardManager.showSensitiveData(card.getPin(), card.getCvv());
+            else
+                cardManager.hideSensitiveData();
+        }
+    }
+
 
     private void updateCardImage()
     {
