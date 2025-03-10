@@ -1,19 +1,15 @@
 package com.smu.dao;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.ExpenseDetails;
 import com.smu.model.IncomeDetails;
 import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 import com.smu.model.Report;
 
-public class ReportDAO 
+public class ReportDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
     public static Report get(PaymentCard card, LocalDate date)
     {
         if(date.isBefore(PaymentCardDAO.getFirstReportDate(card)) || date.isAfter(LocalDate.now()))

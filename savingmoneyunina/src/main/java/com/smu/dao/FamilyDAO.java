@@ -1,7 +1,6 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,16 +8,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.Family;
 import com.smu.model.MonthlyBalance;
 import com.smu.model.User;
 
 
-public class FamilyDAO
+public class FamilyDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
 	public static Family get(String memberUsername) 
     {
         Family family = null;

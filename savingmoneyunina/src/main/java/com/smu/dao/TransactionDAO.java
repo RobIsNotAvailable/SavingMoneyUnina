@@ -1,7 +1,6 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,15 +8,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.Category;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 
-public class TransactionDAO 
+public class TransactionDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
     public static List<Transaction> getByCard(PaymentCard card)
     {
         String cardNumber = card.getCardNumber();

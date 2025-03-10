@@ -1,20 +1,16 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 
-public class MonthlyBalanceDAO 
+public class MonthlyBalanceDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
     public static MonthlyBalance get(PaymentCard card, LocalDate date)
     {
         String sql = "select initial_balance, final_balance FROM get_card_monthly_balance(?, ?)";

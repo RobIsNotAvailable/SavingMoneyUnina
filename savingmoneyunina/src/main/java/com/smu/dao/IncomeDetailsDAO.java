@@ -1,20 +1,16 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.IncomeDetails;
 import com.smu.model.PaymentCard;
 
-public class IncomeDetailsDAO
+public class IncomeDetailsDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
     public static IncomeDetails get(PaymentCard card, LocalDate date)
     {
         String sql = "select max_income, min_income, avg_income, total_income from get_card_monthly_income_details(?,?)";

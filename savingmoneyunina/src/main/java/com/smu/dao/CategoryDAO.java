@@ -1,7 +1,6 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,17 +8,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.Category;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 import com.smu.model.Transaction.Direction;
 import com.smu.model.User;
 
-public class CategoryDAO 
+public class CategoryDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
     public static Category get(String name, String creatorUsername)
     {
         String sql = "SELECT * FROM category WHERE name = ? AND creator_username = ?";

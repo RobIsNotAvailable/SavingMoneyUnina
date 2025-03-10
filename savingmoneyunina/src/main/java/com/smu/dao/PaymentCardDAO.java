@@ -1,23 +1,19 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.PaymentCard;
 import com.smu.model.Report;
 import com.smu.model.Transaction;
 import com.smu.model.User;
 
-public class PaymentCardDAO
+public class PaymentCardDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-
     public static PaymentCard get(String cardNumber)
     {
         String sql = "SELECT * FROM payment_card WHERE card_number = ?";

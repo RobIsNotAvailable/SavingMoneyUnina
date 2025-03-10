@@ -1,7 +1,6 @@
 package com.smu.dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,20 +8,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.smu.databaseConnection.DbConnection;
 import com.smu.model.User;
 import com.smu.model.Category;
 import com.smu.model.Family;
 import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 
-public class UserDAO
+public class UserDAO implements DAOconnection
 {
-    static Connection conn = DbConnection.getConnection();
-    
     public static User get(String username)
     {
-
 		String sql = "SELECT * FROM \"user\" WHERE username = ?";
 		
         try 
