@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import com.smu.model.IncomeDetails;
 import com.smu.model.PaymentCard;
 
-public class IncomeDetailsDAO implements DAOconnection
+public class IncomeDetailsDAO extends DAOconnection
 {
     public static IncomeDetails get(PaymentCard card, LocalDate date)
     {

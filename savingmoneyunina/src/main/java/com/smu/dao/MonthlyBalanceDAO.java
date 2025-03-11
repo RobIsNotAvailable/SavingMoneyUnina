@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 
-public class MonthlyBalanceDAO implements DAOconnection
+public class MonthlyBalanceDAO extends DAOconnection
 {
     public static MonthlyBalance get(PaymentCard card, LocalDate date)
     {

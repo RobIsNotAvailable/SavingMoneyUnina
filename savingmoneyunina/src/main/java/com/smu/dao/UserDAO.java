@@ -14,7 +14,7 @@ import com.smu.model.Family;
 import com.smu.model.MonthlyBalance;
 import com.smu.model.PaymentCard;
 
-public class UserDAO implements DAOconnection
+public class UserDAO extends DAOconnection
 {
     public static User get(String username)
     {

@@ -12,7 +12,7 @@ import com.smu.model.Report;
 import com.smu.model.Transaction;
 import com.smu.model.User;
 
-public class PaymentCardDAO implements DAOconnection
+public class PaymentCardDAO extends DAOconnection
 {
     public static PaymentCard get(String cardNumber)
     {
