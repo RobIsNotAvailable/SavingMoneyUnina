@@ -418,29 +418,34 @@ CREATE OR REPLACE FUNCTION get_user_monthly_balance(input_username VARCHAR, inpu
 /********************************************** POPULATION ************************************************/
 INSERT INTO family (name)
     VALUES
-    ('Smith'),
+    ('Bezos'),
     ('Johnson'),
     ('Brown');
 
 INSERT INTO "user" (username, password, name, family_id)
     VALUES
-    ('alice104', 'Password123', 'Alice', 1),
+    ('the_real_jeff_bezos', 'Amazon4tw', 'Jeffrey', 1),
     ('frankiewastaken', 'Password123', 'Frankie', 1),
     ('bobyyyy', 'Password456', 'Boby', 1),
+    ('riga_tony', 'Ilovepasta10', 'Anthony', 1),
     ('charlie_el_guapo', 'Password789', 'Charlie', 2);
 
 INSERT INTO payment_card (card_number, cvv, pin, expiration_date, balance, owner_username)
     VALUES
+    --fmaily smith
     ('2402432187654321', '385', '2758', '2029-06-01', 9000.00, 'bobyyyy'),
     
-    ('1003673846299564', '640', '4658', '2029-08-01', 1000.00, 'charlie_el_guapo'),
-
     ('3498567345687564', '904', '6349', '2029-06-01', 3000.00, 'frankiewastaken'),
 
-    ('4021640965634942', '549', '5483', '2029-06-01', 0.00, 'alice104'),
-    ('2402740937654901', '945', '2378', '2029-06-01', 1250.38, 'alice104'),
-    ('3498734875349033', '648', '8906', '2029-12-01', 3000.00, 'alice104'),
-    ('1003789453846743', '673', '5648', '2029-12-01', 20000.00, 'alice104');
+    ('4021640965634942', '549', '5483', '2029-06-01', 0.00, 'the_real_jeff_bezos'),
+    ('2402740937654901', '945', '2378', '2029-06-01', 1250.38, 'the_real_jeff_bezos'),
+    ('3498734875349033', '648', '8906', '2029-12-01', 3000.00, 'the_real_jeff_bezos'),
+    ('1003789453846743', '673', '5648', '2029-12-01', 20000.00, 'the_real_jeff_bezos'),
+
+    ('1003394875377732', '104', '0000', '2029-12-01', 1000.00, 'riga_tony'),
+
+    --others
+    ('1003673846299564', '640', '4658', '2029-08-01', 1000.00, 'charlie_el_guapo');
 
 INSERT INTO monthly_balance 
     VALUES
@@ -450,16 +455,19 @@ INSERT INTO monthly_balance
     (3000.00, 3000.00, '2024-02-01', '3498734875349033'),
     (3000.00, 3000.00, '2024-02-01', '3498567345687564'),
     (0.00, 0.00, '2024-02-01', '4021640965634942'),
-    (1250.38, 1250.38, '2024-02-01', '2402740937654901');
+    (1250.38, 1250.38, '2024-02-01', '2402740937654901'),
+    (1000.00, 1000.00, '2024-02-01', '1003394875377732');
 
 INSERT INTO category (name, creator_username)
     VALUES
-    ('Food', 'alice104'),
-    ('Paycheck', 'alice104'),
-    ('Health', 'alice104'),
-    ('Travel', 'alice104'),
-    ('Electronics', 'alice104'),
-    
+    ('Food', 'the_real_jeff_bezos'),
+    ('Paycheck', 'the_real_jeff_bezos'),
+    ('Health', 'the_real_jeff_bezos'),
+    ('Travel', 'the_real_jeff_bezos'),
+    ('Electronics', 'the_real_jeff_bezos'),
+    ('Investiments', 'the_real_jeff_bezos'),
+
+
     ('Entertainment', 'bobyyyy'),
     ('Shopping', 'bobyyyy'),
 
@@ -468,14 +476,15 @@ INSERT INTO category (name, creator_username)
 
     ('Transport', 'frankiewastaken'),
 
-    ('Other', 'alice104'),
+    ('Other', 'the_real_jeff_bezos'),
     ('Other', 'bobyyyy'),
     ('Other', 'charlie_el_guapo'),
+    ('Other', 'riga_tony'),
     ('Other', 'frankiewastaken');
     
 INSERT INTO keyword (keyword, category_id)
     VALUES
-    ('groceries', 1),      -- for Food (creator: alice104)
+    ('groceries', 1),      -- for Food (creator: the_real_jeff_bezos)
     ('food', 1),
     ('supermarket', 1),
     ('restaurant', 1),
@@ -483,54 +492,63 @@ INSERT INTO keyword (keyword, category_id)
     ('coffee', 1),
     ('snacks', 1),
 
-    ('salary', 2),        -- for Paycheck (creator: alice104)
+    ('salary', 2),        -- for Paycheck (creator: the_real_jeff_bezos)
     ('freelance', 2),
     ('bonus', 2),
 
-    ('health', 3),        -- for Health (creator: alice104)
+    ('health', 3),        -- for Health (creator: the_real_jeff_bezos)
     ('medical', 3),
     ('doctor', 3),
     ('hospital', 3),
     ('pharmacy', 3),
 
-    ('travel', 4),        -- for Travel (creator: alice104)
+    ('travel', 4),        -- for Travel (creator: the_real_jeff_bezos)
     ('vacation', 4),
     ('flight', 4),
     ('hotel', 4),
     ('tour', 4),
 
-    ('gadgets', 5),       -- for Electronics (creator: alice104)
+    ('gadgets', 5),       -- for Electronics (creator: the_real_jeff_bezos)
     ('devices', 5),
     ('laptop', 5),
     ('phone', 5),
     ('tablet', 5),
 
-    ('movies', 6),        -- for Entertainment (creator: bobyyyy)
-    ('music', 6),
-    ('games', 6),
-    ('concert', 6),
-    ('show', 6),
+      
+    ('stocks', 6),         -- for Electronics (creator: the_real_jeff_bezos)
+    ('bonds', 6),
+    ('real_estate', 6),
+    ('mutual_funds', 6),
+    ('cryptocurrency', 6),
+    ('investments', 6),
 
-    ('shopping', 7),      -- for Shopping (creator: bobyyyy)
-    ('clothes', 7),
-    ('shoes', 7),
-    ('accessories', 7),
-    ('fashion', 7),
 
-    ('bills', 8),         -- for Utilities (creator: charlie_el_guapo)
-    ('subscriptions', 8),
-    ('internet', 8),
-    ('water', 8),
-    ('gas', 8),
+    ('movies', 7),        -- for Entertainment (creator: bobyyyy)
+    ('music', 7),
+    ('games', 7),
+    ('concert', 7),
+    ('show', 7),
 
-    ('rent', 9),          -- for Housing (creator: charlie_el_guapo)
-    ('mortgage', 9),
-    ('maintenance', 9),
-    ('furniture', 9),
-    ('appliances', 9),
+    ('shopping', 8),      -- for Shopping (creator: bobyyyy)
+    ('clothes', 8),
+    ('shoes', 8),
+    ('accessories', 8),
+    ('fashion', 8),
 
-    ('transport', 10),    -- for Transport (creator: frankiewastaken)
-    ('bus', 10),
-    ('train', 10),
-    ('taxi', 10),
-    ('fuel', 10);
+    ('bills', 9),         -- for Utilities (creator: charlie_el_guapo)
+    ('subscriptions', 9),
+    ('internet', 9),
+    ('water', 9),
+    ('gas', 9),
+
+    ('rent', 10),          -- for Housing (creator: charlie_el_guapo)
+    ('mortgage', 10),
+    ('maintenance', 10),
+    ('furniture', 10),
+    ('appliances', 10),
+
+    ('transport', 11),    -- for Transport (creator: frankiewastaken)
+    ('bus', 11),
+    ('train', 11),
+    ('taxi', 11),
+    ('fuel', 11);
