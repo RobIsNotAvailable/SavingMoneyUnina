@@ -14,7 +14,7 @@ import com.smu.model.Transaction;
 import com.smu.model.Transaction.Direction;
 import com.smu.model.User;
 
-public class CategoryDAO implements DAOconnection
+public class CategoryDAO extends DAOconnection
 {
     public static Category get(String name, String creatorUsername)
     {

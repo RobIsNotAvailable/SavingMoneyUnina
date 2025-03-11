@@ -13,7 +13,7 @@ import com.smu.model.MonthlyBalance;
 import com.smu.model.User;
 
 
-public class FamilyDAO implements DAOconnection
+public class FamilyDAO extends DAOconnection
 {
 	public static Family get(String memberUsername) 
     {
