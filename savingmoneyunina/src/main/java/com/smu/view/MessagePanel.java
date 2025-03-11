@@ -18,7 +18,7 @@ public class MessagePanel extends JPanel
         messageLabel.setForeground(UiUtil.SUCCESS_GREEN);
         messageLabel.setText(message);
         
-        UiUtil.delayExecution(4000, _ -> resetMessage());
+        UiUtil.delayExecution(4000, unused -> resetMessage());
     }
 
     public void resetMessage()

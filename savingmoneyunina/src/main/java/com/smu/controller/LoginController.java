@@ -45,7 +45,6 @@ public class LoginController
                 user.retrieveName();
                 main.loadScreens(user);
                 main.showScreen("Home");
-                view.resetMessage();
                 view.clearFields();
             } 
             else 

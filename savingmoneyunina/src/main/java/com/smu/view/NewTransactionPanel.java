@@ -6,14 +6,15 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import com.smu.model.CurrencyConverter.Currency;
@@ -33,7 +34,7 @@ public class NewTransactionPanel extends DefaultPanel
     private JButton directionButton;
     private JButton currencyButton;
 
-    private JLabel comaLabel = new JLabel(",");
+    private JLabel commaLabel = new JLabel(",");
 
     public NewTransactionPanel()
     {
@@ -68,14 +69,9 @@ public class NewTransactionPanel extends DefaultPanel
 
     private void addAmountField(JPanel panel)
     {
-
-        DecimalFormat integerFormat = new DecimalFormat("#,###");
-        integerFormat.setRoundingMode(RoundingMode.DOWN);
-
-        DecimalFormat decimalFormat = new DecimalFormat("##");
-        decimalFormat.setRoundingMode(RoundingMode.DOWN);
-
-
+        NumberFormat integerFormat = new DecimalFormat("#,###");
+        NumberFormat decimalFormat = new DecimalFormat("##");
+        
         NumberFormatter integerFormatter = new NumberFormatter(integerFormat);
         integerFormatter.setValueClass(Integer.class);
         integerFormatter.setMinimum(0);
@@ -88,7 +84,7 @@ public class NewTransactionPanel extends DefaultPanel
         decimalFormatter.setMaximum(99);
         decimalFormatter.setAllowsInvalid(false);
 
-        amountField = new JFormattedTextField(integerFormatter);
+        amountField = new JFormattedTextField(new DefaultFormatterFactory(integerFormatter));
         amountField.setPreferredSize(new Dimension(700, 100));
         amountField.setFont(new Font("Arial", Font.BOLD, 80));
         amountField.setHorizontalAlignment(JTextField.CENTER);
@@ -102,7 +98,7 @@ public class NewTransactionPanel extends DefaultPanel
         UiUtil.styleComponent(decimalAmountField);
 
         panel.add(amountField);
-        panel.add(createComaPanel());
+        panel.add(createCommaPanel());
         panel.add(decimalAmountField);
     }
 
@@ -111,7 +107,7 @@ public class NewTransactionPanel extends DefaultPanel
         currencyButton = UiUtil.createStyledButton("€");
         currencyButton.setFont(new Font("Arial", Font.BOLD, 50));
         panel.add(currencyButton);
-        }
+    }
 
     private void addLabelsPanel(JPanel panel)  
     {  
@@ -173,16 +169,16 @@ public class NewTransactionPanel extends DefaultPanel
         panel.add(insertButtonPanel);
     }
 
-    private JPanel createComaPanel()
+    private JPanel createCommaPanel()
     {
-        JPanel comaPanel = new JPanel();
-        comaPanel.setPreferredSize(new Dimension(55, 100));
-        comaPanel.setOpaque(false);
+        JPanel commaPanel = new JPanel();
+        commaPanel.setPreferredSize(new Dimension(55, 100));
+        commaPanel.setOpaque(false);
         
-        comaLabel.setFont(new Font("Arial", Font.BOLD, 80));
-        comaLabel.setForeground(Color.WHITE);
-        comaPanel.add(comaLabel);
-        return comaPanel;
+        commaLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        commaLabel.setForeground(Color.WHITE);
+        commaPanel.add(commaLabel);
+        return commaPanel;
     }
 
     public void resetAmountField()
@@ -221,7 +217,7 @@ public class NewTransactionPanel extends DefaultPanel
 
     public JButton getCurrencyButton() { return currencyButton; }
 
-    public JLabel getComJLabel() { return comaLabel; }
+    public JLabel getCommaLabel() { return commaLabel; }
 
     public BigDecimal getAmountValue() throws Exception
     {

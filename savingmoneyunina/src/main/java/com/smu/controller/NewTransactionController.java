@@ -18,7 +18,7 @@ import com.smu.model.User;
 import com.smu.model.CurrencyConverter.Currency;
 import com.smu.view.NewTransactionPanel;
 import com.smu.view.UiUtil;
-
+import com.smu.view.UiUtil.TriangleButton;
 import com.smu.model.Transaction.Direction;
 
 public class NewTransactionController extends DefaultController
@@ -32,7 +32,7 @@ public class NewTransactionController extends DefaultController
         super(main, view, user);
         this.view = view;
 
-        initializeDefaultListeners();
+        
 
         UiUtil.addListener(view.getDirectionButton(), new DirectionListener());
         UiUtil.addListener(view.getCurrencyButton(), new CurrencyListener());
@@ -40,30 +40,9 @@ public class NewTransactionController extends DefaultController
 
         UiUtil.addKeyBinding(view.getInsertButton(), "ENTER");
 
-        view.getAmountField().addKeyListener(new KeyAdapter()  
-        {  
-            @Override  
-            public void keyPressed(KeyEvent e)  
-            {  
-                if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == ',')  
-                {  
-                    view.getDecimalField().requestFocus();  
-                    view.getDecimalField().setCaretPosition(0); 
-                }  
-            }  
-        });
+        initializeCustomListeners(new CardListener(),new TransactionCardChangerListener(getRightButton()), new TransactionCardChangerListener(getLeftButton()));
 
-        view.getDecimalField().addKeyListener(new KeyAdapter()  
-        {  
-            @Override  
-            public void keyPressed(KeyEvent e)  
-            {  
-                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)  
-                {  
-                    view.resetDecimalAmountField();  
-                }  
-            }  
-        });
+        addAmountFieldsListeners();
     }
 
     private class DirectionListener implements ActionListener
@@ -103,8 +82,14 @@ public class NewTransactionController extends DefaultController
                 if (currency == Currency.USD)
                     amount = CurrencyConverter.convertUsdToEur(amount);
 
+                if (amount.compareTo(BigDecimal.ZERO) <= 0)
+                    throw new Exception("The amount must be greater than 0");
+
                 if (direction == Direction.EXPENSE && amount.compareTo(card.getBalance()) > 0)
                     throw new Exception("This card doesn't have enough money");
+
+                if (description.isEmpty())
+                    description = "(No description)";
                 
                 card.executeTransaction(new Transaction(amount, description, now, direction, card));
                 updateCard();
@@ -116,6 +101,22 @@ public class NewTransactionController extends DefaultController
             }
         }
     }
+
+    private class TransactionCardChangerListener extends CardChangerListener
+    {
+        public TransactionCardChangerListener(TriangleButton button)
+        {
+            super(button);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) 
+        {
+            super.actionPerformed(e);
+            emptyFields();
+        }
+    }
+
 
     private void changeDirection()
     {
@@ -129,7 +130,7 @@ public class NewTransactionController extends DefaultController
             currencyButton.setForeground(Color.WHITE);
             view.getAmountField().setForeground(Color.WHITE);
             view.getDecimalField().setForeground(Color.WHITE);
-            view.getComJLabel().setForeground(Color.WHITE);
+            view.getCommaLabel().setForeground(Color.WHITE);
         }
         else
         {
@@ -138,7 +139,7 @@ public class NewTransactionController extends DefaultController
             currencyButton.setForeground(UiUtil.CAPPUCCINO);
             view.getAmountField().setForeground(UiUtil.CAPPUCCINO);
             view.getDecimalField().setForeground(UiUtil.CAPPUCCINO);
-            view.getComJLabel().setForeground(UiUtil.CAPPUCCINO);
+            view.getCommaLabel().setForeground(UiUtil.CAPPUCCINO);
         }
     }
 
@@ -150,6 +151,46 @@ public class NewTransactionController extends DefaultController
             button.setText("€");
         else
             button.setText("$");
+    }
+
+    private void addAmountFieldsListeners()
+    {
+        view.getAmountField().addKeyListener(new KeyAdapter()  
+        {  
+            @Override  
+            public void keyPressed(KeyEvent e)  
+            {  
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == ',' || e.getKeyChar() == '.')  
+                {  
+                    view.getDecimalField().requestFocus();  
+                    view.getDecimalField().setCaretPosition(0); 
+                }  
+            }  
+        });
+
+        view.getAmountField().addKeyListener(new KeyAdapter()  
+        {  
+            @Override  
+            public void keyPressed(KeyEvent e)  
+            {  
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && view.getAmountField().getText().length() == 1)  
+                {  
+                    view.resetAmountField();
+                }  
+            }  
+        });
+
+        view.getDecimalField().addKeyListener(new KeyAdapter()  
+        {  
+            @Override  
+            public void keyPressed(KeyEvent e)  
+            {  
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && view.getDecimalField().getText().length() == 1)  
+                {  
+                    view.resetDecimalAmountField();  
+                }  
+            }  
+        });
     }
 
     @Override
