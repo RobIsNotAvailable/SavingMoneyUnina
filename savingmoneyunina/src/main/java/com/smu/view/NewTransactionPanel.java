@@ -3,12 +3,10 @@ package com.smu.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.awt.Font;
 import java.text.DecimalFormat;
 
 import javax.swing.JButton;
@@ -16,15 +14,18 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 
 import com.smu.model.CurrencyConverter.Currency;
 import com.smu.model.Transaction.Direction;
+import com.smu.view.UiUtil.BlankPanel;
+
 
 public class NewTransactionPanel extends DefaultPanel
 {
     private JFormattedTextField amountField;
+    private JFormattedTextField decimalAmountField;
+
     private JTextField descriptionField;
 
     private JButton insertButton;
@@ -32,139 +33,166 @@ public class NewTransactionPanel extends DefaultPanel
     private JButton directionButton;
     private JButton currencyButton;
 
+    private JLabel comaLabel = new JLabel(",");
+
     public NewTransactionPanel()
     {
         addFormPanel();
     }
 
-    private void addFormPanel()
+    public void addFormPanel()
     {
-        JPanel formPanel = new JPanel(new GridBagLayout());
+        JPanel formPanel = new JPanel(new FlowLayout());
+        
         formPanel.setPreferredSize(new Dimension(1000, 370));
         formPanel.setOpaque(false);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 5, 10, 5);
-
-        addDirectionButton(formPanel, gbc);
-        addAmountField(formPanel, gbc);
-        addCurrencyButton(formPanel, gbc);
-        addBlankPanel(formPanel, gbc);
-        addDescriptionLabel(formPanel, gbc);
-        addDescriptionField(formPanel, gbc);
-        addInsertButton(formPanel, gbc);
-        addMessageLabel(formPanel, gbc);
+        addDirectionButton(formPanel);
+        addAmountField(formPanel);
+        addCurrencyButton(formPanel);
+        formPanel.add(new BlankPanel(new Dimension(1200,30)));
+        addLabelsPanel(formPanel);
+        addDescriptionField(formPanel);
+        addInsertButton(formPanel);
+        
 
         this.add(formPanel, BorderLayout.SOUTH);
     }
 
-    private void addDirectionButton(JPanel panel, GridBagConstraints gbc)
+    private void addDirectionButton(JPanel panel)
     {
         directionButton = UiUtil.createStyledButton("-");
         directionButton.setFont(new Font("Courier New", Font.BOLD, 50));
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        panel.add(directionButton, gbc);
+        panel.add(directionButton);
     }
 
-    private void addAmountField(JPanel panel, GridBagConstraints gbc)
+    private void addAmountField(JPanel panel)
     {
-        DecimalFormat format = new DecimalFormat("#,##0.00");
-        format.setRoundingMode(RoundingMode.DOWN);
 
-        NumberFormatter amountFormatter = new NumberFormatter(format);
-        amountFormatter.setValueClass(Double.class);
-        amountFormatter.setMinimum(0.00);
-        amountFormatter.setMaximum(9999999999.99);
-        amountFormatter.setAllowsInvalid(false);
+        DecimalFormat integerFormat = new DecimalFormat("#,###");
+        integerFormat.setRoundingMode(RoundingMode.DOWN);
+
+        DecimalFormat decimalFormat = new DecimalFormat("##");
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
 
 
-        amountField = new JFormattedTextField(new DefaultFormatterFactory(amountFormatter));
-        
-        UiUtil.styleComponent(amountField);
-        amountField.setMinimumSize(new Dimension(400, 150));
-        amountField.setMaximumSize(new Dimension(500, 150));
+        NumberFormatter integerFormatter = new NumberFormatter(integerFormat);
+        integerFormatter.setValueClass(Integer.class);
+        integerFormatter.setMinimum(0);
+        integerFormatter.setMaximum(999999999);
+        integerFormatter.setAllowsInvalid(false);
 
-        amountField.setFont(new Font("Arial", Font.BOLD, 100));
+        NumberFormatter decimalFormatter = new NumberFormatter(decimalFormat);
+        decimalFormatter.setValueClass(Integer.class);
+        decimalFormatter.setMinimum(0);
+        decimalFormatter.setMaximum(99);
+        decimalFormatter.setAllowsInvalid(false);
+
+        amountField = new JFormattedTextField(integerFormatter);
+        amountField.setPreferredSize(new Dimension(700, 100));
+        amountField.setFont(new Font("Arial", Font.BOLD, 80));
         amountField.setHorizontalAlignment(JTextField.CENTER);
 
-        gbc.gridx = 2;
-        gbc.insets = new Insets(10, 20, 10, 5);
-    
-        panel.add(amountField, gbc);
+        decimalAmountField = new JFormattedTextField(decimalFormatter);
+        decimalAmountField.setPreferredSize(new Dimension(200, 100));
+        decimalAmountField.setFont(new Font("Arial", Font.BOLD, 80));
+        decimalAmountField.setHorizontalAlignment(JTextField.CENTER);
+
+        UiUtil.styleComponent(amountField);
+        UiUtil.styleComponent(decimalAmountField);
+
+        panel.add(amountField);
+        panel.add(createComaPanel());
+        panel.add(decimalAmountField);
     }
 
-    private void addCurrencyButton(JPanel panel, GridBagConstraints gbc)
+    private void addCurrencyButton(JPanel panel)
     {
         currencyButton = UiUtil.createStyledButton("€");
         currencyButton.setFont(new Font("Arial", Font.BOLD, 50));
-        gbc.gridx = 3;
-        gbc.insets = new Insets(10, 5, 10, 5);
-        panel.add(currencyButton, gbc);
+        panel.add(currencyButton);
+        }
+
+    private void addLabelsPanel(JPanel panel)  
+    {  
+        JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));  
+        labelPanel.setPreferredSize(new Dimension(975, 50));  
+        labelPanel.setOpaque(false);  
+    
+        JLabel descriptionLabel = new JLabel("Description");  
+        descriptionLabel.setFont(new Font("Arial", Font.BOLD, 30));  
+        descriptionLabel.setForeground(Color.WHITE);  
+        descriptionLabel.setPreferredSize(new Dimension(200, 50));  
+    
+        messageLabel = new JLabel();  
+        messageLabel.setFont(new Font("Arial", Font.BOLD, 20));  
+        messageLabel.setPreferredSize(new Dimension(600, 50));  
+    
+        labelPanel.add(descriptionLabel);  
+        labelPanel.add(new BlankPanel(new Dimension(100, 50)));
+        labelPanel.add(messageLabel);  
+    
+        panel.add(labelPanel);  
     }
 
-    private void addBlankPanel(JPanel panel, GridBagConstraints gbc)
+    private void addDescriptionField(JPanel panel)
     {
-        JPanel blankPanel = new UiUtil.BlankPanel(new Dimension(1000, 10));
-        blankPanel.setOpaque(false);
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        panel.add(blankPanel, gbc);
-    }
-
-    private void addDescriptionLabel(JPanel panel, GridBagConstraints gbc)
-    {
-        JLabel descriptionLabel = UiUtil.createStyledLabel("Description");
-        descriptionLabel.setHorizontalAlignment(JLabel.LEFT);
-        descriptionLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        descriptionLabel.setForeground(Color.WHITE);
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        gbc.insets = new Insets(0, 20, 0, 5);
-        panel.add(descriptionLabel, gbc);
-    }
-
-    private void addDescriptionField(JPanel panel, GridBagConstraints gbc)
-    {
-        descriptionField = new JTextField(1);
+        descriptionField = new JTextField(40);
         UiUtil.styleComponent(descriptionField);
-        descriptionField.setMinimumSize(new Dimension(300, 100));
-        descriptionField.setMaximumSize(new Dimension(500, 100));
-        descriptionField.setFont(new Font("Arial", Font.PLAIN, 40));
-        gbc.gridy = 3;
-        gbc.insets = new Insets(2, 20, 10, 5);
-        panel.add(descriptionField, gbc);
+
+        descriptionField.setPreferredSize(new Dimension(900, 50));
+
+
+        descriptionField.setFont(new Font("Arial", Font.PLAIN, 28));
+        descriptionField.setHorizontalAlignment(JTextField.LEFT);
+        UiUtil.styleComponent(descriptionField);
+
+        JPanel descriptionFieldPanel = new JPanel(new FlowLayout());
+        descriptionFieldPanel.setPreferredSize(new Dimension(1000, 70));
+        descriptionFieldPanel.setOpaque(false);
+        descriptionFieldPanel.add(descriptionField);
+
+        panel.add(descriptionFieldPanel);
     }
 
-    private void addInsertButton(JPanel panel, GridBagConstraints gbc)
+    private void addInsertButton(JPanel panel)
     {
         insertButton = UiUtil.createStyledButton("Insert");
+        insertButton.setFont(new Font("Arial", Font.BOLD, 30));
         insertButton.setBackground(UiUtil.DARK_CAPPUCCINO);
         insertButton.setOpaque(true);
         insertButton.setContentAreaFilled(true);
-        insertButton.setFont(new Font("Arial", Font.BOLD, 20));
-        gbc.gridx = 2;
-        gbc.gridy = 4;
-        gbc.insets = new Insets(20, 20, 10, 5);
-        panel.add(insertButton, gbc);
-    }
-    
-    private void addMessageLabel(JPanel panel, GridBagConstraints gbc)  
-    {  
-        messageLabel = UiUtil.createStyledLabel(" ");  
-        messageLabel.setFont(new Font("Arial", Font.BOLD, 24));  
-        messageLabel.setForeground(UiUtil.ERROR_RED);  
+        insertButton.setPreferredSize(new Dimension(966, 50)); 
 
-        gbc.gridx = 2;  
-        gbc.gridy = 2; 
-        gbc.insets = new Insets(10, 20, 10, 5);  
-        panel.add(messageLabel, gbc);  
+        JPanel insertButtonPanel = new JPanel(new FlowLayout());
+        insertButtonPanel.setPreferredSize(new Dimension(1000, 70));
+        insertButtonPanel.setOpaque(false);
+        
+        insertButtonPanel.add(insertButton);
+
+        panel.add(insertButtonPanel);
+    }
+
+    private JPanel createComaPanel()
+    {
+        JPanel comaPanel = new JPanel();
+        comaPanel.setPreferredSize(new Dimension(55, 100));
+        comaPanel.setOpaque(false);
+        
+        comaLabel.setFont(new Font("Arial", Font.BOLD, 80));
+        comaLabel.setForeground(Color.WHITE);
+        comaPanel.add(comaLabel);
+        return comaPanel;
     }
 
     public void resetAmountField()
     {
-        amountField.setValue(0.00);
+        amountField.setValue(null);   
+    }
+
+    public void resetDecimalAmountField()
+    {
+        decimalAmountField.setValue(null);
     }
 
     public void resetDescriptionField()
@@ -181,6 +209,8 @@ public class NewTransactionPanel extends DefaultPanel
     /****************************************** GETTERS ************************************************************** */
     public JFormattedTextField getAmountField() { return amountField; }
 
+    public JFormattedTextField getDecimalField() { return decimalAmountField; }
+
     public JTextField getDescriptionField() { return descriptionField; }
 
     public JButton getInsertButton() { return insertButton; }
@@ -191,18 +221,25 @@ public class NewTransactionPanel extends DefaultPanel
 
     public JButton getCurrencyButton() { return currencyButton; }
 
+    public JLabel getComJLabel() { return comaLabel; }
+
     public BigDecimal getAmountValue() throws Exception
     {
-        String amountString = amountField.getText();
+        String integerPart = amountField.getText().replace(".", "");
+        String decimalPart = decimalAmountField.getText();
 
-        amountString = amountString.replace(".", "");
-        amountString = amountString.replace(",", ".");
+        if (decimalPart.isEmpty()) 
+            decimalPart = "00";
+        
+
+        String amountString = integerPart + "." + decimalPart;
 
         BigDecimal amount = new BigDecimal(amountString);
 
-        if (amount.equals(BigDecimal.valueOf(000, 2)))
+        if (amount.equals(BigDecimal.ZERO)) {
             throw new Exception("The amount can't be zero");
-            
+        }
+
         return amount;
     }
 

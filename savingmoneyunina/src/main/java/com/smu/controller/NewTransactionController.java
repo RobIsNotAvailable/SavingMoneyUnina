@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 
@@ -37,6 +39,31 @@ public class NewTransactionController extends DefaultController
         UiUtil.addListener(view.getInsertButton(), new InsertListener());
 
         UiUtil.addKeyBinding(view.getInsertButton(), "ENTER");
+
+        view.getAmountField().addKeyListener(new KeyAdapter()  
+        {  
+            @Override  
+            public void keyPressed(KeyEvent e)  
+            {  
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == ',')  
+                {  
+                    view.getDecimalField().requestFocus();  
+                    view.getDecimalField().setCaretPosition(0); 
+                }  
+            }  
+        });
+
+        view.getDecimalField().addKeyListener(new KeyAdapter()  
+        {  
+            @Override  
+            public void keyPressed(KeyEvent e)  
+            {  
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)  
+                {  
+                    view.resetDecimalAmountField();  
+                }  
+            }  
+        });
     }
 
     private class DirectionListener implements ActionListener
@@ -101,6 +128,8 @@ public class NewTransactionController extends DefaultController
             directionButton.setForeground(Color.WHITE);
             currencyButton.setForeground(Color.WHITE);
             view.getAmountField().setForeground(Color.WHITE);
+            view.getDecimalField().setForeground(Color.WHITE);
+            view.getComJLabel().setForeground(Color.WHITE);
         }
         else
         {
@@ -108,6 +137,8 @@ public class NewTransactionController extends DefaultController
             directionButton.setForeground(UiUtil.CAPPUCCINO);
             currencyButton.setForeground(UiUtil.CAPPUCCINO);
             view.getAmountField().setForeground(UiUtil.CAPPUCCINO);
+            view.getDecimalField().setForeground(UiUtil.CAPPUCCINO);
+            view.getComJLabel().setForeground(UiUtil.CAPPUCCINO);
         }
     }
 
@@ -132,6 +163,7 @@ public class NewTransactionController extends DefaultController
     {
         view.resetMessage();
         view.resetAmountField();
+        view.resetDecimalAmountField();
         view.resetDescriptionField();
         view.resetDirection();
     }
