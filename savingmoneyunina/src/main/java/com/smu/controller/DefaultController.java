@@ -36,6 +36,7 @@ public class DefaultController
         updateCardImage();
         updateCardDetails();
         UiUtil.addListener(cardManager.getEyeButton(), new EyeListener());
+        UiUtil.addListener(cardManager.getCardButton(), new CardListener());
     }
 
     protected class CardChangerListener implements ActionListener 
@@ -111,18 +112,10 @@ public class DefaultController
         updateCardImage();
     }
 
-    protected void initializeDefaultListeners()
-    {
-        UiUtil.addListener(cardManager.getRightTriangleButton(), new CardChangerListener(cardManager.getRightTriangleButton()));
-        UiUtil.addListener(cardManager.getLeftTriangleButton(), new CardChangerListener(cardManager.getLeftTriangleButton()));
-        UiUtil.addListener(cardManager.getCardButton(), new CardListener());
-    }
-
-    protected void initializeCustomListeners(CardListener cardListener, CardChangerListener rightButtonListener, CardChangerListener leftButtonListener)
+    protected void initializeListeners(CardChangerListener rightButtonListener, CardChangerListener leftButtonListener)
     {
         UiUtil.addListener(cardManager.getRightTriangleButton(), rightButtonListener);
         UiUtil.addListener(cardManager.getLeftTriangleButton(), leftButtonListener);
-        UiUtil.addListener(cardManager.getCardButton(), cardListener);
     }
 
     private String getCorrespondingCard() 

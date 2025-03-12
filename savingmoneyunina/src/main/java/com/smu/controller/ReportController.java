@@ -21,7 +21,7 @@ public class ReportController extends DefaultController
 
         this.view = view;
 
-        initializeCustomListeners(new CardListener(), new ReportCardChangerListener(getRightButton()), new ReportCardChangerListener(getLeftButton()));
+        initializeListeners(new ReportCardChangerListener(getRightButton()), new ReportCardChangerListener(getLeftButton()));
 
         UiUtil.addListener(view.getShowButton(), new ShowListener());
         updateDetails();

@@ -40,7 +40,7 @@ public class NewTransactionController extends DefaultController
 
         UiUtil.addKeyBinding(view.getInsertButton(), "ENTER");
 
-        initializeCustomListeners(new CardListener(),new TransactionCardChangerListener(getRightButton()), new TransactionCardChangerListener(getLeftButton()));
+        initializeListeners(new TransactionCardChangerListener(getRightButton()), new TransactionCardChangerListener(getLeftButton()));
 
         addAmountFieldsListeners();
     }

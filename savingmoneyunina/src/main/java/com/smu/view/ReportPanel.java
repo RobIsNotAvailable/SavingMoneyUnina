@@ -63,7 +63,7 @@ public class ReportPanel extends DefaultPanel
         }
 
         UiUtil.styleComponent(dateField);
-        dateField.setFont(new Font("Arial", Font.PLAIN, 18));
+        dateField.setFont(new Font("Arial", Font.PLAIN, 20));
         dateField.setColumns(7);
         dateField.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/uuuu")));
 

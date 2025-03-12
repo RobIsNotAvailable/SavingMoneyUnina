@@ -89,7 +89,6 @@ public class MainController
 
     public ReportController getReportController() { return reportController;}
 
-    //used for populating the db only for first time running of the application
     public static void populate()
     {
         /* ************************************************************JEFF FIRST CARD****************************************************************** */
@@ -155,10 +154,10 @@ public class MainController
         card.executeTransaction(new Transaction(BigDecimal.valueOf(3200), "Received a project bonus for excellent work.", LocalDate.parse("2025-02-10"), Transaction.Direction.INCOME, card));
         card.executeTransaction(new Transaction(BigDecimal.valueOf(200), "Purchased theme park tickets for a fun day out.", LocalDate.parse("2025-02-20"), Transaction.Direction.EXPENSE, card));
 
-        card.executeTransaction(new Transaction(BigDecimal.valueOf(5000), "Received investment returns from stock market.", LocalDate.parse("2025-03-25"), Transaction.Direction.INCOME, card));
-        card.executeTransaction(new Transaction(BigDecimal.valueOf(3000), "Received dividends from mutual funds.", LocalDate.parse("2025-03-25"), Transaction.Direction.INCOME, card));
-        card.executeTransaction(new Transaction(BigDecimal.valueOf(2000), "Invested in new startup company.", LocalDate.parse("2025-03-25"), Transaction.Direction.EXPENSE, card));
-        card.executeTransaction(new Transaction(BigDecimal.valueOf(1500), "Purchased additional shares in existing portfolio.", LocalDate.parse("2025-03-25"), Transaction.Direction.EXPENSE, card));
+        card.executeTransaction(new Transaction(BigDecimal.valueOf(5000), "Received investment returns from stock market.", LocalDate.parse("2025-03-10"), Transaction.Direction.INCOME, card));
+        card.executeTransaction(new Transaction(BigDecimal.valueOf(3000), "Received dividends from mutual funds.", LocalDate.parse("2025-03-10"), Transaction.Direction.INCOME, card));
+        card.executeTransaction(new Transaction(BigDecimal.valueOf(2000), "Invested in new startup company.", LocalDate.parse("2025-03-10"), Transaction.Direction.EXPENSE, card));
+        card.executeTransaction(new Transaction(BigDecimal.valueOf(1500), "Purchased additional shares in existing portfolio.", LocalDate.parse("2025-03-10"), Transaction.Direction.EXPENSE, card));
 
         /***************************************************************************JEFF SECOND CARD******************************************************************** */
 
