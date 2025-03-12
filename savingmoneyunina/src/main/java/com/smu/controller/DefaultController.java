@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 import com.smu.MainController;
+
 import com.smu.model.PaymentCard;
 import com.smu.model.User;
+
 import com.smu.view.CardManager;
 import com.smu.view.DefaultPanel;
 import com.smu.view.UiUtil;

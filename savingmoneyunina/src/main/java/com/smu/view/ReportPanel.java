@@ -18,6 +18,7 @@ import javax.swing.text.MaskFormatter;
 
 import com.smu.model.ExpenseDetails;
 import com.smu.model.IncomeDetails;
+import com.smu.model.MonthlyBalance;
 import com.smu.model.Report;
 import com.smu.view.UiUtil.*;
 
@@ -128,8 +129,12 @@ public class ReportPanel extends DefaultPanel
     public void showReport(Report report)
     {
         /*****************BALANCE *************************/
-        BigDecimal initial = report.getInitialBalance();
-        BigDecimal ending = report.getFinalBalance();
+
+        MonthlyBalance balance = report.getMonthlyBalance();
+
+        BigDecimal initial = balance.getInitialBalance();
+        BigDecimal ending = balance.getFinalBalance();
+        
         BigDecimal difference = report.getMonthlyDifference();
 
         startingBalanceLabel.setText(String.format("<html><font color='white'>Initial: </font><font color='%s'>%.2f€</font></html>", UiUtil.CAPPUCCINO_RGB, initial));

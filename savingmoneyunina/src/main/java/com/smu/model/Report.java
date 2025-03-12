@@ -39,10 +39,6 @@ public class Report
 
     public MonthlyBalance getMonthlyBalance() { return monthlyBalance; }
 
-    public BigDecimal getInitialBalance() { return monthlyBalance.getInitialBalance(); }
-
-    public BigDecimal getFinalBalance() { return monthlyBalance.getFinalBalance(); }
-
     public PaymentCard getCard() { return card; }
 
     public LocalDate getDate() { return date; }
@@ -51,5 +47,10 @@ public class Report
 
     public ExpenseDetails getExpenseDetails() {return expenseDetails; }
 
-    public BigDecimal getMonthlyDifference() { return getFinalBalance().subtract(getInitialBalance()); }
+    public BigDecimal getMonthlyDifference()
+    {
+        BigDecimal initialBalance = monthlyBalance.getInitialBalance();
+        BigDecimal finalBalance = monthlyBalance.getFinalBalance();
+        return finalBalance.subtract(initialBalance);
+    }
 }

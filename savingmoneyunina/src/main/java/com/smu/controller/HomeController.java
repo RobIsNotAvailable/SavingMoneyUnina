@@ -6,16 +6,17 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 
 import java.util.List;
-import com.smu.model.Transaction;
 
+import com.smu.model.Transaction;
 import com.smu.model.TransactionFilter;
-import com.smu.MainController;
 import com.smu.model.Category;
 import com.smu.model.User;
 
 import com.smu.view.HomePanel;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.TriangleButton;
+
+import com.smu.MainController;
 
 public class HomeController extends DefaultController
 {

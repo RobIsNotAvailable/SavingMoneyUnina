@@ -5,8 +5,10 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
 import com.smu.MainController;
+
 import com.smu.model.Report;
 import com.smu.model.User;
+
 import com.smu.view.ReportPanel;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.TriangleButton;

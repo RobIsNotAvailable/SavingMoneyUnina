@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.smu.MainController;
+
 import com.smu.model.User;
+
 import com.smu.view.LoginPanel;
 import com.smu.view.UiUtil;
 

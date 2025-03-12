@@ -11,11 +11,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 
 import com.smu.MainController;
+
 import com.smu.model.CurrencyConverter;
 import com.smu.model.PaymentCard;
 import com.smu.model.Transaction;
 import com.smu.model.User;
 import com.smu.model.CurrencyConverter.Currency;
+
 import com.smu.view.NewTransactionPanel;
 import com.smu.view.UiUtil;
 import com.smu.view.UiUtil.TriangleButton;
